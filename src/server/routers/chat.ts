@@ -64,10 +64,11 @@ export const chatRouter = router({
           content: schema.message.content,
           createdAt: schema.message.createdAt,
           senderId: schema.message.senderId,
+          role: schema.message.role,
           senderName: schema.user.name,
         })
         .from(schema.message)
-        .innerJoin(schema.user, eq(schema.message.senderId, schema.user.id))
+        .leftJoin(schema.user, eq(schema.message.senderId, schema.user.id))
         .where(eq(schema.message.conversationId, input.conversationId))
         .orderBy(asc(schema.message.createdAt));
 

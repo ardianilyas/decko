@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Albert_Sans, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 const albertSans = Albert_Sans({
   variable: "--font-sans",
@@ -30,7 +31,10 @@ export default function RootLayout({
       className={`${albertSans.variable} ${geistMono.variable} h-full antialiased dark`}
     >
       <body className="min-h-full flex flex-col">
-        <TRPCProvider>{children}</TRPCProvider>
+        <TRPCProvider>
+          {children}
+          <Toaster />
+        </TRPCProvider>
       </body>
     </html>
   );

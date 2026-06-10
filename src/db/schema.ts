@@ -64,7 +64,8 @@ export const participant = pgTable("participant", {
 export const message = pgTable("message", {
   id: text("id").primaryKey(),
   conversationId: text("conversationId").notNull().references(() => conversation.id),
-  senderId: text("senderId").notNull().references(() => user.id),
+  senderId: text("senderId").references(() => user.id),
+  role: text("role").$type<"user" | "assistant" | "system">().default("user").notNull(),
   content: text("content").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   isRead: boolean("isRead").default(false).notNull()

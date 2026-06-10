@@ -1,6 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { trpc } from "@/trpc/client";
+import { useRouter } from "next/navigation";
+import { signOut } from "@/lib/auth-client";
 import { 
   Loader2, 
   PanelLeft, 
@@ -11,7 +14,8 @@ import {
   Diamond, 
   HelpCircle, 
   Clock, 
-  Settings 
+  Settings,
+  LogOut
 } from "lucide-react";
 
 interface ConversationListProps {
@@ -22,11 +26,14 @@ interface ConversationListProps {
 }
 
 export function ConversationList({ activeId, onSelect, onToggleSidebar, userEmail }: ConversationListProps) {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const router = useRouter();
   const { data: conversations, isLoading, refetch } = trpc.chat.getConversations.useQuery();
   const createConv = trpc.chat.createConversation.useMutation({
     onSuccess: (data) => {
       refetch();
       onSelect(data.id);
+      router.push(`/chat/${data.id}`);
     }
   });
 
@@ -78,7 +85,10 @@ export function ConversationList({ activeId, onSelect, onToggleSidebar, userEmai
             {conversations?.map((conv) => (
               <button
                 key={conv.id}
-                onClick={() => onSelect(conv.id)}
+                onClick={() => {
+                  onSelect(conv.id);
+                  router.push(`/chat/${conv.id}`);
+                }}
                 className={`w-full text-left px-2 py-2 rounded-md flex items-center gap-3 transition-colors ${
                   activeId === conv.id 
                     ? "bg-[#2a2a2a] text-white" 
@@ -125,8 +135,25 @@ export function ConversationList({ activeId, onSelect, onToggleSidebar, userEmai
       </div>
 
       {/* User Profile */}
-      <div className="px-3 pb-3">
-        <button className="w-full flex items-center justify-between bg-[#2a2a2a] hover:bg-[#333333] rounded-lg p-2 transition-colors border border-[#333333]">
+      <div className="px-3 pb-3 relative">
+        {isDropdownOpen && (
+          <div className="absolute bottom-[100%] left-3 right-3 mb-2 bg-[#2a2a2a] border border-[#333333] rounded-lg shadow-lg overflow-hidden z-10">
+            <button 
+              onClick={async () => {
+                await signOut();
+                router.push("/auth/login");
+              }}
+              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[#e0e0e0] hover:bg-[#333333] transition-colors"
+            >
+              <LogOut className="w-4 h-4" />
+              Sign out
+            </button>
+          </div>
+        )}
+        <button 
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          className="w-full flex items-center justify-between bg-[#2a2a2a] hover:bg-[#333333] rounded-lg p-2 transition-colors border border-[#333333]"
+        >
           <div className="flex items-center gap-2 overflow-hidden">
             <div className="w-4 h-4 rounded-full bg-white shrink-0 text-black flex items-center justify-center font-bold text-[8px]">
               {userEmail ? userEmail.charAt(0).toUpperCase() : "?"}
@@ -135,7 +162,7 @@ export function ConversationList({ activeId, onSelect, onToggleSidebar, userEmai
               {userEmail || "user@example.com"}
             </span>
           </div>
-          <ChevronDown className="w-3 h-3 text-[#808080] shrink-0" />
+          <ChevronDown className={`w-3 h-3 text-[#808080] shrink-0 transition-transform ${isDropdownOpen ? "rotate-180" : ""}`} />
         </button>
       </div>
     </div>
