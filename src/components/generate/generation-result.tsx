@@ -100,8 +100,8 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
       <div className="bg-card border border-border rounded-2xl p-6 space-y-4">
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div className="space-y-1 min-w-0">
-            <h2 className="text-xl font-bold text-foreground">{result.title}</h2>
-            <p className="text-sm text-muted-foreground leading-relaxed">{result.description}</p>
+            <h2 className="text-xl md:text-2xl font-bold text-foreground">{result.title}</h2>
+            <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{result.description}</p>
           </div>
           <button
             onClick={handleCopyText}
@@ -173,7 +173,7 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
             {expandedChapters.has(idx) && (
               <div className="px-4 pb-4 space-y-4 border-t border-border bg-background/50">
                 {chapter.chapterSummary && (
-                  <div className="pt-3 text-sm text-foreground/90 leading-relaxed border-b border-border/50 pb-3">
+                  <div className="pt-3 text-sm md:text-base text-foreground/90 leading-relaxed border-b border-border/50 pb-3">
                     {chapter.chapterSummary}
                   </div>
                 )}
@@ -186,7 +186,7 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
                           <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground shrink-0" />
                           <span className="font-semibold">{topic.title}</span>
                         </div>
-                        <div className="pl-3.5 text-muted-foreground text-xs leading-relaxed">
+                        <div className="pl-3.5 text-muted-foreground text-xs md:text-sm leading-relaxed">
                           {topic.explanation}
                         </div>
                       </li>
@@ -212,7 +212,7 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
 
       {/* Summary */}
       <Section title="Summary" icon={<BookOpen className="w-4 h-4" />}>
-        <p className="text-sm text-foreground leading-relaxed">{result.summary}</p>
+        <p className="text-sm md:text-base text-foreground leading-relaxed">{result.summary}</p>
       </Section>
 
       {/* Revision Panel */}

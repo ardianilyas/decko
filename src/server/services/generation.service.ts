@@ -31,7 +31,7 @@ export const PresentationSchema = z.object({
   presentationDuration: z.number(),
   learningObjectives: z.array(z.string()).min(1),
   prerequisites: z.array(z.string()),
-  chapters: z.array(ChapterSchema).min(7).max(9),
+  chapters: z.array(ChapterSchema).min(3).max(15),
   summary: z.string(),
 });
 
@@ -53,7 +53,7 @@ Generate the ENTIRE output (including all text, summaries, and descriptions) str
 
 CRITICAL RULES:
 - Return ONLY valid JSON. No markdown fences, no explanations, no preamble, no postamble.
-- Generate exactly 7 to 9 chapters. No more, no less.
+- Generate between 3 and 15 chapters. If the user's topic implies or explicitly requests a specific number of items/chapters (e.g., "5 cyber attacks"), generate EXACTLY that many chapters.
 - Each chapter MUST include:
   - chapterNumber (integer, starting at 1)
   - title (concise, engaging)
@@ -108,7 +108,7 @@ CRITICAL RULES:
 - Return ONLY valid JSON. No markdown, no explanations.
 - Maintain all existing fields and structure.
 - Apply the requested changes precisely.
-- Keep 7-9 chapters.
+- Keep the existing number of chapters unless the user explicitly asks to add or remove chapters (must remain between 3 and 15).
 - Follow the same schema as the original.
 
 CURRENT PRESENTATION JSON:

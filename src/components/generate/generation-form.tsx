@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { trpc } from "@/trpc/client";
-import { Loader2, Sparkles, Zap, Coins, Send } from "lucide-react";
+import { Loader2, Sparkles, Zap, Coins, ArrowUp, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import type { Presentation } from "@/server/services/generation.service";
 
@@ -39,6 +39,12 @@ export function GenerationForm({ onResult }: GenerationFormProps) {
   const [selectedModel, setSelectedModel] = useState<"deepseek/deepseek-chat" | "openai/gpt-4o-mini" | "openrouter/owl-alpha">("openrouter/owl-alpha");
   const [language, setLanguage] = useState<"English" | "Bahasa Indonesia">("English");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Custom dropdown states
+  const [isModelOpen, setIsModelOpen] = useState(false);
+  const [isLangOpen, setIsLangOpen] = useState(false);
+  const modelDropdownRef = useRef<HTMLDivElement>(null);
+  const langDropdownRef = useRef<HTMLDivElement>(null);
 
   const { data: creditsData } = trpc.generation.getCredits.useQuery();
   const generateMutation = trpc.generation.generate.useMutation({
@@ -83,92 +89,243 @@ export function GenerationForm({ onResult }: GenerationFormProps) {
     }
   }, [topic]);
 
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        modelDropdownRef.current &&
+        !modelDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsModelOpen(false);
+      }
+      if (
+        langDropdownRef.current &&
+        !langDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsLangOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="w-full max-w-3xl mx-auto space-y-3 relative">
       {!hasEnoughCredits && creditsData !== undefined && (
-        <div className="absolute -top-12 left-0 right-0 flex items-center gap-2 px-4 py-2 rounded-xl bg-destructive/10 border border-destructive/20 text-xs text-destructive mx-auto w-fit shadow-sm backdrop-blur-sm">
+        <div className="absolute -top-14 left-0 right-0 z-50 flex items-center gap-2 px-4 py-2 rounded-xl bg-destructive/10 border border-destructive/20 text-xs text-destructive mx-auto w-fit shadow-lg backdrop-blur-md animate-in fade-in slide-in-from-bottom-2">
           <Zap className="w-3.5 h-3.5 shrink-0" />
           Insufficient credits. Need {selectedModelData.cost}, have {creditsData.credits}.
         </div>
       )}
 
       {/* Main Input Area */}
-      <div className="relative group rounded-2xl bg-card border border-border focus-within:border-ring/50 focus-within:ring-1 focus-within:ring-ring/50 transition-all shadow-sm">
+      <div className="relative group rounded-3xl bg-card border border-border focus-within:border-ring/50 focus-within:ring-1 focus-within:ring-ring/50 transition-all shadow-sm flex flex-col">
         <textarea
           ref={textareaRef}
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="What do you want to present about?"
-          className="w-full bg-transparent p-4 pr-12 text-foreground placeholder:text-muted-foreground text-sm leading-relaxed resize-none outline-none max-h-[200px]"
+          className="w-full bg-transparent p-4 pb-2 text-foreground placeholder:text-muted-foreground text-sm md:text-base leading-relaxed resize-none outline-none max-h-[200px]"
           rows={1}
         />
         
-        <button
-          onClick={handleSubmit}
-          disabled={!canSubmit}
-          className="absolute right-3 bottom-3 p-2 rounded-xl bg-foreground text-background transition-all hover:opacity-90 disabled:opacity-40 disabled:hover:opacity-40 disabled:cursor-not-allowed shadow-sm"
-        >
-          {generateMutation.isPending ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
-          ) : (
-            <Send className="w-4 h-4" />
-          )}
-        </button>
-      </div>
+        {/* Inner Footer: Models, Language, Submit */}
+        <div className="flex items-center justify-between px-4 pb-3 pt-1 gap-2">
+          {/* Left side: Selectors */}
+          <div className="flex items-center gap-2 flex-1 min-w-0">
+            {/* Language Dropdown Pill */}
+            <div className="relative shrink-0" ref={langDropdownRef}>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsLangOpen(!isLangOpen);
+                  setIsModelOpen(false);
+                }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-secondary/50 border border-border/50 text-foreground hover:bg-secondary transition-all ${
+                  isLangOpen ? "ring-1 ring-ring/30 border-border bg-secondary" : ""
+                }`}
+              >
+                <span>{language === "English" ? "🇬🇧 EN" : "🇮🇩 ID"}</span>
+                <ChevronDown className={`w-3.5 h-3.5 opacity-50 transition-transform duration-200 ${isLangOpen ? "rotate-180" : ""}`} />
+              </button>
+              
+              {isLangOpen && (
+                <div className="absolute bottom-full left-0 mb-2 z-50 w-48 rounded-2xl border border-border bg-popover/95 backdrop-blur-md p-1.5 shadow-xl animate-in fade-in slide-in-from-bottom-2 duration-150">
+                  <div className="px-2.5 py-1.5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+                    Language
+                  </div>
+                  <div className="space-y-0.5">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setLanguage("English");
+                        setIsLangOpen(false);
+                      }}
+                      className={`w-full flex items-center gap-2 p-2 rounded-xl text-xs transition-colors text-left ${
+                        language === "English"
+                          ? "bg-foreground text-background font-medium"
+                          : "text-foreground hover:bg-secondary"
+                      }`}
+                    >
+                      <span className="text-sm">🇬🇧</span>
+                      <div>
+                        <div className="font-medium">English</div>
+                        <div className={`text-[10px] ${language === "English" ? "text-background/80" : "text-muted-foreground"}`}>
+                          Generate in English
+                        </div>
+                      </div>
+                    </button>
+                    
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setLanguage("Bahasa Indonesia");
+                        setIsLangOpen(false);
+                      }}
+                      className={`w-full flex items-center gap-2 p-2 rounded-xl text-xs transition-colors text-left ${
+                        language === "Bahasa Indonesia"
+                          ? "bg-foreground text-background font-medium"
+                          : "text-foreground hover:bg-secondary"
+                      }`}
+                    >
+                      <span className="text-sm">🇮🇩</span>
+                      <div>
+                        <div className="font-medium">Bahasa Indonesia</div>
+                        <div className={`text-[10px] ${language === "Bahasa Indonesia" ? "text-background/80" : "text-muted-foreground"}`}>
+                          Hasilkan dalam Bahasa
+                        </div>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
 
-      {/* Footer / Model Selection Pills */}
-      <div className="flex items-center justify-between flex-wrap gap-2 px-1">
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
-          {MODELS.map((model) => (
+            <div className="h-4 w-px bg-border/50 mx-0.5" />
+
+            {/* Model Dropdown Pill */}
+            <div className="relative shrink-0" ref={modelDropdownRef}>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsModelOpen(!isModelOpen);
+                  setIsLangOpen(false);
+                }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-secondary/50 border border-border/50 text-foreground hover:bg-secondary transition-all ${
+                  isModelOpen ? "ring-1 ring-ring/30 border-border bg-secondary" : ""
+                }`}
+              >
+                <span>{selectedModelData.icon}</span>
+                <span className="hidden sm:inline">{selectedModelData.label}</span>
+                {selectedModelData.cost > 0 && (
+                  <span className="flex items-center gap-0.5 ml-0.5 opacity-90 text-amber-600 dark:text-amber-500">
+                    <Coins className="w-3 h-3" />
+                    {selectedModelData.cost}
+                  </span>
+                )}
+                <ChevronDown className={`w-3.5 h-3.5 opacity-50 transition-transform duration-200 ${isModelOpen ? "rotate-180" : ""}`} />
+              </button>
+              
+              {isModelOpen && (
+                <div className="absolute bottom-full left-0 mb-2 z-50 w-64 rounded-2xl border border-border bg-popover/95 backdrop-blur-md p-1.5 shadow-xl animate-in fade-in slide-in-from-bottom-2 duration-150">
+                  <div className="px-2.5 py-1.5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+                    Select AI Model
+                  </div>
+                  <div className="space-y-0.5">
+                    {MODELS.map((model) => (
+                      <button
+                        key={model.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedModel(model.id);
+                          setIsModelOpen(false);
+                        }}
+                        className={`w-full flex items-center justify-between p-2 rounded-xl text-xs transition-colors text-left ${
+                          selectedModel === model.id
+                            ? "bg-foreground text-background font-medium"
+                            : "text-foreground hover:bg-secondary"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm">{model.icon}</span>
+                          <div>
+                            <div className="font-medium">{model.label}</div>
+                            <div className={`text-[10px] ${selectedModel === model.id ? "text-background/80" : "text-muted-foreground"}`}>
+                              {model.description}
+                            </div>
+                          </div>
+                        </div>
+                        {model.cost > 0 ? (
+                          <div className={`flex items-center gap-0.5 px-1.5 py-0.5 rounded-md text-[10px] font-medium ${
+                            selectedModel === model.id
+                              ? "bg-background/25 text-background"
+                              : "bg-amber-500/10 text-amber-600 dark:text-amber-500"
+                          }`}>
+                            <Coins className="w-3 h-3" />
+                            {model.cost}
+                          </div>
+                        ) : (
+                          <div className={`text-[10px] px-1.5 py-0.5 rounded-md ${
+                            selectedModel === model.id
+                              ? "bg-background/25 text-background"
+                              : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-500"
+                          }`}>
+                            Free
+                          </div>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Right side: Button */}
+          <div className="flex items-center gap-3 shrink-0">
+            {topic.length > 0 && (
+              <span className={`text-xs ${topicTooLong ? "text-destructive" : "text-muted-foreground"}`}>
+                {topic.length}/500
+              </span>
+            )}
             <button
-              key={model.id}
-              onClick={() => setSelectedModel(model.id)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all border ${
-                selectedModel === model.id
-                  ? "bg-secondary border-foreground/20 text-foreground"
-                  : "bg-transparent border-transparent text-muted-foreground hover:bg-secondary/50"
-              }`}
+              type="button"
+              onClick={handleSubmit}
+              disabled={!canSubmit}
+              className="p-2 rounded-xl bg-foreground text-background transition-all hover:opacity-90 disabled:opacity-40 disabled:hover:opacity-40 disabled:cursor-not-allowed shadow-sm"
             >
-              <span>{model.icon}</span>
-              <span>{model.label}</span>
-              {model.cost > 0 && (
-                <span className="flex items-center gap-0.5 ml-0.5 opacity-80">
-                  <Coins className="w-3 h-3" />
-                  {model.cost}
-                </span>
+              {generateMutation.isPending ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <ArrowUp className="w-4 h-4" />
               )}
             </button>
-          ))}
-        </div>
-
-        <div className="flex items-center gap-3 text-xs text-muted-foreground shrink-0 pl-2">
-          <select
-            value={language}
-            onChange={(e) => setLanguage(e.target.value as any)}
-            className="bg-transparent border border-border/50 text-foreground rounded-lg px-2 py-1 outline-none appearance-none cursor-pointer hover:bg-secondary/50 transition-colors"
-          >
-            <option value="English">🇬🇧 EN</option>
-            <option value="Bahasa Indonesia">🇮🇩 ID</option>
-          </select>
-          {topic.length > 0 && (
-            <span className={topicTooLong ? "text-destructive" : ""}>
-              {topic.length}/500
-            </span>
-          )}
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary/50 border border-border/50">
-            <Coins className="w-3.5 h-3.5 text-amber-500" />
-            <span className="font-medium text-foreground">
-              {creditsData !== undefined ? creditsData.credits : "..."}
-            </span>
           </div>
+        </div>
+      </div>
+
+      {/* External Footer: Credits Status */}
+      <div className="flex items-center justify-end px-1">
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary/50 border border-border/50 text-xs">
+          <Coins className="w-3.5 h-3.5 text-amber-500" />
+          <span className="font-medium text-foreground">
+            {creditsData !== undefined ? creditsData.credits : "..."} credits left
+          </span>
         </div>
       </div>
       
       {generateMutation.isPending && (
-        <div className="absolute -top-8 left-1/2 -translate-x-1/2 flex items-center gap-2 text-xs font-medium text-muted-foreground animate-pulse">
-          <Sparkles className="w-3.5 h-3.5" />
-          Crafting presentation structure...
+        <div className="absolute -top-16 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-5 py-2.5 rounded-full bg-background/95 border border-border backdrop-blur-md shadow-xl text-sm font-semibold text-foreground animate-in fade-in slide-in-from-bottom-3 duration-300">
+          <div className="relative flex items-center justify-center">
+            <Loader2 className="w-4 h-4 animate-spin text-primary animate-duration-1000" />
+            <Sparkles className="w-2.5 h-2.5 text-amber-500 absolute -top-1.5 -right-1.5 animate-pulse" />
+          </div>
+          <span className="bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+            Crafting your presentation...
+          </span>
         </div>
       )}
     </div>
