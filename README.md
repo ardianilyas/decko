@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Decko
+
+Decko is an AI-powered presentation generator that creates highly descriptive, deeply structured presentation outlines from a simple topic prompt.
+
+## Features
+
+- **AI-Powered Generation**: Instantly generate structured presentation outlines including learning objectives, prerequisites, and chapters.
+- **Multilingual Support**: Generate presentations natively in English or Bahasa Indonesia.
+- **Deep Content**: Detailed summaries and highly descriptive topics/code examples generated for every chapter.
+- **AI Revisions**: Refine and tweak your presentation with prompt-based revisions.
+- **Export Ready**: Copy your generated presentation directly into a clean, human-readable text format for PowerPoint, Word, or Google Slides.
+- **Credit System**: Track usage and model costs seamlessly.
+
+## Tech Stack
+
+- **Framework**: [Next.js 16](https://nextjs.org/) (App Router)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **API**: [tRPC](https://trpc.io/)
+- **Database**: PostgreSQL with [Drizzle ORM](https://orm.drizzle.team/)
+- **Authentication**: [Better Auth](https://better-auth.com/)
+- **AI Integration**: [Vercel AI SDK](https://sdk.vercel.ai/docs) and [OpenRouter](https://openrouter.ai/)
 
 ## Getting Started
 
-First, run the development server:
+First, copy the `.env.example` file to `.env.local` and add your keys:
+
+```bash
+cp .env.example .env.local
+```
+
+Required Environment Variables:
+- `DATABASE_URL`: PostgreSQL connection string.
+- `BETTER_AUTH_SECRET`: A secure random string for authentication.
+- `BETTER_AUTH_URL`: Your local or production URL (e.g. `http://localhost:3000`).
+- `OPENROUTER_API_KEY`: API Key for AI generation.
+
+Run database migrations:
+
+```bash
+npx drizzle-kit push
+```
+
+Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
