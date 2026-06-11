@@ -38,7 +38,10 @@ function GeneratePageContent({ user }: { user: { name: string; email: string } }
 
   const { data: historyItem, isLoading: historyLoading } = trpc.generation.getGeneration.useQuery(
     { id: displayId! },
-    { enabled: !!displayId }
+    { 
+      enabled: !!displayId,
+      refetchInterval: (query) => query.state.data?.status === "pending" ? 3000 : false
+    }
   );
 
   const handleNewGeneration = () => {
@@ -147,12 +150,27 @@ function GeneratePageContent({ user }: { user: { name: string; email: string } }
 
         {/* Scrollable content area */}
         <div className="flex-1 overflow-y-auto w-full">
-          <div className="max-w-3xl mx-auto px-4 py-8 md:py-12 pb-32">
+          <div className={`max-w-3xl mx-auto px-4 py-8 md:py-12 ${displayId ? "pb-12" : "pb-56"}`}>
             {displayId ? (
               historyLoading ? (
                 <div className="flex flex-col items-center justify-center mt-24 space-y-4">
                   <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
                   <p className="text-sm text-muted-foreground">Loading presentation...</p>
+                </div>
+              ) : historyItem?.status === "pending" ? (
+                <div className="flex flex-col items-center justify-center mt-24 space-y-5 animate-in fade-in zoom-in duration-500">
+                  <div className="relative bg-card rounded-full p-2.5 shadow-sm border border-primary/20">
+                    <Loader2 className="w-8 h-8 animate-spin text-primary" style={{ animation: "spin 1s linear infinite" }} />
+                    <Sparkles className="w-4 h-4 text-amber-500 absolute -top-1.5 -right-1.5 animate-bounce" />
+                  </div>
+                  <div className="flex flex-col items-center space-y-1 text-center">
+                    <p className="text-base font-bold bg-gradient-to-r from-primary to-foreground bg-clip-text text-transparent">
+                      Still crafting your presentation...
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      This is running in the background. You can wait here or check back later!
+                    </p>
+                  </div>
                 </div>
               ) : displayResult ? (
                 <GenerationResult key={displayId} generationId={displayId} initialResult={displayResult} />
@@ -177,8 +195,8 @@ function GeneratePageContent({ user }: { user: { name: string; email: string } }
           </div>
         </div>
 
-        {/* Fixed bottom input area */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background via-background to-transparent pt-10">
+        {/* Fixed bottom input area (kept mounted to prevent aborting requests) */}
+        <div className={`absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background via-background to-transparent pt-10 ${displayId ? 'hidden' : 'block'}`}>
           <GenerationForm onResult={handleResult} />
         </div>
       </div>

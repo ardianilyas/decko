@@ -6,7 +6,7 @@ export const user = pgTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: boolean("emailVerified").notNull(),
   image: text("image"),
-  credits: integer("credits").notNull().default(100),
+  credits: integer("credits").notNull().default(2),
   createdAt: timestamp("createdAt").notNull(),
   updatedAt: timestamp("updatedAt").notNull(),
 });
@@ -92,6 +92,7 @@ export const revision = pgTable("revision", {
   id: text("id").primaryKey(),
   generationId: text("generationId").notNull().references(() => generation.id),
   prompt: text("prompt").notNull(),
+  affectedSummary: text("affectedSummary"),
   generatedJson: jsonb("generatedJson").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });

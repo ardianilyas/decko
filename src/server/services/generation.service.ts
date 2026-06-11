@@ -37,6 +37,32 @@ export const PresentationSchema = z.object({
 
 export type Presentation = z.infer<typeof PresentationSchema>;
 
+// Revision intent — what the user wants to change
+export const RevisionIntentSchema = z.object({
+  affectedChapters: z.array(z.number()),   // chapter numbers (e.g. [3,4])
+  globalFields: z.array(z.string()),        // e.g. ["learningObjectives","summary"]
+  parsedInstruction: z.string(),            // clean instruction for the revision AI
+  affectedSummary: z.string(),              // human-readable label e.g. "Chapter 3, Chapter 4"
+});
+
+export type RevisionIntent = z.infer<typeof RevisionIntentSchema>;
+
+// Partial chapters revision response schema
+const RevisedChaptersResponseSchema = z.object({
+  revisedChapters: z.array(ChapterSchema),
+});
+
+// Partial global fields revision response schema
+const RevisedGlobalFieldsResponseSchema = z.object({
+  title: z.string().optional(),
+  description: z.string().optional(),
+  targetAudience: z.string().optional(),
+  presentationDuration: z.number().optional(),
+  learningObjectives: z.array(z.string()).optional(),
+  prerequisites: z.array(z.string()).optional(),
+  summary: z.string().optional(),
+});
+
 // ---------------------------------------------------------------------------
 // Prompt builders
 // ---------------------------------------------------------------------------
@@ -96,23 +122,81 @@ OUTPUT SCHEMA (follow exactly):
 }
 
 /**
- * Build the system prompt for revising an existing presentation.
+ * Build the system prompt for parsing a user's natural language revision intent.
+ * This is a lightweight call — only chapter titles/numbers are sent as context.
  */
-export function buildRevisionSystemPrompt(currentJson: Presentation, language: string): string {
-  return `You are an expert instructional designer revising an existing presentation outline.
+export function buildIntentParserPrompt(chapterIndex: { chapterNumber: number; title: string }[]): string {
+  const index = chapterIndex
+    .map((c) => `Chapter ${c.chapterNumber}: ${c.title}`)
+    .join("\n");
 
-The user will provide a revision instruction. Apply it to the existing JSON below and return the UPDATED full JSON.
-Ensure any new or revised text is generated strictly in ${language}.
+  return `You are a revision intent parser for a presentation editor.
 
-CRITICAL RULES:
+The user will give a natural language instruction to revise parts of a presentation.
+Your job is to identify WHICH parts they want to change and return structured JSON.
+
+CHAPTER INDEX:
+${index}
+
+GLOBAL FIELDS available: title, description, targetAudience, presentationDuration, learningObjectives, prerequisites, summary
+
+RULES:
+- Return ONLY valid JSON. No markdown, no explanation.
+- If the user mentions specific chapters (by number or title), list those chapter numbers in "affectedChapters".
+- If the user mentions global fields (e.g. "change learning objectives", "update summary"), list them in "globalFields".
+- If the instruction is general and not specific to any chapter or field (e.g. "make it more beginner friendly"), set affectedChapters to ALL chapter numbers and globalFields to [].
+- "parsedInstruction" must be a clear, concise English instruction for the revision AI. Translate from any language if needed.
+- "affectedSummary" must be a short human-readable label like "Chapter 3, Chapter 4" or "Learning Objectives, Summary" or "All Chapters".
+
+OUTPUT:
+{
+  "affectedChapters": [number],
+  "globalFields": ["string"],
+  "parsedInstruction": "string",
+  "affectedSummary": "string"
+}`;
+}
+
+/**
+ * Build the system prompt for revising specific chapters.
+ */
+export function buildChapterRevisionPrompt(instruction: string, language: string): string {
+  return `You are an expert instructional designer revising specific chapters of a presentation.
+
+REVISION INSTRUCTION: ${instruction}
+OUTPUT LANGUAGE: ${language}
+
+RULES:
 - Return ONLY valid JSON. No markdown, no explanations.
-- Maintain all existing fields and structure.
-- Apply the requested changes precisely.
-- Keep the existing number of chapters unless the user explicitly asks to add or remove chapters (must remain between 3 and 15).
-- Follow the same schema as the original.
+- Apply the revision instruction ONLY to the chapters provided in the user message.
+- Each revised chapter MUST follow this exact schema:
+  {
+    "chapterNumber": number,
+    "title": string,
+    "description": string,
+    "chapterSummary": string,
+    "topics": [{ "title": string, "explanation": string }],
+    "keyTakeaways": [string]
+  }
+- Preserve chapterNumber values exactly.
+- Return the result as: { "revisedChapters": [ ...chapters ] }`;
+}
 
-CURRENT PRESENTATION JSON:
-${JSON.stringify(currentJson, null, 2)}`;
+/**
+ * Build the system prompt for revising specific global fields.
+ */
+export function buildGlobalFieldsRevisionPrompt(instruction: string, fields: string[], language: string): string {
+  return `You are an expert instructional designer revising specific fields of a presentation outline.
+
+REVISION INSTRUCTION: ${instruction}
+OUTPUT LANGUAGE: ${language}
+FIELDS TO REVISE: ${fields.join(", ")}
+
+RULES:
+- Return ONLY valid JSON. No markdown, no explanations.
+- Only include the fields listed above in your response.
+- Do NOT include any other fields.
+- Match the same data types as the input (arrays stay arrays, strings stay strings, numbers stay numbers).`;
 }
 
 // ---------------------------------------------------------------------------
@@ -164,16 +248,24 @@ export async function generatePresentation(
   );
 }
 
+// ---------------------------------------------------------------------------
+// Smart Partial Revision (FR-004)
+// ---------------------------------------------------------------------------
+
 /**
- * Revise an existing presentation based on a user instruction.
- * Retries up to 2 times on invalid JSON.
+ * Step 1: Parse the user's natural language revision intent.
+ * Only sends the chapter index (numbers + titles) — tiny context, low token cost.
  */
-export async function revisePresentation(
-  currentJson: Presentation,
-  revisionPrompt: string,
-  modelId: string,
-  language: string = "English"
-): Promise<Presentation> {
+export async function parseRevisionIntent(
+  presentation: Presentation,
+  userInstruction: string,
+  modelId: string
+): Promise<RevisionIntent> {
+  const chapterIndex = presentation.chapters.map((c) => ({
+    chapterNumber: c.chapterNumber,
+    title: c.title,
+  }));
+
   const maxRetries = 2;
   let lastError: Error | null = null;
 
@@ -181,8 +273,62 @@ export async function revisePresentation(
     try {
       const { text } = await generateText({
         model: openrouter(modelId),
-        system: buildRevisionSystemPrompt(currentJson, language),
-        prompt: revisionPrompt,
+        system: buildIntentParserPrompt(chapterIndex),
+        prompt: userInstruction,
+        temperature: 0.1, // Low temperature for deterministic parsing
+        maxOutputTokens: 512,
+      });
+
+      const cleaned = text
+        .replace(/^```(?:json)?\s*/i, "")
+        .replace(/\s*```\s*$/i, "")
+        .trim();
+
+      const parsed = JSON.parse(cleaned);
+      return RevisionIntentSchema.parse(parsed);
+    } catch (err) {
+      lastError = err instanceof Error ? err : new Error(String(err));
+      if (attempt < maxRetries) {
+        await new Promise((r) => setTimeout(r, 500 * (attempt + 1)));
+      }
+    }
+  }
+
+  // Fallback: if intent parsing fails, treat as "revise all chapters"
+  console.warn("Intent parsing failed, falling back to all chapters:", lastError?.message);
+  return {
+    affectedChapters: presentation.chapters.map((c) => c.chapterNumber),
+    globalFields: [],
+    parsedInstruction: userInstruction,
+    affectedSummary: "All Chapters",
+  };
+}
+
+/**
+ * Step 2a: Revise only the specified chapters.
+ * Sends only those chapter objects — not the full presentation.
+ */
+async function reviseChapters(
+  presentation: Presentation,
+  intent: RevisionIntent,
+  modelId: string,
+  language: string
+): Promise<Presentation> {
+  const chaptersToRevise = presentation.chapters.filter((c) =>
+    intent.affectedChapters.includes(c.chapterNumber)
+  );
+
+  if (chaptersToRevise.length === 0) return presentation;
+
+  const maxRetries = 2;
+  let lastError: Error | null = null;
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const { text } = await generateText({
+        model: openrouter(modelId),
+        system: buildChapterRevisionPrompt(intent.parsedInstruction, language),
+        prompt: JSON.stringify({ chaptersToRevise }),
         temperature: 0.5,
         maxOutputTokens: 4096,
       });
@@ -193,8 +339,17 @@ export async function revisePresentation(
         .trim();
 
       const parsed = JSON.parse(cleaned);
-      const validated = PresentationSchema.parse(parsed);
-      return validated;
+      const { revisedChapters } = RevisedChaptersResponseSchema.parse(parsed);
+
+      // Merge revised chapters back into the full presentation
+      const mergedChapters = presentation.chapters.map((original) => {
+        const revised = revisedChapters.find(
+          (r) => r.chapterNumber === original.chapterNumber
+        );
+        return revised ?? original;
+      });
+
+      return { ...presentation, chapters: mergedChapters };
     } catch (err) {
       lastError = err instanceof Error ? err : new Error(String(err));
       if (attempt < maxRetries) {
@@ -203,7 +358,103 @@ export async function revisePresentation(
     }
   }
 
-  throw new Error(
-    `Revision failed after ${maxRetries + 1} attempts: ${lastError?.message}`
+  throw new Error(`Chapter revision failed: ${lastError?.message}`);
+}
+
+/**
+ * Step 2b: Revise only the specified global fields.
+ * Sends only those field values — not the full presentation.
+ */
+async function reviseGlobalFields(
+  presentation: Presentation,
+  intent: RevisionIntent,
+  modelId: string,
+  language: string
+): Promise<Presentation> {
+  if (intent.globalFields.length === 0) return presentation;
+
+  const allowedGlobalFields = [
+    "title", "description", "targetAudience", "presentationDuration",
+    "learningObjectives", "prerequisites", "summary",
+  ] as const;
+
+  const fieldsToRevise = intent.globalFields.filter((f) =>
+    allowedGlobalFields.includes(f as any)
   );
+
+  if (fieldsToRevise.length === 0) return presentation;
+
+  // Extract only the current values of the fields to revise
+  const currentValues: Record<string, unknown> = {};
+  for (const field of fieldsToRevise) {
+    currentValues[field] = (presentation as any)[field];
+  }
+
+  const maxRetries = 2;
+  let lastError: Error | null = null;
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const { text } = await generateText({
+        model: openrouter(modelId),
+        system: buildGlobalFieldsRevisionPrompt(intent.parsedInstruction, fieldsToRevise, language),
+        prompt: JSON.stringify({ currentValues }),
+        temperature: 0.5,
+        maxOutputTokens: 1024,
+      });
+
+      const cleaned = text
+        .replace(/^```(?:json)?\s*/i, "")
+        .replace(/\s*```\s*$/i, "")
+        .trim();
+
+      const parsed = JSON.parse(cleaned);
+      const revisedFields = RevisedGlobalFieldsResponseSchema.parse(parsed);
+
+      // Merge revised fields back into the full presentation
+      return { ...presentation, ...revisedFields };
+    } catch (err) {
+      lastError = err instanceof Error ? err : new Error(String(err));
+      if (attempt < maxRetries) {
+        await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)));
+      }
+    }
+  }
+
+  throw new Error(`Global fields revision failed: ${lastError?.message}`);
+}
+
+/**
+ * Main entry point: Two-step smart partial revision.
+ * 1. Parse intent (tiny LLM call)
+ * 2. Revise only the affected parts (minimal context)
+ * 3. Merge back into full Presentation
+ *
+ * Returns both the revised Presentation and the intent (for UI display).
+ */
+export async function revisePartialPresentation(
+  presentation: Presentation,
+  userInstruction: string,
+  modelId: string,
+  language: string = "English"
+): Promise<{ revised: Presentation; intent: RevisionIntent }> {
+  // Step 1: Parse intent
+  const intent = await parseRevisionIntent(presentation, userInstruction, modelId);
+
+  let current = presentation;
+
+  // Step 2a: Revise affected chapters
+  if (intent.affectedChapters.length > 0) {
+    current = await reviseChapters(current, intent, modelId, language);
+  }
+
+  // Step 2b: Revise affected global fields
+  if (intent.globalFields.length > 0) {
+    current = await reviseGlobalFields(current, intent, modelId, language);
+  }
+
+  // Validate the final merged result
+  const validated = PresentationSchema.parse(current);
+
+  return { revised: validated, intent };
 }

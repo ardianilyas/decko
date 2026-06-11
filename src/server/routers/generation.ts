@@ -6,7 +6,7 @@ import { TRPCError } from "@trpc/server";
 import { randomUUID } from "crypto";
 import {
   generatePresentation,
-  revisePresentation,
+  revisePartialPresentation,
   PresentationSchema,
   type Presentation,
 } from "../services/generation.service";
@@ -151,6 +151,7 @@ export const generationRouter = router({
 
   /**
    * FR-004: Revise a generated presentation (max 3 revisions, no extra credits).
+   * Uses two-step partial revision: parse intent → revise only affected parts.
    */
   revise: protectedProcedure
     .input(
@@ -178,9 +179,19 @@ export const generationRouter = router({
       }
 
       const currentJson = PresentationSchema.parse(gen.generatedJson);
+
       let revised: Presentation;
+      let affectedSummary: string;
+
       try {
-        revised = await revisePresentation(currentJson, input.prompt, gen.model, gen.language);
+        const result = await revisePartialPresentation(
+          currentJson,
+          input.prompt,
+          gen.model,
+          gen.language
+        );
+        revised = result.revised;
+        affectedSummary = result.intent.affectedSummary;
       } catch {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
@@ -194,6 +205,7 @@ export const generationRouter = router({
         id: revisionId,
         generationId: input.generationId,
         prompt: input.prompt,
+        affectedSummary,
         generatedJson: revised as any,
       });
 
@@ -206,6 +218,35 @@ export const generationRouter = router({
         })
         .where(eq(schema.generation.id, input.generationId));
 
-      return { id: revisionId, result: revised, revisionsLeft: MAX_REVISIONS - gen.revisionCount - 1 };
+      const revisionsLeft = MAX_REVISIONS - gen.revisionCount - 1;
+      return { id: revisionId, result: revised, affectedSummary, revisionsLeft };
+    }),
+
+  /**
+   * Delete a generation and all its revisions
+   */
+  delete: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      // Check ownership
+      const [gen] = await ctx.db
+        .select()
+        .from(schema.generation)
+        .where(eq(schema.generation.id, input.id));
+
+      if (!gen) throw new TRPCError({ code: "NOT_FOUND" });
+      if (gen.userId !== ctx.session.user.id) throw new TRPCError({ code: "FORBIDDEN" });
+
+      // Delete revisions manually since cascade delete is not set on the foreign key
+      await ctx.db
+        .delete(schema.revision)
+        .where(eq(schema.revision.generationId, input.id));
+
+      // Delete generation
+      await ctx.db
+        .delete(schema.generation)
+        .where(eq(schema.generation.id, input.id));
+
+      return { success: true };
     }),
 });

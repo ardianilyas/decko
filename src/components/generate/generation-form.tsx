@@ -9,9 +9,9 @@ import type { Presentation } from "@/server/services/generation.service";
 const MODELS = [
   {
     id: "openrouter/owl-alpha" as const,
-    label: "Owl Alpha (Testing)",
-    description: "Free",
-    cost: 0,
+    label: "Owl Alpha",
+    description: "1 credit · Fast",
+    cost: 1,
     icon: "🦉",
   },
   {
@@ -258,8 +258,7 @@ export function GenerationForm({ onResult }: GenerationFormProps) {
                             </div>
                           </div>
                         </div>
-                        {model.cost > 0 ? (
-                          <div className={`flex items-center gap-0.5 px-1.5 py-0.5 rounded-md text-[10px] font-medium ${
+                        <div className={`flex items-center gap-0.5 px-1.5 py-0.5 rounded-md text-[10px] font-medium ${
                             selectedModel === model.id
                               ? "bg-background/25 text-background"
                               : "bg-amber-500/10 text-amber-600 dark:text-amber-500"
@@ -267,20 +266,21 @@ export function GenerationForm({ onResult }: GenerationFormProps) {
                             <Coins className="w-3 h-3" />
                             {model.cost}
                           </div>
-                        ) : (
-                          <div className={`text-[10px] px-1.5 py-0.5 rounded-md ${
-                            selectedModel === model.id
-                              ? "bg-background/25 text-background"
-                              : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-500"
-                          }`}>
-                            Free
-                          </div>
-                        )}
                       </button>
                     ))}
                   </div>
                 </div>
               )}
+            </div>
+
+            <div className="h-4 w-px bg-border/50 mx-0.5" />
+
+            {/* Credit Pill */}
+            <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs font-semibold text-amber-600 dark:text-amber-500 shrink-0 transition-colors hover:bg-amber-500/20">
+              <Coins className="w-3.5 h-3.5" />
+              <span>
+                {creditsData !== undefined ? creditsData.credits : "..."} <span className="hidden sm:inline">credits</span>
+              </span>
             </div>
           </div>
 
@@ -298,7 +298,7 @@ export function GenerationForm({ onResult }: GenerationFormProps) {
               className="p-2 rounded-xl bg-foreground text-background transition-all hover:opacity-90 disabled:opacity-40 disabled:hover:opacity-40 disabled:cursor-not-allowed shadow-sm"
             >
               {generateMutation.isPending ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <Loader2 className="w-4 h-4 animate-spin" style={{ animation: "spin 1s linear infinite" }} />
               ) : (
                 <ArrowUp className="w-4 h-4" />
               )}
@@ -307,25 +307,28 @@ export function GenerationForm({ onResult }: GenerationFormProps) {
         </div>
       </div>
 
-      {/* External Footer: Credits Status */}
-      <div className="flex items-center justify-end px-1">
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary/50 border border-border/50 text-xs">
-          <Coins className="w-3.5 h-3.5 text-amber-500" />
-          <span className="font-medium text-foreground">
-            {creditsData !== undefined ? creditsData.credits : "..."} credits left
-          </span>
-        </div>
-      </div>
       
       {generateMutation.isPending && (
-        <div className="absolute -top-16 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-5 py-2.5 rounded-full bg-background/95 border border-border backdrop-blur-md shadow-xl text-sm font-semibold text-foreground animate-in fade-in slide-in-from-bottom-3 duration-300">
-          <div className="relative flex items-center justify-center">
-            <Loader2 className="w-4 h-4 animate-spin text-primary animate-duration-1000" />
-            <Sparkles className="w-2.5 h-2.5 text-amber-500 absolute -top-1.5 -right-1.5 animate-pulse" />
+        <div className="absolute -top-20 left-1/2 -translate-x-1/2 z-50 flex items-center gap-4 px-6 py-3.5 rounded-full bg-background/60 border border-primary/20 backdrop-blur-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 slide-in-from-bottom-5 duration-500">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent animate-pulse duration-2000" />
+          
+          <div className="relative flex items-center justify-center shrink-0">
+            <div className="absolute inset-0 rounded-full bg-primary/30 animate-ping duration-1000" />
+            <div className="relative bg-card rounded-full p-1.5 shadow-sm border border-primary/20">
+              <Loader2 className="w-4 h-4 animate-spin text-primary" style={{ animation: "spin 1s linear infinite" }} />
+              <Sparkles className="w-3 h-3 text-amber-500 absolute -top-1.5 -right-1.5 animate-bounce" />
+            </div>
           </div>
-          <span className="bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
-            Crafting your presentation...
-          </span>
+          
+          <div className="relative z-10 flex flex-col items-start justify-center">
+            <span className="text-sm font-bold bg-gradient-to-r from-primary to-foreground bg-clip-text text-transparent">
+              Crafting presentation...
+            </span>
+            <span className="text-[10px] font-medium text-muted-foreground flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary/60 animate-pulse" />
+              Structuring slides & writing content
+            </span>
+          </div>
         </div>
       )}
     </div>
