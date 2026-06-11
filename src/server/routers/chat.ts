@@ -1,26 +1,20 @@
 import { z } from "zod";
 import { router, protectedProcedure } from "../trpc";
-import { eq, and, desc, asc } from "drizzle-orm";
+import { desc, asc, inArray, and, eq } from "drizzle-orm";
 import * as schema from "@/db/schema";
 import { TRPCError } from "@trpc/server";
 import { randomUUID } from "crypto";
+import {
+  verifyParticipant,
+  touchConversation,
+} from "../services/conversation.service";
 
 export const chatRouter = router({
+  // -------------------------------------------------------------------------
+  // Queries
+  // -------------------------------------------------------------------------
+
   getConversations: protectedProcedure.query(async ({ ctx }) => {
-    // For now, let's just return all conversations the user is part of.
-    const userParticipants = await ctx.db
-      .select({
-        conversationId: schema.participant.conversationId,
-      })
-      .from(schema.participant)
-      .where(eq(schema.participant.userId, ctx.session.user.id));
-
-    if (userParticipants.length === 0) return [];
-
-    const conversationIds = userParticipants.map((p) => p.conversationId);
-
-
-
     const result = await ctx.db
       .select({
         id: schema.conversation.id,
@@ -42,22 +36,8 @@ export const chatRouter = router({
   getMessages: protectedProcedure
     .input(z.object({ conversationId: z.string() }))
     .query(async ({ ctx, input }) => {
-      // Verify user is in conversation
-      const isParticipant = await ctx.db
-        .select()
-        .from(schema.participant)
-        .where(
-          and(
-            eq(schema.participant.conversationId, input.conversationId),
-            eq(schema.participant.userId, ctx.session.user.id)
-          )
-        );
+      await verifyParticipant(ctx.db, input.conversationId, ctx.session.user.id);
 
-      if (isParticipant.length === 0) {
-        throw new TRPCError({ code: "FORBIDDEN" });
-      }
-
-      // Join with user to get sender name
       const messages = await ctx.db
         .select({
           id: schema.message.id,
@@ -75,28 +55,31 @@ export const chatRouter = router({
       return messages;
     }),
 
-  sendMessage: protectedProcedure
-    .input(
-      z.object({
-        conversationId: z.string(),
-        content: z.string().min(1),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      // Verify participant
-      const isParticipant = await ctx.db
-        .select()
-        .from(schema.participant)
-        .where(
-          and(
-            eq(schema.participant.conversationId, input.conversationId),
-            eq(schema.participant.userId, ctx.session.user.id)
-          )
-        );
+  // -------------------------------------------------------------------------
+  // Mutations
+  // -------------------------------------------------------------------------
 
-      if (isParticipant.length === 0) {
-        throw new TRPCError({ code: "FORBIDDEN" });
-      }
+  createConversation: protectedProcedure
+    .input(z.object({ name: z.string().optional() }).optional())
+    .mutation(async ({ ctx, input }) => {
+      const convId = randomUUID();
+      await ctx.db.insert(schema.conversation).values({
+        id: convId,
+        name: input?.name || "New Chat",
+        isGroup: false,
+      });
+      await ctx.db.insert(schema.participant).values({
+        id: randomUUID(),
+        conversationId: convId,
+        userId: ctx.session.user.id,
+      });
+      return { id: convId };
+    }),
+
+  sendMessage: protectedProcedure
+    .input(z.object({ conversationId: z.string(), content: z.string().min(1) }))
+    .mutation(async ({ ctx, input }) => {
+      await verifyParticipant(ctx.db, input.conversationId, ctx.session.user.id);
 
       const [newMessage] = await ctx.db
         .insert(schema.message)
@@ -108,31 +91,47 @@ export const chatRouter = router({
         })
         .returning();
 
-      // Update conversation updatedAt
-      await ctx.db
-        .update(schema.conversation)
-        .set({ updatedAt: new Date() })
-        .where(eq(schema.conversation.id, input.conversationId));
-
+      await touchConversation(ctx.db, input.conversationId);
       return newMessage;
     }),
 
-  createConversation: protectedProcedure
-    .mutation(async ({ ctx }) => {
-      // Create a dummy group conversation for testing if empty
-      const convId = randomUUID();
-      await ctx.db.insert(schema.conversation).values({
-        id: convId,
-        name: "General Chat",
-        isGroup: true,
-      });
+  deleteMessagesFrom: protectedProcedure
+    .input(z.object({ conversationId: z.string(), messageId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      await verifyParticipant(ctx.db, input.conversationId, ctx.session.user.id);
 
-      await ctx.db.insert(schema.participant).values({
-        id: randomUUID(),
-        conversationId: convId,
-        userId: ctx.session.user.id,
-      });
+      // Get the target message's timestamp
+      const [msg] = await ctx.db
+        .select({ createdAt: schema.message.createdAt })
+        .from(schema.message)
+        .where(
+          and(
+            eq(schema.message.id, input.messageId),
+            eq(schema.message.conversationId, input.conversationId)
+          )
+        );
 
-      return { id: convId };
+      if (!msg) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Message not found" });
+      }
+
+      // Fetch IDs of messages at or after this timestamp and batch-delete
+      const all = await ctx.db
+        .select({ id: schema.message.id, createdAt: schema.message.createdAt })
+        .from(schema.message)
+        .where(eq(schema.message.conversationId, input.conversationId));
+
+      const cutoff = new Date(msg.createdAt).getTime();
+      const toDeleteIds = all
+        .filter((m) => new Date(m.createdAt).getTime() >= cutoff)
+        .map((m) => m.id);
+
+      if (toDeleteIds.length > 0) {
+        await ctx.db
+          .delete(schema.message)
+          .where(inArray(schema.message.id, toDeleteIds));
+      }
+
+      return { success: true, deletedCount: toDeleteIds.length };
     }),
 });

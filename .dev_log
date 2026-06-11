@@ -1,0 +1,184 @@
+
+> decko@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.9 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.8:3000
+- Environments: .env.local
+✓ Ready in 751ms
+⚠ Slow filesystem detected. The benchmark took 468ms. If /Users/macbookpro/Documents/NextJS/decko/.next/dev is a network drive, consider moving it to a local folder.
+See more: https://nextjs.org/docs/app/guides/local-development
+
+○ Compiling /chat ...
+ GET /chat 200 in 7.9s (next.js: 3.6s, proxy.ts: 1253ms, application-code: 3.0s)
+ GET /api/trpc/chat.getConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 3.0s (next.js: 2.9s, application-code: 130ms)
+ GET /api/trpc/chat.getConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 94ms (next.js: 28ms, application-code: 65ms)
+ GET /chat 200 in 221ms (next.js: 7ms, proxy.ts: 7ms, application-code: 207ms)
+[browser] ⨯ unhandledRejection: ChunkLoadError: Failed to load chunk /_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_1mojsay._.js from module [turbopack]/browser/dev/hmr-client/hmr-client.ts [app-client] (ecmascript, async loader)
+ GET /chat 200 in 366ms (next.js: 8ms, proxy.ts: 14ms, application-code: 344ms)
+[browser] ⨯ unhandledRejection: ChunkLoadError: Failed to load chunk /_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_1mojsay._.js from module [turbopack]/browser/dev/hmr-client/hmr-client.ts [app-client] (ecmascript, async loader)
+[browser] ⨯ unhandledRejection: ChunkLoadError: Failed to load chunk /_next/static/chunks/node_modules_next_dist_client_components_builtin_global-error_0ogr5o3.js from module [project]/node_modules/next/dist/compiled/react-server-dom-turbopack/cjs/react-server-dom-turbopack-client.browser.development.js [app-client] (ecmascript)
+ GET /chat 200 in 380ms (next.js: 12ms, proxy.ts: 27ms, application-code: 341ms)
+[browser] ⨯ unhandledRejection: ChunkLoadError: Failed to load chunk /_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_1mojsay._.js from module [turbopack]/browser/dev/hmr-client/hmr-client.ts [app-client] (ecmascript, async loader)
+ GET /chat 200 in 240ms (next.js: 8ms, proxy.ts: 25ms, application-code: 207ms)
+ GET /api/trpc/chat.getConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 121ms (next.js: 14ms, application-code: 107ms)
+ GET /api/trpc/chat.getConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 134ms (next.js: 23ms, application-code: 111ms)
+ GET /api/trpc/chat.getConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 30ms (next.js: 10ms, application-code: 20ms)
+ GET /chat 200 in 144ms (next.js: 5ms, proxy.ts: 5ms, application-code: 134ms)
+ GET /api/trpc/chat.getConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 28ms (next.js: 9ms, application-code: 19ms)
+✓ Compiled in 436ms
+ GET /api/trpc/chat.getConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 42ms (next.js: 17ms, application-code: 25ms)
+✓ Compiled in 278ms
+ GET /api/trpc/chat.getConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 54ms (next.js: 12ms, application-code: 42ms)
+ GET /chat 200 in 122ms (next.js: 7ms, proxy.ts: 5ms, application-code: 110ms)
+ GET /api/trpc/chat.getConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 32ms (next.js: 7ms, application-code: 24ms)
+ GET /api/trpc/chat.getConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 47ms (next.js: 12ms, application-code: 36ms)
+ GET /chat 200 in 139ms (next.js: 3ms, proxy.ts: 4ms, application-code: 131ms)
+ GET /api/trpc/chat.getConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 177ms (next.js: 9ms, application-code: 168ms)
+ GET /chat 200 in 139ms (next.js: 6ms, proxy.ts: 7ms, application-code: 126ms)
+ GET /api/trpc/chat.getConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 42ms (next.js: 8ms, application-code: 34ms)
+ GET /api/trpc/chat.getConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 23ms (next.js: 3ms, application-code: 20ms)
+ GET /chat 200 in 1340ms (next.js: 343ms, proxy.ts: 326ms, application-code: 670ms)
+ GET /chat 200 in 432ms (next.js: 38ms, proxy.ts: 21ms, application-code: 373ms)
+ GET /chat 200 in 115ms (next.js: 5ms, proxy.ts: 9ms, application-code: 101ms)
+ GET /chat 200 in 469ms (next.js: 116ms, proxy.ts: 40ms, application-code: 313ms)
+ GET /chat 200 in 477ms (next.js: 77ms, proxy.ts: 34ms, application-code: 367ms)
+ GET /chat 200 in 457ms (next.js: 159ms, proxy.ts: 67ms, application-code: 231ms)
+ GET /chat 200 in 478ms (next.js: 142ms, proxy.ts: 35ms, application-code: 301ms)
+ GET /chat 200 in 358ms (next.js: 60ms, proxy.ts: 29ms, application-code: 269ms)
+ GET /chat 200 in 366ms (next.js: 36ms, proxy.ts: 32ms, application-code: 299ms)
+ GET /chat 200 in 349ms (next.js: 15ms, proxy.ts: 96ms, application-code: 238ms)
+ GET /chat 200 in 361ms (next.js: 44ms, proxy.ts: 96ms, application-code: 222ms)
+ GET /chat 200 in 362ms (next.js: 71ms, proxy.ts: 96ms, application-code: 195ms)
+ GET /chat 200 in 368ms (next.js: 126ms, proxy.ts: 27ms, application-code: 214ms)
+ GET /chat 200 in 349ms (next.js: 31ms, proxy.ts: 22ms, application-code: 296ms)
+ GET /chat 200 in 349ms (next.js: 56ms, proxy.ts: 22ms, application-code: 271ms)
+ GET /chat 200 in 452ms (next.js: 21ms, proxy.ts: 95ms, application-code: 336ms)
+ GET /chat 200 in 375ms (next.js: 88ms, proxy.ts: 23ms, application-code: 264ms)
+ GET /chat 200 in 382ms (next.js: 61ms, proxy.ts: 22ms, application-code: 299ms)
+ GET /chat 200 in 367ms (next.js: 96ms, proxy.ts: 60ms, application-code: 211ms)
+ GET /chat 200 in 423ms (next.js: 15ms, proxy.ts: 13ms, application-code: 395ms)
+ GET /chat 200 in 430ms (next.js: 50ms, proxy.ts: 17ms, application-code: 363ms)
+ GET /chat 200 in 300ms (next.js: 16ms, proxy.ts: 33ms, application-code: 251ms)
+ GET /chat 200 in 293ms (next.js: 128ms, proxy.ts: 26ms, application-code: 139ms)
+ GET /chat 200 in 289ms (next.js: 156ms, proxy.ts: 27ms, application-code: 106ms)
+ GET /api/trpc/chat.getConversations?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D 200 in 617ms (next.js: 463ms, application-code: 154ms)
+ GET /api/trpc/chat.getMessages?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%22conversationId%22%3A%2273f89b0e-04be-453c-a590-ef9e3802c510%22%7D%7D%7D 200 in 129ms (next.js: 10ms, application-code: 119ms)
+ GET /chat/73f89b0e-04be-453c-a590-ef9e3802c510 200 in 4.7s (next.js: 4.4s, proxy.ts: 32ms, application-code: 225ms)
+✓ Compiled in 1209ms
+ GET /chat/73f89b0e-04be-453c-a590-ef9e3802c510 404 in 953ms (next.js: 345ms, proxy.ts: 227ms, application-code: 382ms)
+ GET /chat/73f89b0e-04be-453c-a590-ef9e3802c510 404 in 954ms (next.js: 466ms, proxy.ts: 228ms, application-code: 261ms)
+ GET /chat/73f89b0e-04be-453c-a590-ef9e3802c510 404 in 952ms (next.js: 592ms, proxy.ts: 224ms, application-code: 135ms)
+ GET /chat/73f89b0e-04be-453c-a590-ef9e3802c510 404 in 945ms (next.js: 615ms, proxy.ts: 225ms, application-code: 105ms)
+ GET /chat/73f89b0e-04be-453c-a590-ef9e3802c510 404 in 753ms (next.js: 93ms, proxy.ts: 564ms, application-code: 97ms)
+ GET /api/trpc/chat.getConversations,chat.getMessages?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%2C%221%22%3A%7B%22json%22%3A%7B%22conversationId%22%3A%2273f89b0e-04be-453c-a590-ef9e3802c510%22%7D%7D%7D 200 in 2.0s (next.js: 716ms, application-code: 1297ms)
+ GET /chat/73f89b0e-04be-453c-a590-ef9e3802c510 404 in 281ms (next.js: 217ms, proxy.ts: 22ms, application-code: 42ms)
+ GET /chat/73f89b0e-04be-453c-a590-ef9e3802c510 404 in 310ms (next.js: 7ms, proxy.ts: 26ms, application-code: 277ms)
+ GET /chat/73f89b0e-04be-453c-a590-ef9e3802c510 404 in 209ms (next.js: 13ms, proxy.ts: 16ms, application-code: 181ms)
+ GET /chat/73f89b0e-04be-453c-a590-ef9e3802c510 404 in 79ms (next.js: 12ms, proxy.ts: 5ms, application-code: 61ms)
+ GET /chat/73f89b0e-04be-453c-a590-ef9e3802c510 404 in 81ms (next.js: 9ms, proxy.ts: 6ms, application-code: 65ms)
+
+thread 'tokio-runtime-worker' (367899) panicked at turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:225:17:
+Failed to restore task data (corrupted database or bug): Data for batch of 45 tasks
+
+Caused by:
+    0: Looking up typed data for 45 tasks from database failed
+    1: Unable to open static sorted file referenced from 00001033.meta
+    2: Unable to open static sorted file 00001029.sst
+    3: Failed to open SST file /Users/macbookpro/Documents/NextJS/decko/.next/dev/cache/turbopack/f37fad94/00001029.sst
+    4: No such file or directory (os error 2)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'tokio-runtime-worker' (367899) panicked at turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:225:17:
+Failed to restore task data (corrupted database or bug): Data for batch of 45 tasks
+
+Caused by:
+    0: Looking up typed data for 45 tasks from database failed
+    1: Unable to open static sorted file referenced from 00001033.meta
+    2: Unable to open static sorted file 00001029.sst
+    3: Failed to open SST file /Users/macbookpro/Documents/NextJS/decko/.next/dev/cache/turbopack/f37fad94/00001029.sst
+    4: No such file or directory (os error 2)
+
+thread 'tokio-runtime-worker' (367899) panicked at turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:197:17:
+Failed to restore task data (corrupted database or bug): Data for TaskId 82799)
+
+Caused by:
+    0: Looking up task storage for TaskId 82799 from database failed
+    1: Unable to open static sorted file referenced from 00000996.meta
+    2: Unable to open static sorted file 00000993.sst
+    3: Failed to open SST file /Users/macbookpro/Documents/NextJS/decko/.next/dev/cache/turbopack/f37fad94/00000993.sst
+    4: No such file or directory (os error 2)
+
+thread 'tokio-runtime-worker' (367899) panicked at turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:197:17:
+Failed to restore task data (corrupted database or bug): Data for TaskId 82799)
+
+Caused by:
+    0: Looking up task storage for TaskId 82799 from database failed
+    1: Unable to open static sorted file referenced from 00000996.meta
+    2: Unable to open static sorted file 00000993.sst
+    3: Failed to open SST file /Users/macbookpro/Documents/NextJS/decko/.next/dev/cache/turbopack/f37fad94/00000993.sst
+    4: No such file or directory (os error 2)
+
+thread 'tokio-runtime-worker' (367375) panicked at turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:197:17:
+Failed to restore task data (corrupted database or bug): Meta for TaskId 82799)
+
+Caused by:
+    0: Looking up task storage for TaskId 82799 from database failed
+    1: Unable to open static sorted file referenced from 00000855.meta
+    2: Unable to open static sorted file 00000854.sst
+    3: Failed to open SST file /Users/macbookpro/Documents/NextJS/decko/.next/dev/cache/turbopack/f37fad94/00000854.sst
+    4: No such file or directory (os error 2)
+
+thread 'tokio-runtime-worker' (367898) panicked at turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:225:17:
+Failed to restore task data (corrupted database or bug): Data for batch of 3 tasks
+
+Caused by:
+    0: Looking up typed data for 3 tasks from database failed
+    1: Unable to open static sorted file referenced from 00000996.meta
+    2: Unable to open static sorted file 00000995.sst
+    3: Failed to open SST file /Users/macbookpro/Documents/NextJS/decko/.next/dev/cache/turbopack/f37fad94/00000995.sst
+    4: No such file or directory (os error 2)
+
+thread 'tokio-runtime-worker' (367375) panicked at turbopack/crates/turbo-tasks-backend/src/backend/operation/mod.rs:197:17:
+Failed to restore task data (corrupted database or bug): Data for TaskId 436966)
+
+Caused by:
+    0: Looking up task storage for TaskId 436966 from database failed
+    1: Unable to open static sorted file referenced from 00000996.meta
+    2: Unable to open static sorted file 00000993.sst
+    3: Failed to open SST file /Users/macbookpro/Documents/NextJS/decko/.next/dev/cache/turbopack/f37fad94/00000993.sst
+    4: No such file or directory (os error 2)
+○ Compiling /_error ...
+Persisting failed: Unable to write SST file 00001035.sst
+
+Caused by:
+    No such file or directory (os error 2)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+[browser] Failed to fetch RSC payload for http://localhost:3000/chat/73f89b0e-04be-453c-a590-ef9e3802c510. Falling back to browser navigation. TypeError: Load failed
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Persisting failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Persisting failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Persisting failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)
+Compaction failed: Another write batch or compaction is already active (Only a single write operations is allowed at a time)

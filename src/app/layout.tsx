@@ -19,6 +19,7 @@ export const metadata: Metadata = {
 };
 
 import { TRPCProvider } from "@/trpc/Provider";
+import { ThemeProvider } from "@/components/theme-provider";
 
 export default function RootLayout({
   children,
@@ -32,8 +33,10 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <TRPCProvider>
-          {children}
-          <Toaster />
+          <ThemeProvider>
+            {children}
+            <Toaster position="top-right" closeButton richColors />
+          </ThemeProvider>
         </TRPCProvider>
       </body>
     </html>
