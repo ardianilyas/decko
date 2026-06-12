@@ -30,6 +30,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${albertSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <head>
         <script
