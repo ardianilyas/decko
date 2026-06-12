@@ -131,7 +131,7 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
   };
 
   return (
-    <div className="min-h-screen bg-[#030303] text-zinc-100 font-sans selection:bg-amber-400 selection:text-black overflow-x-hidden relative">
+    <div className="min-h-screen bg-[#030303] text-zinc-100 font-sans selection:bg-amber-400 selection:text-black overflow-x-clip relative">
       {/* Background Starry Particles */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         {stars.map((star) => (
@@ -174,6 +174,12 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
               className="text-sm text-zinc-400 hover:text-white transition-colors cursor-pointer"
             >
               Home
+            </button>
+            <button
+              onClick={() => scrollToSection("features")}
+              className="text-sm text-zinc-400 hover:text-white transition-colors cursor-pointer"
+            >
+              Features
             </button>
             <button
               onClick={() => scrollToSection("pricing")}
@@ -239,6 +245,12 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
                 className="text-left text-base text-zinc-300 hover:text-white py-1 cursor-pointer"
               >
                 Home
+              </button>
+              <button
+                onClick={() => scrollToSection("features")}
+                className="text-left text-base text-zinc-300 hover:text-white py-1 cursor-pointer"
+              >
+                Features
               </button>
               <button
                 onClick={() => scrollToSection("pricing")}
@@ -375,7 +387,7 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
       </section>
 
       {/* Features Showcase Section */}
-      <section className="relative z-10 py-24 border-t border-white/5 bg-[#050507]/40">
+      <section id="features" className="relative z-10 py-24 border-t border-white/5 bg-[#050507]/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
@@ -386,38 +398,113 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Feature 1 */}
-            <div className="glass-card-premium rounded-2xl p-8 text-left">
-              <div className="w-12 h-12 rounded-xl bg-amber-400/10 border border-amber-400/20 flex items-center justify-center mb-6 text-amber-300">
-                <Zap className="w-6 h-6" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-auto">
+            {/* Feature 1 (Double size - Col Span 2, Row Span 2) */}
+            <div className="glass-card-premium rounded-3xl p-8 md:col-span-2 md:row-span-2 flex flex-col justify-between relative overflow-hidden border-indigo-500/25 hover:border-indigo-500/40 hover:shadow-indigo-500/5 group text-left min-h-[380px] md:min-h-[460px]">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(99,102,241,0.07)_0%,_transparent_60%)] pointer-events-none" />
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-6 text-indigo-400">
+                  <Zap className="w-6 h-6" />
+                </div>
+                <h3 className="text-2xl font-semibold text-white mb-3">Instant AI Generation</h3>
+                <p className="text-zinc-400 text-sm leading-relaxed max-w-xl mb-6">
+                  Input your topic, select your language preference, and choose an AI model. In under 30 seconds, Decko drafts slide titles, descriptions, target outcomes, and chapter slides.
+                </p>
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">Instant AI Generation</h3>
-              <p className="text-zinc-400 text-sm leading-relaxed">
-                Feed your presentation topic and language. The AI parses the guidelines and outputs presentation titles, descriptions, target goals, and chapter slides in 30 seconds.
-              </p>
+              {/* Mini Interactive Mockup inside Bento box */}
+              <div className="relative z-10 bg-black/40 border border-white/5 rounded-xl p-4 mt-auto">
+                <div className="flex items-center justify-between mb-3 border-b border-white/5 pb-2">
+                  <span className="text-xs font-semibold text-zinc-300">AI Steps Checklist</span>
+                  <span className="text-[10px] text-indigo-400 animate-pulse font-medium">Processing...</span>
+                </div>
+                <div className="space-y-2 text-xs text-zinc-400">
+                  <div className="flex items-center gap-2">
+                    <Check className="w-3.5 h-3.5 text-indigo-400" />
+                    <span>Tuning Prompt template</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check className="w-3.5 h-3.5 text-indigo-400" />
+                    <span>Generating Outline chapters</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-3.5 h-3.5 rounded-full border border-indigo-400/50 animate-spin border-t-transparent shrink-0" />
+                    <span className="text-zinc-200">Polishing slide content & formatting</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* Feature 2 */}
-            <div className="glass-card-premium rounded-2xl p-8 text-left">
-              <div className="w-12 h-12 rounded-xl bg-amber-400/10 border border-amber-400/20 flex items-center justify-center mb-6 text-amber-300">
-                <History className="w-6 h-6" />
+            {/* Feature 2 (Single size - Amber) */}
+            <div className="glass-card-premium rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden border-amber-500/25 hover:border-amber-500/40 hover:shadow-amber-500/5 group text-left min-h-[220px]">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(245,158,11,0.07)_0%,_transparent_60%)] pointer-events-none" />
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-xl bg-amber-400/10 border border-amber-400/20 flex items-center justify-center mb-6 text-amber-300">
+                  <Sparkles className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-2">DeepSeek & GPT-4o</h3>
+                <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed">
+                  Choose between Owl Alpha (1 credit), DeepSeek (3 credits), or GPT-4o Mini (7 credits) to match your draft detail and cost requirements.
+                </p>
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">Free Outline Revisions</h3>
-              <p className="text-zinc-400 text-sm leading-relaxed">
-                Refine slides, modify objectives, or expand summaries interactively. Revisions use a specialized chat window that won&apos;t charge extra credits.
-              </p>
             </div>
 
-            {/* Feature 3 */}
-            <div className="glass-card-premium rounded-2xl p-8 text-left">
-              <div className="w-12 h-12 rounded-xl bg-amber-400/10 border border-amber-400/20 flex items-center justify-center mb-6 text-amber-300">
-                <FileText className="w-6 h-6" />
+            {/* Feature 3 (Single size - Rose) */}
+            <div className="glass-card-premium rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden border-rose-500/25 hover:border-rose-500/40 hover:shadow-rose-500/5 group text-left min-h-[220px]">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(244,63,94,0.07)_0%,_transparent_60%)] pointer-events-none" />
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mb-6 text-rose-400">
+                  <History className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-2">Free Chat Revisions</h3>
+                <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed">
+                  Refine slide outlines iteratively using natural chat feedback. Up to 3 cycles per presentation outline with absolutely zero extra credits required.
+                </p>
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">PDF & Word Export</h3>
-              <p className="text-zinc-400 text-sm leading-relaxed">
-                Generate outlines and export them cleanly to beautifully formatted PDFs or editable Microsoft Word files ready for team distributions.
-              </p>
+            </div>
+
+            {/* Feature 4 (Single size - Emerald) */}
+            <div className="glass-card-premium rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden border-emerald-500/25 hover:border-emerald-500/40 hover:shadow-emerald-500/5 group text-left min-h-[220px]">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(16,185,129,0.07)_0%,_transparent_60%)] pointer-events-none" />
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-6 text-emerald-400">
+                  <FileText className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-2">Document Exports</h3>
+                <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed">
+                  Download finished outlines cleanly into styled Microsoft Word (.docx) or print-ready PDF files with one single click.
+                </p>
+              </div>
+            </div>
+
+            {/* Feature 5 (Double size - Col Span 2, Purple) */}
+            <div className="glass-card-premium rounded-3xl p-8 md:col-span-2 flex flex-col md:flex-row gap-6 items-center justify-between relative overflow-hidden border-purple-500/25 hover:border-purple-500/40 hover:shadow-purple-500/5 group text-left min-h-[220px]">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(139,92,246,0.07)_0%,_transparent_60%)] pointer-events-none" />
+              <div className="relative z-10 flex-1">
+                <div className="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mb-6 text-purple-400">
+                  <Activity className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-2">Visual Skeletons & stable UI</h3>
+                <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed max-w-md">
+                  Pulsing loader skeletons match elements exactly, maintaining a visually stable workspace during initial loading states without layout shifts.
+                </p>
+              </div>
+              {/* Mini Skeleton Preview widget */}
+              <div className="relative z-10 bg-black/40 border border-white/5 rounded-xl p-4 w-full md:w-[220px] space-y-3 shrink-0">
+                <div className="flex items-center gap-2 border-b border-white/5 pb-2">
+                  <div className="w-3.5 h-3.5 rounded bg-purple-500/20 shrink-0" />
+                  <div className="h-2.5 bg-purple-500/20 rounded w-16" />
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-purple-500/10 shrink-0" />
+                    <div className="h-2 bg-purple-500/10 rounded w-[60%]" />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-purple-500/10 shrink-0" />
+                    <div className="h-2 bg-purple-500/10 rounded w-[50%]" />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
