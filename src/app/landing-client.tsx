@@ -154,15 +154,15 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
       <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-500/10 blur-[150px] pointer-events-none z-0" />
       <div className="absolute top-[10%] right-[-10%] w-[45%] h-[45%] rounded-full bg-purple-500/10 blur-[130px] pointer-events-none z-0" />
 
-      {/* Navbar */}
-      <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-[#030303]/60 backdrop-blur-md transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      {/* Floating Navbar Container */}
+      <div className="sticky top-4 z-50 w-full px-4 sm:px-6 lg:px-8 pointer-events-none">
+        <header className="max-w-5xl mx-auto h-14 rounded-full border border-white/10 bg-[#0c0c0f]/75 backdrop-blur-md shadow-lg shadow-black/40 flex items-center justify-between px-6 pointer-events-auto">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-400 to-amber-200 flex items-center justify-center shadow-lg shadow-amber-400/10">
-              <Sparkles className="w-4 h-4 text-black" />
+            <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-amber-400 to-amber-200 flex items-center justify-center shadow-lg shadow-amber-400/10">
+              <Sparkles className="w-3.5 h-3.5 text-black" />
             </div>
-            <span className="text-xl font-bold tracking-tight text-white group-hover:opacity-90 transition-opacity">
+            <span className="text-base font-bold tracking-tight text-white group-hover:opacity-90 transition-opacity">
               Decko
             </span>
           </Link>
@@ -198,7 +198,7 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
                 </span>
                 <Link
                   href="/chat"
-                  className="px-4 py-2 rounded-lg bg-white text-black text-sm font-medium hover:bg-zinc-200 transition-colors shadow-md shadow-white/5"
+                  className="px-4 py-2 rounded-full bg-white text-black text-xs font-semibold hover:bg-zinc-200 transition-colors shadow-md shadow-white/5"
                 >
                   Go to Workspace
                 </Link>
@@ -207,13 +207,13 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
               <>
                 <Link
                   href="/auth/login"
-                  className="px-4 py-2 rounded-lg text-zinc-300 hover:text-white text-sm font-medium transition-colors"
+                  className="px-3 py-1.5 rounded-full text-zinc-300 hover:text-white text-xs font-semibold transition-colors"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/auth/signup"
-                  className="px-4 py-2 rounded-lg bg-white text-black text-sm font-medium hover:bg-zinc-200 transition-colors shadow-md shadow-white/5"
+                  className="px-4 py-2 rounded-full bg-white text-black text-xs font-semibold hover:bg-zinc-200 transition-colors shadow-md shadow-white/5"
                 >
                   Sign Up
                 </Link>
@@ -224,63 +224,63 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+            className="md:hidden p-2 rounded-full text-zinc-400 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
           >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
-        </div>
-      </header>
+        </header>
 
-      {/* Mobile Menu Panel */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-x-0 top-16 z-40 bg-[#030303] border-b border-white/5 px-4 py-6 flex flex-col gap-5 md:hidden animate-in fade-in slide-in-from-top-5 duration-200">
-          <nav className="flex flex-col gap-4">
-            <button
-              onClick={() => scrollToSection("hero")}
-              className="text-left text-base text-zinc-300 hover:text-white py-1 cursor-pointer"
-            >
-              Home
-            </button>
-            <button
-              onClick={() => scrollToSection("pricing")}
-              className="text-left text-base text-zinc-300 hover:text-white py-1 cursor-pointer"
-            >
-              Pricing
-            </button>
-            <button
-              onClick={() => scrollToSection("faq")}
-              className="text-left text-base text-zinc-300 hover:text-white py-1 cursor-pointer"
-            >
-              FAQ
-            </button>
-          </nav>
-          <div className="border-t border-white/5 pt-4 flex flex-col gap-3">
-            {isLoggedIn ? (
-              <Link
-                href="/chat"
-                className="w-full text-center px-4 py-2.5 rounded-lg bg-white text-black text-sm font-medium hover:bg-zinc-200 transition-colors"
+        {/* Mobile Menu Panel */}
+        {mobileMenuOpen && (
+          <div className="fixed inset-x-4 top-20 z-40 bg-[#0c0c0f]/95 border border-white/10 rounded-2xl px-5 py-6 flex flex-col gap-5 md:hidden animate-in fade-in slide-in-from-top-5 duration-200 shadow-xl shadow-black/50 pointer-events-auto">
+            <nav className="flex flex-col gap-4">
+              <button
+                onClick={() => scrollToSection("hero")}
+                className="text-left text-base text-zinc-300 hover:text-white py-1 cursor-pointer"
               >
-                Go to Workspace
-              </Link>
-            ) : (
-              <>
+                Home
+              </button>
+              <button
+                onClick={() => scrollToSection("pricing")}
+                className="text-left text-base text-zinc-300 hover:text-white py-1 cursor-pointer"
+              >
+                Pricing
+              </button>
+              <button
+                onClick={() => scrollToSection("faq")}
+                className="text-left text-base text-zinc-300 hover:text-white py-1 cursor-pointer"
+              >
+                FAQ
+              </button>
+            </nav>
+            <div className="border-t border-white/5 pt-4 flex flex-col gap-3">
+              {isLoggedIn ? (
                 <Link
-                  href="/auth/login"
-                  className="w-full text-center px-4 py-2.5 rounded-lg border border-white/10 text-zinc-300 hover:text-white text-sm font-medium hover:bg-white/5 transition-colors"
+                  href="/chat"
+                  className="w-full text-center px-4 py-2.5 rounded-xl bg-white text-black text-sm font-medium hover:bg-zinc-200 transition-colors"
                 >
-                  Sign In
+                  Go to Workspace
                 </Link>
-                <Link
-                  href="/auth/signup"
-                  className="w-full text-center px-4 py-2.5 rounded-lg bg-white text-black text-sm font-medium hover:bg-zinc-200 transition-colors"
-                >
-                  Sign Up
-                </Link>
-              </>
-            )}
+              ) : (
+                <>
+                  <Link
+                    href="/auth/login"
+                    className="w-full text-center px-4 py-2.5 rounded-xl border border-white/10 text-zinc-300 hover:text-white text-sm font-medium hover:bg-white/5 transition-colors"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/auth/signup"
+                    className="w-full text-center px-4 py-2.5 rounded-xl bg-white text-black text-sm font-medium hover:bg-zinc-200 transition-colors"
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Hero Section */}
       <section id="hero" className="relative z-10 pt-16 pb-24 md:pt-24 md:pb-36 flex flex-col items-center text-center px-4 max-w-7xl mx-auto">
