@@ -135,24 +135,35 @@
   }
 }
 
-/* Custom minimalist scrollbar for all scrollable elements */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
-}
-
-*::-webkit-scrollbar {
+/* Custom minimalist scrollbar for WebKit/Blink browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
   width: 6px;
   height: 6px;
-  background-color: transparent;
 }
-*::-webkit-scrollbar-track {
-  background-color: transparent;
+::-webkit-scrollbar-track {
+  background: transparent;
 }
-*::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background-color: var(--border);
-  border-radius: 4px;
+  border-radius: 9999px;
 }
-*::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
   background-color: var(--muted-foreground);
+}
+
+/* Fallback for standard browsers like Firefox that don't support custom webkit scrollbars */
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+}
+
+/* Utility to hide scrollbar where needed */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
