@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { MessageCircle, Eye, EyeOff } from "lucide-react";
+import { Sparkles, Eye, EyeOff } from "lucide-react";
 
 export function LoginForm() {
   const [email, setEmail] = useState("");
@@ -36,14 +36,16 @@ export function LoginForm() {
 
   return (
     <div className="flex flex-col items-center w-full">
-      <MessageCircle className="w-10 h-10 mb-8" />
+      <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-amber-400 to-amber-200 flex items-center justify-center shadow-lg shadow-amber-400/10 mb-6">
+        <Sparkles className="w-5 h-5 text-black" />
+      </div>
       
-      <h2 className="text-3xl font-semibold tracking-tight mb-8">
+      <h2 className="text-3xl font-semibold tracking-tight text-zinc-950 dark:text-white mb-8">
         Sign in to your account
       </h2>
 
-      <div className="w-full flex gap-4 mb-8">
-        <Button variant="outline" className="w-full h-12 bg-white hover:bg-zinc-50 border-zinc-200">
+      <div className="w-full flex flex-col gap-3 mb-8">
+        <Button variant="outline" className="w-full h-12 bg-white dark:bg-[#0c0c0f]/60 hover:bg-zinc-50 dark:hover:bg-white/5 border-zinc-200 dark:border-white/10 text-zinc-800 dark:text-zinc-200 font-medium">
           <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
             <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
@@ -53,7 +55,7 @@ export function LoginForm() {
           </svg>
           Sign in with Google
         </Button>
-        <Button variant="outline" className="w-full h-12 bg-white hover:bg-zinc-50 border-zinc-200">
+        <Button variant="outline" className="w-full h-12 bg-white dark:bg-[#0c0c0f]/60 hover:bg-zinc-50 dark:hover:bg-white/5 border-zinc-200 dark:border-white/10 text-zinc-800 dark:text-zinc-200 font-medium">
           <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
             <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.04 2.26-.71 3.58-.71 1.514.048 2.872.845 3.65 2.15-3.1 1.72-2.64 5.92.51 7.15-.65 1.48-1.54 2.76-2.82 3.58zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
           </svg>
@@ -63,16 +65,16 @@ export function LoginForm() {
 
       <div className="w-full relative mb-8">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-zinc-200"></div>
+          <div className="w-full border-t border-zinc-200 dark:border-white/10"></div>
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="bg-[#FDFCF7] px-4 text-zinc-500">Or with email</span>
+          <span className="bg-[#fafcf7] dark:bg-[#030303] px-4 text-zinc-500 dark:text-zinc-400">Or with email</span>
         </div>
       </div>
 
       <form onSubmit={handleLogin} className="w-full space-y-4">
         {error && (
-          <div className="p-3 text-sm font-medium text-red-500 bg-red-50 rounded-md text-center">
+          <div className="p-3 text-sm font-medium text-red-500 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 rounded-md text-center">
             {error}
           </div>
         )}
@@ -85,7 +87,7 @@ export function LoginForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           disabled={isLoading}
-          className="h-12 bg-white border-zinc-200"
+          className="h-12 bg-white dark:bg-zinc-900/40 border-zinc-200 dark:border-white/10 text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus-visible:ring-amber-500"
         />
 
         <div className="relative">
@@ -97,12 +99,12 @@ export function LoginForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={isLoading}
-            className="h-12 bg-white border-zinc-200 pr-10"
+            className="h-12 bg-white dark:bg-zinc-900/40 border-zinc-200 dark:border-white/10 text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus-visible:ring-amber-500 pr-10"
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300"
           >
             {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
           </button>
@@ -113,24 +115,24 @@ export function LoginForm() {
             <input 
               type="checkbox" 
               id="remember" 
-              className="w-4 h-4 rounded border-zinc-300 text-black focus:ring-black"
+              className="w-4 h-4 rounded border-zinc-300 dark:border-white/10 text-black dark:text-white focus:ring-amber-500 bg-white dark:bg-zinc-900"
             />
-            <label htmlFor="remember" className="text-sm font-medium text-zinc-700">
+            <label htmlFor="remember" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
               Remember me
             </label>
           </div>
-          <a href="#" className="text-sm font-medium text-green-800 hover:underline">
+          <a href="#" className="text-sm font-medium text-amber-600 hover:text-amber-500 dark:text-amber-400 dark:hover:text-amber-300 hover:underline">
             Forgot Password?
           </a>
         </div>
 
-        <Button type="submit" className="w-full h-12 bg-black hover:bg-zinc-800 text-white text-base mt-2" disabled={isLoading}>
+        <Button type="submit" className="w-full h-12 bg-zinc-950 dark:bg-white hover:bg-zinc-800 dark:hover:bg-zinc-200 text-white dark:text-black font-semibold text-base mt-2 transition-colors animate-in fade-in duration-300" disabled={isLoading}>
           {isLoading ? "Signing in..." : "Sign In"}
         </Button>
 
-        <div className="text-center text-sm text-zinc-500 mt-8 pt-4">
+        <div className="text-center text-sm text-zinc-500 dark:text-zinc-400 mt-8 pt-4">
           Don&apos;t have an account?{" "}
-          <Link href="/auth/signup" className="text-black font-semibold hover:underline">
+          <Link href="/auth/signup" className="text-zinc-950 dark:text-white font-semibold hover:underline">
             Sign Up
           </Link>
         </div>

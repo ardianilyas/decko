@@ -166,7 +166,7 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
             <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-amber-400 to-amber-200 flex items-center justify-center shadow-lg shadow-amber-400/10">
               <Sparkles className="w-3.5 h-3.5 text-black" />
             </div>
-            <span className="text-base font-bold tracking-tight text-zinc-955 dark:text-white group-hover:opacity-90 transition-opacity">
+            <span className="text-base font-bold tracking-tight text-zinc-950 dark:text-white group-hover:opacity-90 transition-opacity">
               Decko
             </span>
           </Link>
@@ -225,7 +225,7 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
                 </Link>
                 <Link
                   href="/auth/signup"
-                  className="px-4 py-2 rounded-full bg-zinc-955 dark:bg-white text-white dark:text-black text-xs font-semibold hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors shadow-md shadow-zinc-950/5 dark:shadow-white/5"
+                  className="px-4 py-2 rounded-full bg-zinc-950 dark:bg-white text-white dark:text-black text-xs font-semibold hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors shadow-md shadow-zinc-950/5 dark:shadow-white/5"
                 >
                   Sign Up
                 </Link>
@@ -294,7 +294,7 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
                     </Link>
                     <Link
                       href="/auth/signup"
-                      className="w-full text-center px-4 py-2.5 rounded-xl bg-zinc-955 dark:bg-white text-white dark:text-black text-sm font-semibold hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors"
+                      className="w-full text-center px-4 py-2.5 rounded-xl bg-zinc-950 dark:bg-white text-white dark:text-black text-sm font-semibold hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors"
                     >
                       Sign Up
                     </Link>
@@ -526,7 +526,7 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
       <section id="pricing" className="relative z-10 py-24 border-t border-black/5 dark:border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-zinc-955 dark:text-white mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-zinc-950 dark:text-white mb-4">
               Simple, transparent pricing
             </h2>
             <p className="text-zinc-600 dark:text-zinc-400 text-base sm:text-lg">
@@ -587,7 +587,7 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
       <section id="faq" className="relative z-10 py-24 border-t border-black/5 dark:border-white/5 bg-zinc-50/10 dark:bg-[#050507]/30">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-zinc-955 dark:text-white mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-zinc-950 dark:text-white mb-4">
               Frequently Asked Questions
             </h2>
             <p className="text-zinc-600 dark:text-zinc-400 text-base sm:text-lg">
