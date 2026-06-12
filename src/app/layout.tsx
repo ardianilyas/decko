@@ -29,8 +29,33 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${albertSans.variable} ${geistMono.variable} h-full antialiased dark`}
+      className={`${albertSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const stored = localStorage.getItem("decko-theme");
+                  const theme = stored || "system";
+                  let isDark = theme === "dark";
+                  if (theme === "system") {
+                    isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+                  }
+                  if (isDark) {
+                    document.documentElement.classList.add("dark");
+                    document.documentElement.classList.remove("light");
+                  } else {
+                    document.documentElement.classList.remove("dark");
+                    document.documentElement.classList.add("light");
+                  }
+                } catch (e) {}
+              })()
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">
         <TRPCProvider>
           <ThemeProvider>
