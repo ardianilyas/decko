@@ -104,7 +104,7 @@ function GeneratePageContent({ user }: { user: { name: string; email: string } }
   // Cycle loadingStep for new generations
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    const isPending = isGenerating || (historyItem?.status === "pending" && historyItem?.revisionCount === 0);
+    const isPending = isGenerating || (historyItem?.status === "pending" && !historyItem?.generatedJson);
     if (isPending) {
       interval = setInterval(() => {
         setLoadingStep((prev) => (prev + 1 < LOADING_STEPS.length ? prev + 1 : prev));
@@ -113,7 +113,7 @@ function GeneratePageContent({ user }: { user: { name: string; email: string } }
       setLoadingStep(0);
     }
     return () => clearInterval(interval);
-  }, [isGenerating, historyItem?.status, historyItem?.revisionCount]);
+  }, [isGenerating, historyItem?.status, historyItem?.generatedJson]);
 
   const handleNewGeneration = () => {
     router.push("/chat");
@@ -227,7 +227,7 @@ function GeneratePageContent({ user }: { user: { name: string; email: string } }
           </div>
         </div>        {/* Scrollable content area */}
         <div className="flex-1 overflow-y-auto w-full relative">
-          {isGenerating || (displayId && historyItem?.status === "pending" && historyItem?.revisionCount === 0) ? (
+          {isGenerating || (displayId && historyItem?.status === "pending" && !historyItem?.generatedJson) ? (
             <div className="absolute inset-0 bg-background/80 backdrop-blur-xl z-20 flex flex-col items-center justify-center p-6 animate-in fade-in duration-500">
               {/* Ambient Glows */}
               <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
@@ -341,9 +341,8 @@ function GeneratePageContent({ user }: { user: { name: string; email: string } }
         <div className={`absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background via-background to-transparent pt-10 ${displayId ? 'hidden' : 'block'}`}>
           <GenerationForm 
             onResult={handleResult} 
-            onPendingChange={(pending, step) => {
+            onPendingChange={(pending) => {
               setIsGenerating(pending);
-              setLoadingStep(step);
             }}
           />
         </div>

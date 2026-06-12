@@ -32,7 +32,7 @@ const MODELS = [
 
 interface GenerationFormProps {
   onResult: (id: string, result: Presentation) => void;
-  onPendingChange?: (isPending: boolean, loadingStep: number) => void;
+  onPendingChange?: (isPending: boolean) => void;
 }
 
 export function GenerationForm({ onResult, onPendingChange }: GenerationFormProps) {
@@ -112,30 +112,9 @@ export function GenerationForm({ onResult, onPendingChange }: GenerationFormProp
     };
   }, []);
 
-  const LOADING_STEPS = [
-    "Tuning the prompt...",
-    "Generating AI content...",
-    "Structuring chapters...",
-    "Polishing key takeaways...",
-    "Finalizing presentation...",
-  ];
-  const [loadingStep, setLoadingStep] = useState(0);
-
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (generateMutation.isPending) {
-      interval = setInterval(() => {
-        setLoadingStep((prev) => (prev + 1 < LOADING_STEPS.length ? prev + 1 : prev));
-      }, 3000);
-    } else {
-      setLoadingStep(0);
-    }
-    return () => clearInterval(interval);
-  }, [generateMutation.isPending]);
-
-  useEffect(() => {
-    onPendingChange?.(generateMutation.isPending, loadingStep);
-  }, [generateMutation.isPending, loadingStep, onPendingChange]);
+    onPendingChange?.(generateMutation.isPending);
+  }, [generateMutation.isPending, onPendingChange]);
 
   return (
     <div className="w-full max-w-3xl mx-auto space-y-3 relative">
