@@ -392,21 +392,21 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
                         <MarkdownContent content={chapter.chapterSummary} />
                       </div>
                     )}
-                    <div className="pt-3 space-y-1">
+                    <div className="pt-3 space-y-2">
                       <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Topics</div>
-                      <ul className="space-y-1">
+                      <div className="space-y-3">
                         {chapter.topics.map((topic, ti) => (
-                          <li key={ti} className="flex flex-col gap-1 text-sm text-foreground">
-                            <div className="flex items-center gap-2">
-                              <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground shrink-0" />
-                              <span className="font-semibold">{topic.title}</span>
+                          <div key={ti} className="flex flex-col gap-1.5 p-4 bg-secondary/20 dark:bg-white/[0.01] rounded-xl border border-border/50">
+                            <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+                              <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
+                              {topic.title}
                             </div>
-                            <div className="pl-3.5 mt-1">
+                            <div className="pl-3.5 text-sm text-foreground/90 leading-relaxed">
                               <MarkdownContent content={topic.explanation} />
                             </div>
-                          </li>
+                          </div>
                         ))}
-                      </ul>
+                      </div>
                     </div>
                     <div className="space-y-1">
                       <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Key Takeaways</div>
@@ -436,30 +436,30 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
           <div
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
-            className="w-full aspect-[16/9] min-h-[320px] md:min-h-[460px] bg-[#fcfdfa] dark:bg-[#0b0b0e] border border-border dark:border-white/10 rounded-3xl shadow-2xl flex flex-col justify-between p-6 md:p-10 relative overflow-hidden transition-all duration-300"
+            className="w-full aspect-auto md:aspect-[16/9.5] min-h-[380px] md:min-h-[520px] bg-[#fcfdfa] dark:bg-[#0b0b0e] border border-border dark:border-white/10 rounded-3xl shadow-2xl flex flex-col justify-between p-6 md:py-8 md:px-10 relative overflow-hidden transition-all duration-300"
           >
             {/* Ambient gradients */}
             <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] rounded-full bg-gradient-to-br from-indigo-500/8 via-purple-500/8 to-pink-500/4 blur-[120px] pointer-events-none z-0 animate-pulse" style={{ animationDuration: "8s" }} />
             <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-gradient-to-tr from-blue-500/8 via-teal-500/4 to-amber-500/8 blur-[120px] pointer-events-none z-0 animate-pulse" style={{ animationDuration: "12s" }} />
 
             {/* Slide active content wrapper */}
-            <div className="flex-1 flex flex-col justify-center z-10 select-text overflow-hidden">
+            <div className="flex-1 flex flex-col justify-center z-10 select-text overflow-y-auto md:overflow-hidden pr-1.5 scrollbar-thin">
               {currentSlide === 0 && (
-                <div key={0} className={`text-center space-y-4 md:space-y-6 animate-in fade-in duration-300 ${
+                <div key={0} className={`text-center space-y-3 md:space-y-5 animate-in fade-in duration-300 ${
                   direction === "forward" ? "slide-in-from-right-[30px]" : "slide-in-from-left-[30px]"
                 }`}>
-                  <div className="inline-flex p-3 bg-gradient-to-tr from-amber-400 to-amber-200 rounded-full shadow-md shadow-amber-400/10 mx-auto animate-pulse">
-                    <Sparkles className="w-6 h-6 text-black" />
+                  <div className="inline-flex p-2 bg-gradient-to-tr from-amber-400 to-amber-200 rounded-full shadow-md shadow-amber-400/10 mx-auto animate-pulse">
+                    <Sparkles className="w-5 h-5 text-black" />
                   </div>
-                  <div className="space-y-3">
-                    <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-primary via-violet-500 to-amber-400 bg-clip-text text-transparent leading-[1.15] px-4">
+                  <div className="space-y-2">
+                    <h1 className="text-xl sm:text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-primary via-violet-500 to-amber-400 bg-clip-text text-transparent leading-[1.15] px-4">
                       {result.title}
                     </h1>
-                    <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed px-6 font-medium">
+                    <p className="text-xs sm:text-sm md:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed px-6 font-medium">
                       {result.description}
                     </p>
                   </div>
-                  <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+                  <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
                     <span className="px-3.5 py-1.5 rounded-full bg-secondary/80 dark:bg-white/[0.04] border border-border/70 dark:border-white/5 text-[10px] sm:text-xs font-bold text-foreground shadow-sm">
                       Audience: {result.targetAudience}
                     </span>
@@ -481,14 +481,14 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
                     <Target className="w-4 md:w-5 h-4 md:h-5 text-primary" />
                     Learning Objectives & Prerequisites
                   </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 flex-1 min-h-0">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full">
                     {/* Objectives Card */}
-                    <div className="flex flex-col bg-secondary/50 dark:bg-white/[0.03] border border-border/85 dark:border-white/5 rounded-2xl p-4 md:p-5 min-h-0">
-                      <div className="text-xs font-bold text-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <div className="bg-secondary/50 dark:bg-white/[0.03] border border-border/85 dark:border-white/5 rounded-2xl p-4 md:p-5 h-auto">
+                      <div className="text-xs font-bold text-foreground uppercase tracking-wider mb-3 border-b border-border/40 pb-1.5 flex items-center gap-2">
                         <Target className="w-3.5 h-3.5 text-primary" />
                         Objectives
                       </div>
-                      <div className="flex-1 overflow-y-auto pr-1 scrollbar-thin">
+                      <div className="space-y-3">
                         <ul className="space-y-3">
                           {result.learningObjectives.map((obj, i) => (
                             <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-foreground/90 leading-relaxed">
@@ -503,12 +503,12 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
                     </div>
 
                     {/* Prerequisites Card */}
-                    <div className="flex flex-col bg-secondary/50 dark:bg-white/[0.03] border border-border/85 dark:border-white/5 rounded-2xl p-4 md:p-5 min-h-0">
-                      <div className="text-xs font-bold text-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <div className="bg-secondary/50 dark:bg-white/[0.03] border border-border/85 dark:border-white/5 rounded-2xl p-4 md:p-5 h-auto">
+                      <div className="text-xs font-bold text-foreground uppercase tracking-wider mb-3 border-b border-border/40 pb-1.5 flex items-center gap-2">
                         <AlertCircle className="w-3.5 h-3.5 text-primary" />
                         Prerequisites
                       </div>
-                      <div className="flex-1 overflow-y-auto pr-1 scrollbar-thin">
+                      <div className="space-y-3">
                         {result.prerequisites.length > 0 ? (
                           <div className="flex flex-wrap gap-2">
                             {result.prerequisites.map((pre, i) => (
@@ -545,13 +545,13 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 flex-1 min-h-0">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full">
                       {/* Left Card: Overview & Takeaways */}
-                      <div className="flex flex-col bg-secondary/50 dark:bg-white/[0.03] border border-border/85 dark:border-white/5 rounded-2xl p-4 md:p-5 min-h-0">
-                        <div className="text-xs font-bold text-foreground uppercase tracking-wider mb-3">
+                      <div className="bg-secondary/50 dark:bg-white/[0.03] border border-border/85 dark:border-white/5 rounded-2xl p-4 md:p-5 h-auto">
+                        <div className="text-xs font-bold text-foreground uppercase tracking-wider mb-3 border-b border-border/40 pb-1.5">
                           Chapter Overview
                         </div>
-                        <div className="flex-1 overflow-y-auto pr-1 space-y-4 scrollbar-thin">
+                        <div className="space-y-4 pt-1">
                           <div className="text-xs sm:text-sm text-foreground/90 leading-relaxed font-medium">
                             <MarkdownContent content={chapter.chapterSummary || chapter.description} compact />
                           </div>
@@ -571,18 +571,18 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
                       </div>
 
                       {/* Right Card: Topics */}
-                      <div className="flex flex-col bg-secondary/50 dark:bg-white/[0.03] border border-border/85 dark:border-white/5 rounded-2xl p-4 md:p-5 min-h-0">
-                        <div className="text-xs font-bold text-foreground uppercase tracking-wider mb-3">
+                      <div className="bg-secondary/50 dark:bg-white/[0.03] border border-border/85 dark:border-white/5 rounded-2xl p-4 md:p-5 h-auto">
+                        <div className="text-xs font-bold text-foreground uppercase tracking-wider mb-3 border-b border-border/40 pb-1.5">
                           Topics & Explanations
                         </div>
-                        <div className="flex-1 overflow-y-auto pr-1 space-y-3 scrollbar-thin">
+                        <div className="space-y-3 pt-1">
                           {chapter.topics.map((topic, ti) => (
-                            <div key={ti} className="p-3.5 bg-background border border-border/60 dark:border-white/[0.03] rounded-xl space-y-1.5 shadow-[0_2px_8px_rgba(0,0,0,0.01)] transition-all hover:border-primary/20 hover:shadow-sm">
+                            <div key={ti} className="p-4 md:p-5 bg-background border border-border/60 dark:border-white/[0.03] rounded-2xl space-y-2.5 shadow-[0_2px_8px_rgba(0,0,0,0.01)] transition-all hover:border-primary/20 hover:shadow-sm">
                               <div className="font-bold text-xs sm:text-sm text-foreground flex items-center gap-2">
                                 <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0 animate-pulse" />
                                 {topic.title}
                               </div>
-                              <div className="pl-3.5 text-xs text-muted-foreground dark:text-zinc-300 leading-relaxed font-medium">
+                              <div className="pl-4 text-xs text-muted-foreground dark:text-zinc-300 leading-relaxed font-medium">
                                 <MarkdownContent content={topic.explanation} compact />
                               </div>
                             </div>
