@@ -71,7 +71,7 @@ export async function exportToPDF(presentation: Presentation) {
 
   // ── Meta ──
   addText(
-    `Duration: ${presentation.presentationDuration} min  ·  Audience: ${presentation.targetAudience}  ·  ${presentation.chapters.length} chapters`,
+    `Duration: ${presentation.presentationDuration} min  |  Audience: ${presentation.targetAudience}  |  ${presentation.chapters.length} chapters`,
     9,
     "normal",
     [120, 120, 120]
@@ -94,7 +94,7 @@ export async function exportToPDF(presentation: Presentation) {
     addText("Prerequisites", 12, "bold");
     addGap(2);
     presentation.prerequisites.forEach((pre) => {
-      addText(`·  ${pre}`, 10);
+      addText(`-  ${pre}`, 10);
       addGap(1);
     });
     addGap(3);
@@ -121,7 +121,7 @@ export async function exportToPDF(presentation: Presentation) {
       addText("Topics", 10, "bold");
       addGap(1);
       chapter.topics.forEach((t) => {
-        addText(`·  ${t.title}`, 10, "bold");
+        addText(`-  ${t.title}`, 10, "bold");
         addGap(1);
         addText(`   ${t.explanation}`, 10);
         addGap(2);
@@ -133,7 +133,7 @@ export async function exportToPDF(presentation: Presentation) {
       addText("Key Takeaways", 10, "bold");
       addGap(1);
       chapter.keyTakeaways.forEach((k) => {
-        addText(`✓  ${k}`, 10);
+        addText(`-  ${k}`, 10);
         addGap(1);
       });
     }
