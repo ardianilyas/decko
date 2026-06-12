@@ -117,8 +117,8 @@ export const generationRouter = router({
       let result: Presentation;
       try {
         result = await generatePresentation(input.topic, input.model, input.language);
-      } catch (err) {
-        // Refund and mark as failed
+      } catch {
+        // Refund and delete the placeholder generation record
         await refundCredits(
           ctx.db,
           ctx.session.user.id,
@@ -126,8 +126,7 @@ export const generationRouter = router({
           `Refund for failed generation: "${input.topic}"`
         );
         await ctx.db
-          .update(schema.generation)
-          .set({ status: "failed", updatedAt: new Date() })
+          .delete(schema.generation)
           .where(eq(schema.generation.id, genId));
 
         throw new TRPCError({

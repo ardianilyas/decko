@@ -79,14 +79,14 @@ Generate the ENTIRE output (including all text, summaries, and descriptions) str
 
 CRITICAL RULES:
 - Return ONLY valid JSON. No markdown fences, no explanations, no preamble, no postamble.
-- Generate between 3 and 15 chapters. If the user's topic implies or explicitly requests a specific number of items/chapters (e.g., "5 cyber attacks"), generate EXACTLY that many chapters.
+- Generate between 3 and 8 chapters. If the user's topic implies or explicitly requests a specific number of items/chapters (e.g., "5 cyber attacks"), generate EXACTLY that many chapters.
 - Each chapter MUST include:
   - chapterNumber (integer, starting at 1)
   - title (concise, engaging)
   - description (1-2 sentences explaining what this chapter covers)
-  - chapterSummary (A highly descriptive 40-60 word paragraph outlining the chapter content comprehensively. Use rich markdown bolding on critical terms, lists, or tables where appropriate.)
-  - topics (array of 3-5 objects, each with a 'title' string and an 'explanation' string. The explanation must be a detailed, pedagogically sound 60-100 word description or a syntax-highlighted code block detailing the topic. Each explanation should follow a structured flow: (1) Core concept definition in bold, (2) A concrete analogy or real-world use case, and (3) Actionable steps or code examples using rich markdown syntax.)
-  - keyTakeaways (array of 2-4 actionable insights the learner will gain)
+  - chapterSummary (A highly descriptive 30-45 word paragraph outlining the chapter content comprehensively. Use rich markdown bolding on critical terms, lists, or tables where appropriate.)
+  - topics (array of 3 objects, each with a 'title' string and an 'explanation' string. The explanation must be a detailed, pedagogically sound 45-75 word description or a syntax-highlighted code block detailing the topic. Each explanation should follow a structured flow: (1) Core concept definition in bold, (2) A concrete analogy or real-world use case, and (3) Actionable steps or code examples using rich markdown syntax.)
+  - keyTakeaways (array of 2-3 actionable insights the learner will gain)
 - learningObjectives must have 4-6 measurable, verb-driven objectives (use Bloom's taxonomy verbs).
 - prerequisites must list 1-4 realistic prior knowledge requirements.
 - presentationDuration must be an integer between 60 and 120 (minutes).

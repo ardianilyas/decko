@@ -59,6 +59,7 @@ export function GenerationForm({ onResult, onPendingChange }: GenerationFormProp
     },
     onError: (err) => {
       toast.error(err.message || "Generation failed.");
+      utils.generation.getHistory.invalidate();
     },
   });
 
