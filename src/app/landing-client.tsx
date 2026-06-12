@@ -160,7 +160,7 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-400 to-amber-200 flex items-center justify-center shadow-lg shadow-amber-400/10">
-              <Sparkles className="w-4.5 h-4.5 text-black" />
+              <Sparkles className="w-4 h-4 text-black" />
             </div>
             <span className="text-xl font-bold tracking-tight text-white group-hover:opacity-90 transition-opacity">
               Decko
@@ -323,7 +323,7 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
         {/* visual interactive metallic orb container */}
         <div className="w-full max-w-4xl relative mt-4 select-none">
           {/* Back glows */}
-          <div className="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[75%] rounded-full bg-radial from-amber-500/10 via-transparent to-transparent blur-[80px] z-0 pointer-events-none" />
+          <div className="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[75%] rounded-full bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-amber-500/10 via-transparent to-transparent blur-[80px] z-0 pointer-events-none" />
 
           {/* Liquid metallic bubble graphic */}
           <div className="relative w-80 h-80 sm:w-[480px] sm:h-[480px] mx-auto z-10 flex items-center justify-center">
@@ -540,7 +540,7 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
             <div className="w-6 h-6 rounded bg-gradient-to-tr from-amber-400 to-amber-200 flex items-center justify-center">
               <Sparkles className="w-3.5 h-3.5 text-black" />
             </div>
-            <span className="text-md font-bold tracking-tight text-white">Decko</span>
+            <span className="text-base font-bold tracking-tight text-white">Decko</span>
           </div>
           <p className="text-zinc-500 text-xs text-center md:text-left">
             &copy; {new Date().getFullYear()} Decko Presentation outlines. All rights reserved.
