@@ -4,6 +4,10 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:where(.dark, .dark *));
+@custom-variant data-open (&[data-open]);
+@custom-variant data-closed (&[data-closed]);
+@custom-variant data-selected (&[data-selected]);
+@custom-variant data-popup-open (&[data-popup-open]);
 
 @theme inline {
   --color-background: var(--background);

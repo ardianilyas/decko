@@ -178,6 +178,15 @@ export const generationRouter = router({
         });
       }
 
+      // Mark generation as pending while revising so clients know it is loading
+      await ctx.db
+        .update(schema.generation)
+        .set({
+          status: "pending",
+          updatedAt: new Date(),
+        })
+        .where(eq(schema.generation.id, input.generationId));
+
       const currentJson = PresentationSchema.parse(gen.generatedJson);
 
       let revised: Presentation;
@@ -192,7 +201,16 @@ export const generationRouter = router({
         );
         revised = result.revised;
         affectedSummary = result.intent.affectedSummary;
-      } catch {
+      } catch (err) {
+        // Reset status back to completed on failure so it is not stuck in pending
+        await ctx.db
+          .update(schema.generation)
+          .set({
+            status: "completed",
+            updatedAt: new Date(),
+          })
+          .where(eq(schema.generation.id, input.generationId));
+
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Revision failed. Please try again.",
@@ -214,6 +232,7 @@ export const generationRouter = router({
         .set({
           generatedJson: revised as any,
           revisionCount: gen.revisionCount + 1,
+          status: "completed",
           updatedAt: new Date(),
         })
         .where(eq(schema.generation.id, input.generationId));

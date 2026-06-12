@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { trpc } from "@/trpc/client";
-import { Loader2, Sparkles, Zap, Coins, ArrowUp, ChevronDown } from "lucide-react";
+import { Loader2, Sparkles, Zap, Coins, ArrowUp, ChevronDown, CheckCircle2, Circle } from "lucide-react";
 import { toast } from "sonner";
 import type { Presentation } from "@/server/services/generation.service";
 
@@ -32,9 +32,10 @@ const MODELS = [
 
 interface GenerationFormProps {
   onResult: (id: string, result: Presentation) => void;
+  onPendingChange?: (isPending: boolean, loadingStep: number) => void;
 }
 
-export function GenerationForm({ onResult }: GenerationFormProps) {
+export function GenerationForm({ onResult, onPendingChange }: GenerationFormProps) {
   const [topic, setTopic] = useState("");
   const [selectedModel, setSelectedModel] = useState<"deepseek/deepseek-chat" | "openai/gpt-4o-mini" | "openrouter/owl-alpha">("openrouter/owl-alpha");
   const [language, setLanguage] = useState<"English" | "Bahasa Indonesia">("English");
@@ -110,6 +111,31 @@ export function GenerationForm({ onResult }: GenerationFormProps) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const LOADING_STEPS = [
+    "Tuning the prompt...",
+    "Generating AI content...",
+    "Structuring chapters...",
+    "Polishing key takeaways...",
+    "Finalizing presentation...",
+  ];
+  const [loadingStep, setLoadingStep] = useState(0);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (generateMutation.isPending) {
+      interval = setInterval(() => {
+        setLoadingStep((prev) => (prev + 1 < LOADING_STEPS.length ? prev + 1 : prev));
+      }, 3000);
+    } else {
+      setLoadingStep(0);
+    }
+    return () => clearInterval(interval);
+  }, [generateMutation.isPending]);
+
+  useEffect(() => {
+    onPendingChange?.(generateMutation.isPending, loadingStep);
+  }, [generateMutation.isPending, loadingStep, onPendingChange]);
 
   return (
     <div className="w-full max-w-3xl mx-auto space-y-3 relative">
@@ -306,31 +332,6 @@ export function GenerationForm({ onResult }: GenerationFormProps) {
           </div>
         </div>
       </div>
-
-      
-      {generateMutation.isPending && (
-        <div className="absolute -top-20 left-1/2 -translate-x-1/2 z-50 flex items-center gap-4 px-6 py-3.5 rounded-full bg-background/60 border border-primary/20 backdrop-blur-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 slide-in-from-bottom-5 duration-500">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent animate-pulse duration-2000" />
-          
-          <div className="relative flex items-center justify-center shrink-0">
-            <div className="absolute inset-0 rounded-full bg-primary/30 animate-ping duration-1000" />
-            <div className="relative bg-card rounded-full p-1.5 shadow-sm border border-primary/20">
-              <Loader2 className="w-4 h-4 animate-spin text-primary" style={{ animation: "spin 1s linear infinite" }} />
-              <Sparkles className="w-3 h-3 text-amber-500 absolute -top-1.5 -right-1.5 animate-bounce" />
-            </div>
-          </div>
-          
-          <div className="relative z-10 flex flex-col items-start justify-center">
-            <span className="text-sm font-bold bg-gradient-to-r from-primary to-foreground bg-clip-text text-transparent">
-              Crafting presentation...
-            </span>
-            <span className="text-[10px] font-medium text-muted-foreground flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary/60 animate-pulse" />
-              Structuring slides & writing content
-            </span>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

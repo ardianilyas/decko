@@ -36,7 +36,12 @@ export function SearchCommand({ open, onOpenChange, onSelect }: SearchCommandPro
       description="Search your presentation history"
       className="sm:max-w-[550px] w-full"
     >
-      <Command>
+      <Command
+        filter={(value, search) => {
+          if (value.toLowerCase().includes(search.toLowerCase())) return 1;
+          return 0;
+        }}
+      >
         <CommandInput placeholder="Search presentations..." autoFocus />
         <CommandList>
           <CommandEmpty>No presentations found.</CommandEmpty>
@@ -52,7 +57,7 @@ export function SearchCommand({ open, onOpenChange, onSelect }: SearchCommandPro
                     key={item.id}
                     value={title}
                     onSelect={() => handleSelect(item.id)}
-                    className="cursor-pointer px-4 py-3 rounded-lg bg-transparent data-selected:bg-secondary/65 hover:bg-secondary/45 text-sm transition-colors"
+                    className="cursor-pointer px-4 py-3 rounded-lg bg-transparent hover:bg-secondary/60 text-sm transition-colors"
                   >
                     <span className="truncate">{title}</span>
                   </CommandItem>

@@ -374,12 +374,12 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
         )}
 
         {/* Revision loading state */}
-        {reviseMutation.isPending && (
+        {(reviseMutation.isPending || gen?.status === "pending") && (
           <div className="px-4 py-4 border-b border-border bg-background/40 space-y-4">
             {/* Show the user's message */}
             <div className="flex items-start gap-2 justify-end">
               <div className="max-w-[85%] bg-primary/10 border border-primary/15 rounded-2xl rounded-tr-sm px-4 py-2.5">
-                <p className="text-sm text-foreground leading-relaxed">{revisionInput || "Revising..."}</p>
+                <p className="text-sm text-foreground leading-relaxed">{revisionInput || "Revising presentation..."}</p>
               </div>
             </div>
             {/* Typing indicator */}
@@ -407,15 +407,15 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
                 onKeyDown={handleKeyDown}
                 placeholder={`Ask for a revision... e.g. "make chapter 3 more detailed" or "ubah chapter 2 untuk pemula"`}
                 rows={1}
-                disabled={reviseMutation.isPending}
+                disabled={reviseMutation.isPending || gen?.status === "pending"}
                 className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none resize-none leading-relaxed min-h-[24px] max-h-[120px] disabled:opacity-50"
               />
               <button
                 onClick={handleRevise}
-                disabled={revisionInput.trim().length < 3 || reviseMutation.isPending}
+                disabled={revisionInput.trim().length < 3 || reviseMutation.isPending || gen?.status === "pending"}
                 className="p-1.5 rounded-lg bg-primary text-primary-foreground transition-all hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
               >
-                {reviseMutation.isPending ? (
+                {reviseMutation.isPending || gen?.status === "pending" ? (
                   <Loader2 className="w-4 h-4 animate-spin" style={{ animation: "spin 1s linear infinite" }} />
                 ) : (
                   <ArrowUp className="w-4 h-4" />

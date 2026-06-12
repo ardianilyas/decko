@@ -90,7 +90,7 @@ CRITICAL RULES:
 - learningObjectives must have 4-6 measurable, verb-driven objectives (use Bloom's taxonomy verbs).
 - prerequisites must list 1-4 realistic prior knowledge requirements.
 - presentationDuration must be an integer between 60 and 120 (minutes).
-- targetAudience must be a specific, descriptive string (e.g., "Beginner software developers with no prior JavaScript experience").
+- targetAudience must be a short string describing the audience level and role (e.g., "Beginner Level Web Developer"). Do not write long descriptions.
 - summary must be 2-3 sentences encapsulating the full arc of the presentation.
 - All text must be professional, clear, and pedagogically sound.
 
