@@ -113,7 +113,7 @@ function GeneratePageContent({ user }: { user: { name: string; email: string } }
       setLoadingStep(0);
     }
     return () => clearInterval(interval);
-  }, [isGenerating, historyItem?.status, historyItem?.generatedJson]);
+  }, [isGenerating, historyItem?.status, !!historyItem?.generatedJson]);
 
   const handleNewGeneration = () => {
     router.push("/chat");
