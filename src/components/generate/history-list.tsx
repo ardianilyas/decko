@@ -64,9 +64,13 @@ export function HistoryList({ onSelect, activeId }: HistoryListProps) {
     return (
       <div className="space-y-1 px-2 py-1">
         {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg animate-pulse">
-            <div className="w-3.5 h-3.5 rounded bg-muted/65 shrink-0" />
-            <div className="h-3 bg-muted/50 rounded w-[70%]" style={{ opacity: 1 - i * 0.15 }} />
+          <div
+            key={i}
+            className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-secondary/35 border border-border/10 animate-pulse"
+            style={{ opacity: 1 - i * 0.12 }}
+          >
+            <div className="w-3.5 h-3.5 rounded bg-muted-foreground/25 shrink-0" />
+            <div className="h-3 bg-muted-foreground/20 rounded w-[70%]" />
           </div>
         ))}
       </div>

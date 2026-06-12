@@ -31,8 +31,8 @@ const ThemeToggle = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="p-2 rounded-lg text-muted-foreground w-8 h-8 flex items-center justify-center">
-        <span className="w-4 h-4 rounded-full bg-muted animate-pulse" />
+      <div className="p-2 rounded-lg w-8 h-8 flex items-center justify-center bg-secondary/35 border border-border/10 animate-pulse">
+        <span className="w-4 h-4 rounded-full bg-muted-foreground/25" />
       </div>
     ),
   }
@@ -43,12 +43,12 @@ const UserMenu = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="w-full flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg text-left">
-        <div className="min-w-0 flex-1 space-y-1.5">
-          <div className="h-3.5 bg-muted rounded-md w-20 animate-pulse" />
-          <div className="h-3 bg-muted/60 rounded-md w-32 animate-pulse" />
+      <div className="w-full flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg text-left bg-secondary/35 border border-border/10 animate-pulse">
+        <div className="min-w-0 flex-1 space-y-1">
+          <div className="h-3.5 bg-muted-foreground/25 rounded w-20" />
+          <div className="h-3 bg-muted-foreground/15 rounded w-32" />
         </div>
-        <div className="w-4 h-4 bg-muted rounded-md shrink-0 animate-pulse" />
+        <div className="w-4 h-4 bg-muted-foreground/20 rounded shrink-0" />
       </div>
     ),
   }
@@ -313,50 +313,50 @@ function GeneratePageContent({ user }: { user: { name: string; email: string } }
                     {/* Header meta skeleton */}
                     <div className="bg-card border border-border rounded-2xl p-6 space-y-4">
                       <div className="space-y-2.5">
-                        <div className="h-5.5 bg-muted rounded-md w-1/2" />
-                        <div className="h-3.5 bg-muted/65 rounded-md w-3/4" />
-                        <div className="h-3.5 bg-muted/45 rounded-md w-2/3" />
+                        <div className="h-5.5 bg-muted-foreground/20 rounded-md w-1/2" />
+                        <div className="h-3.5 bg-muted-foreground/15 rounded-md w-3/4" />
+                        <div className="h-3.5 bg-muted-foreground/10 rounded-md w-2/3" />
                       </div>
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
-                        <div className="h-14 bg-secondary/50 border border-border/40 rounded-xl" />
-                        <div className="h-14 bg-secondary/50 border border-border/40 rounded-xl" />
-                        <div className="h-14 bg-secondary/50 border border-border/40 rounded-xl" />
+                        <div className="h-14 bg-secondary/40 border border-border/20 rounded-xl animate-pulse" />
+                        <div className="h-14 bg-secondary/40 border border-border/20 rounded-xl animate-pulse" />
+                        <div className="h-14 bg-secondary/40 border border-border/20 rounded-xl animate-pulse" />
                       </div>
                     </div>
 
                     {/* Learning Objectives skeleton */}
                     <div className="bg-card border border-border rounded-2xl p-5 space-y-4">
                       <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 bg-muted/70 rounded shrink-0" />
-                        <div className="h-3.5 bg-muted rounded w-28" />
+                        <div className="w-4 h-4 bg-muted-foreground/20 rounded shrink-0" />
+                        <div className="h-3.5 bg-muted-foreground/20 rounded w-28" />
                       </div>
                       <div className="space-y-3">
                         <div className="flex items-start gap-2">
-                          <div className="w-5 h-5 bg-secondary border border-border/40 rounded-full shrink-0 animate-pulse" />
-                          <div className="h-3.5 bg-muted/70 rounded w-[85%] mt-0.5" />
+                          <div className="w-5 h-5 bg-secondary/50 border border-border/20 rounded-full shrink-0 animate-pulse" />
+                          <div className="h-3.5 bg-muted-foreground/15 rounded w-[85%] mt-0.5" />
                         </div>
                         <div className="flex items-start gap-2">
-                          <div className="w-5 h-5 bg-secondary border border-border/40 rounded-full shrink-0 animate-pulse" />
-                          <div className="h-3.5 bg-muted/70 rounded w-[75%] mt-0.5" />
+                          <div className="w-5 h-5 bg-secondary/50 border border-border/20 rounded-full shrink-0 animate-pulse" />
+                          <div className="h-3.5 bg-muted-foreground/15 rounded w-[75%] mt-0.5" />
                         </div>
                         <div className="flex items-start gap-2">
-                          <div className="w-5 h-5 bg-secondary border border-border/40 rounded-full shrink-0 animate-pulse" />
-                          <div className="h-3.5 bg-muted/70 rounded w-[80%] mt-0.5" />
+                          <div className="w-5 h-5 bg-secondary/50 border border-border/20 rounded-full shrink-0 animate-pulse" />
+                          <div className="h-3.5 bg-muted-foreground/15 rounded w-[80%] mt-0.5" />
                         </div>
                       </div>
                     </div>
 
                     {/* Chapters skeleton */}
                     <div className="space-y-3">
-                      <div className="h-3.5 bg-muted/40 rounded-md w-20 px-0.5" />
+                      <div className="h-3.5 bg-muted-foreground/12 rounded-md w-20 px-0.5" />
                       {Array.from({ length: 3 }).map((_, i) => (
                         <div key={i} className="bg-card border border-border rounded-xl p-4 flex items-center gap-3">
-                          <div className="w-7 h-7 bg-secondary border border-border/40 rounded-full shrink-0 animate-pulse" />
+                          <div className="w-7 h-7 bg-secondary/50 border border-border/20 rounded-full shrink-0 animate-pulse" />
                           <div className="flex-1 space-y-2">
-                            <div className="h-3.5 bg-muted/80 rounded w-1/3" />
-                            <div className="h-3 bg-muted/50 rounded w-2/3" />
+                            <div className="h-3.5 bg-muted-foreground/20 rounded w-1/3" />
+                            <div className="h-3 bg-muted-foreground/12 rounded w-2/3" />
                           </div>
-                          <div className="w-4 h-4 bg-muted/30 rounded shrink-0" />
+                          <div className="w-4 h-4 bg-muted-foreground/10 rounded shrink-0" />
                         </div>
                       ))}
                     </div>
