@@ -163,7 +163,7 @@ export function HistoryList({ onSelect, activeId }: HistoryListProps) {
                 handleDelete();
               }}
               disabled={deleteMutation.isPending}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              className="bg-destructive text-white hover:bg-destructive/90"
             >
               {deleteMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" style={{ animation: "spin 1s linear infinite" }} /> : "Delete"}
             </AlertDialogAction>
