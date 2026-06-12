@@ -152,7 +152,7 @@
 }
 
 /* Fallback for standard browsers like Firefox that don't support custom webkit scrollbars */
-@supports not selector(::-webkit-scrollbar) {
+@supports (-moz-appearance: none) {
   * {
     scrollbar-width: thin;
     scrollbar-color: var(--border) transparent;
