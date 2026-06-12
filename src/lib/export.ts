@@ -51,6 +51,84 @@ export async function exportToPDF(presentation: Presentation) {
     y += lines.length * lineH;
   }
 
+  function drawCodeBlock(lines: string[], size = 9) {
+    const codeLineH = 4.5;
+    const padding = 3;
+    const rectH = lines.length * codeLineH + padding * 2;
+    
+    ensurePage(rectH + 2);
+    
+    doc.setFillColor(245, 245, 247);
+    doc.rect(margin, y, contentW, rectH, "F");
+    
+    doc.setFontSize(size);
+    doc.setFont("courier", "normal");
+    doc.setTextColor(50, 50, 50);
+    
+    let codeY = y + padding + 3;
+    lines.forEach((line) => {
+      doc.text(line, margin + padding, codeY);
+      codeY += codeLineH;
+    });
+    
+    y += rectH;
+    addGap(2);
+  }
+
+  function addMarkdownText(
+    text: string,
+    size: number,
+    color: [number, number, number] = [30, 30, 30]
+  ) {
+    const rawLines = text.split("\n");
+    let inCodeBlock = false;
+    let codeBlockLines: string[] = [];
+
+    for (let i = 0; i < rawLines.length; i++) {
+      const line = rawLines[i].trim();
+
+      if (line.startsWith("```")) {
+        if (inCodeBlock) {
+          drawCodeBlock(codeBlockLines, size - 1);
+          codeBlockLines = [];
+          inCodeBlock = false;
+        } else {
+          inCodeBlock = true;
+        }
+        continue;
+      }
+
+      if (inCodeBlock) {
+        codeBlockLines.push(rawLines[i]);
+        continue;
+      }
+
+      if (line === "") {
+        addGap(2);
+        continue;
+      }
+
+      const cleanLine = line
+        .replace(/\*\*(.*?)\*\*/g, "$1")
+        .replace(/`(.*?)`/g, "$1");
+
+      doc.setFontSize(size);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(...color);
+
+      const wrapped = doc.splitTextToSize(cleanLine, contentW);
+      wrapped.forEach((wrappedLine: string) => {
+        ensurePage(lineH + 1);
+        doc.text(wrappedLine, margin, y);
+        y += lineH;
+      });
+    }
+
+    if (inCodeBlock && codeBlockLines.length > 0) {
+      drawCodeBlock(codeBlockLines, size - 1);
+    }
+  }
+
   function addGap(h = paraGap) {
     y += h;
   }
@@ -66,7 +144,7 @@ export async function exportToPDF(presentation: Presentation) {
   // ── Title ──
   addText(presentation.title, 20, "bold");
   addGap(2);
-  addText(presentation.description, 10, "normal", [90, 90, 90]);
+  addMarkdownText(presentation.description, 10, [90, 90, 90]);
   addGap(3);
 
   // ── Meta ──
@@ -109,11 +187,11 @@ export async function exportToPDF(presentation: Presentation) {
     ensurePage(18);
     addText(`Chapter ${chapter.chapterNumber}: ${chapter.title}`, 12, "bold");
     addGap(1);
-    addText(chapter.description, 10, "normal", [80, 80, 80]);
+    addMarkdownText(chapter.description, 10, [80, 80, 80]);
 
     if (chapter.chapterSummary) {
       addGap(2);
-      addText(chapter.chapterSummary, 10);
+      addMarkdownText(chapter.chapterSummary, 10);
     }
 
     if (chapter.topics.length > 0) {
@@ -123,7 +201,7 @@ export async function exportToPDF(presentation: Presentation) {
       chapter.topics.forEach((t) => {
         addText(`-  ${t.title}`, 10, "bold");
         addGap(1);
-        addText(`   ${t.explanation}`, 10);
+        addMarkdownText(t.explanation, 10);
         addGap(2);
       });
     }
@@ -144,7 +222,7 @@ export async function exportToPDF(presentation: Presentation) {
   addHRule();
   addText("Summary", 12, "bold");
   addGap(2);
-  addText(presentation.summary, 10);
+  addMarkdownText(presentation.summary, 10);
 
   doc.save(`${slugify(presentation.title)}.pdf`);
 }
@@ -159,6 +237,55 @@ export async function exportToDocx(presentation: Presentation) {
   const { saveAs } = await import("file-saver");
 
   const children: Paragraph[] = [];
+
+  function addBodyWithMarkdown(text: string) {
+    const lines = text.split("\n");
+    let inCodeBlock = false;
+
+    lines.forEach((line) => {
+      const trimmed = line.trim();
+      if (trimmed.startsWith("```")) {
+        inCodeBlock = !inCodeBlock;
+        return;
+      }
+
+      if (inCodeBlock) {
+        children.push(
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: line,
+                font: "Courier New",
+                size: 18,
+                color: "333333",
+              }),
+            ],
+            shading: {
+              fill: "F5F5F7",
+            },
+            indent: { left: 360 },
+            spacing: { before: 20, after: 20 },
+          })
+        );
+      } else {
+        if (trimmed === "") {
+          children.push(new Paragraph({ spacing: { after: 60 } }));
+          return;
+        }
+
+        const cleanLine = line
+          .replace(/\*\*(.*?)\*\*/g, "$1")
+          .replace(/`(.*?)`/g, "$1");
+
+        children.push(
+          new Paragraph({
+            children: [new TextRun({ text: cleanLine, size: 22 })],
+            spacing: { after: 80 },
+          })
+        );
+      }
+    });
+  }
 
   function heading1(text: string) {
     return new Paragraph({
@@ -210,7 +337,7 @@ export async function exportToDocx(presentation: Presentation) {
 
   // ── Title ──
   children.push(heading1(presentation.title));
-  children.push(body(presentation.description));
+  addBodyWithMarkdown(presentation.description);
   children.push(
     new Paragraph({
       children: [
@@ -243,8 +370,8 @@ export async function exportToDocx(presentation: Presentation) {
   children.push(heading2("Chapters"));
   presentation.chapters.forEach((chapter) => {
     children.push(heading2(`Chapter ${chapter.chapterNumber}: ${chapter.title}`));
-    children.push(body(chapter.description));
-    if (chapter.chapterSummary) children.push(body(chapter.chapterSummary));
+    addBodyWithMarkdown(chapter.description);
+    if (chapter.chapterSummary) addBodyWithMarkdown(chapter.chapterSummary);
 
     if (chapter.topics.length > 0) {
       children.push(heading3("Topics"));
@@ -255,7 +382,7 @@ export async function exportToDocx(presentation: Presentation) {
             spacing: { after: 40 },
           })
         );
-        children.push(body(t.explanation));
+        addBodyWithMarkdown(t.explanation);
       });
     }
 
@@ -269,7 +396,7 @@ export async function exportToDocx(presentation: Presentation) {
 
   // ── Summary ──
   children.push(heading2("Summary"));
-  children.push(body(presentation.summary));
+  addBodyWithMarkdown(presentation.summary);
 
   const doc = new Document({
     sections: [{ properties: {}, children }],
