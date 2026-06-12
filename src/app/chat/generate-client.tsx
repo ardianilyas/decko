@@ -18,7 +18,7 @@ import type { Presentation } from "@/server/services/generation.service";
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
-import { SignOutButton } from "./sign-out-button";
+import { UserMenu } from "./user-menu";
 
 export function GeneratePageClient({ user }: { user: { name: string; email: string } }) {
   return (
@@ -110,17 +110,7 @@ function GeneratePageContent({ user }: { user: { name: string; email: string } }
           </div>
 
           <div className="p-3 border-t border-border bg-card">
-            <div className="flex items-center justify-between gap-2 px-2">
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium text-foreground truncate">
-                  {user.name}
-                </p>
-                <p className="text-xs text-muted-foreground truncate">
-                  {user.email}
-                </p>
-              </div>
-              <SignOutButton />
-            </div>
+            <UserMenu user={user} />
           </div>
         </div>
       )}
