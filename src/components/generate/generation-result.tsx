@@ -443,7 +443,7 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
             <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-gradient-to-tr from-blue-500/8 via-teal-500/4 to-amber-500/8 blur-[120px] pointer-events-none z-0 animate-pulse" style={{ animationDuration: "12s" }} />
 
             {/* Slide active content wrapper */}
-            <div className="flex-1 flex flex-col justify-center z-10 select-text overflow-y-auto md:overflow-hidden pr-1.5 pb-6 md:pb-8 scrollbar-thin">
+            <div className="flex-1 flex flex-col justify-center z-10 select-text overflow-y-auto pr-1.5 pb-6 md:pb-8 scrollbar-thin">
               {currentSlide === 0 && (
                 <div key={0} className={`text-center space-y-3 md:space-y-5 animate-in fade-in duration-300 ${
                   direction === "forward" ? "slide-in-from-right-[30px]" : "slide-in-from-left-[30px]"
@@ -460,15 +460,25 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
                     </p>
                   </div>
                   <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
-                    <span className="inline-flex items-center justify-center px-3.5 py-1.5 rounded-full bg-secondary/80 dark:bg-white/[0.04] border border-border/70 dark:border-white/5 text-[10px] sm:text-xs font-bold text-foreground shadow-sm leading-none">
-                      Audience: {result.targetAudience}
-                    </span>
-                    <span className="inline-flex items-center justify-center px-3.5 py-1.5 rounded-full bg-secondary/80 dark:bg-white/[0.04] border border-border/70 dark:border-white/5 text-[10px] sm:text-xs font-bold text-foreground shadow-sm leading-none">
-                      Duration: {result.presentationDuration} min
-                    </span>
-                    <span className="inline-flex items-center justify-center px-3.5 py-1.5 rounded-full bg-secondary/80 dark:bg-white/[0.04] border border-border/70 dark:border-white/5 text-[10px] sm:text-xs font-bold text-foreground shadow-sm leading-none">
-                      Chapters: {result.chapters.length}
-                    </span>
+                    {[
+                      `Audience: ${result.targetAudience}`,
+                      `Duration: ${result.presentationDuration} min`,
+                      `Chapters: ${result.chapters.length}`,
+                    ].map((label) => (
+                      <span
+                        key={label}
+                        className="inline-flex items-center justify-center rounded-full font-bold text-foreground shadow-sm"
+                        style={{
+                          padding: "4px 14px",
+                          fontSize: "11px",
+                          border: "1px solid var(--border)",
+                          background: "var(--secondary)",
+                          lineHeight: 1,
+                        }}
+                      >
+                        {label}
+                      </span>
+                    ))}
                   </div>
                 </div>
               )}
@@ -481,7 +491,7 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
                     <Target className="w-4 md:w-5 h-4 md:h-5 text-primary" />
                     Learning Objectives & Prerequisites
                   </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full">
+                  <div className="flex flex-col gap-4 md:gap-6 w-full">
                     {/* Objectives Card */}
                     <div className="bg-secondary/50 dark:bg-white/[0.03] border border-border/85 dark:border-white/5 rounded-2xl p-4 md:p-5 h-auto">
                       <div className="text-xs font-bold text-foreground uppercase tracking-wider mb-3 border-b border-border/40 pb-1.5 flex items-center gap-2">
@@ -545,7 +555,7 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full">
+                    <div className="flex flex-col gap-4 md:gap-6 w-full">
                       {/* Left Card: Overview & Takeaways */}
                       <div className="bg-secondary/50 dark:bg-white/[0.03] border border-border/85 dark:border-white/5 rounded-2xl p-4 md:p-5 h-auto">
                         <div className="text-xs font-bold text-foreground uppercase tracking-wider mb-3 border-b border-border/40 pb-1.5">
@@ -641,7 +651,7 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
             </button>
 
             {/* Indicator dots */}
-            <div className="flex flex-wrap items-center justify-center gap-1.5 max-w-[60%] overflow-x-auto py-1">
+            <div className="flex flex-nowrap items-center justify-center gap-1.5 max-w-[60%] overflow-x-auto py-1 no-scrollbar">
               {Array.from({ length: totalSlides }).map((_, idx) => (
                 <button
                   key={idx}
@@ -652,11 +662,14 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
                       setCurrentSlide(idx);
                     }
                   }}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 cursor-pointer shrink-0 ${
-                    idx === currentSlide
-                      ? "bg-primary w-5"
-                      : "bg-black/15 dark:bg-white/20 hover:bg-black/30 dark:hover:bg-white/30"
-                  }`}
+                  className="rounded-full transition-all duration-300 cursor-pointer shrink-0"
+                  style={{
+                    width: idx === currentSlide ? "20px" : "8px",
+                    height: "8px",
+                    background: idx === currentSlide
+                      ? "var(--primary)"
+                      : "color-mix(in srgb, currentColor 25%, transparent)",
+                  }}
                   title={`Go to slide ${idx + 1}`}
                 />
               ))}
