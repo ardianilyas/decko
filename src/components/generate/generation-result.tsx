@@ -436,11 +436,11 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
           <div
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
-            className="w-full aspect-[16/9] min-h-[320px] md:min-h-[460px] bg-card/65 dark:bg-[#08080a]/65 border border-border/80 dark:border-white/10 rounded-2xl shadow-xl flex flex-col justify-between p-6 md:p-10 relative overflow-hidden backdrop-blur-md transition-all duration-300"
+            className="w-full aspect-[16/9] min-h-[320px] md:min-h-[460px] bg-[#fcfdfa] dark:bg-[#0b0b0e] border border-border dark:border-white/10 rounded-3xl shadow-2xl flex flex-col justify-between p-6 md:p-10 relative overflow-hidden transition-all duration-300"
           >
             {/* Ambient gradients */}
-            <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] rounded-full bg-gradient-to-br from-primary/10 via-violet-500/10 to-indigo-500/5 blur-[120px] pointer-events-none z-0 animate-pulse" style={{ animationDuration: "8s" }} />
-            <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-gradient-to-tr from-blue-500/10 via-pink-500/5 to-amber-500/10 blur-[120px] pointer-events-none z-0 animate-pulse" style={{ animationDuration: "12s" }} />
+            <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] rounded-full bg-gradient-to-br from-indigo-500/8 via-purple-500/8 to-pink-500/4 blur-[120px] pointer-events-none z-0 animate-pulse" style={{ animationDuration: "8s" }} />
+            <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-gradient-to-tr from-blue-500/8 via-teal-500/4 to-amber-500/8 blur-[120px] pointer-events-none z-0 animate-pulse" style={{ animationDuration: "12s" }} />
 
             {/* Slide active content wrapper */}
             <div className="flex-1 flex flex-col justify-center z-10 select-text overflow-hidden">
@@ -455,18 +455,18 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
                     <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-primary via-violet-500 to-amber-400 bg-clip-text text-transparent leading-[1.15] px-4">
                       {result.title}
                     </h1>
-                    <p className="text-xs sm:text-sm md:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed px-6">
+                    <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed px-6 font-medium">
                       {result.description}
                     </p>
                   </div>
                   <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-                    <span className="px-3 py-1 rounded-full bg-secondary/85 border border-border/60 text-[10px] sm:text-xs font-semibold text-foreground shadow-sm">
+                    <span className="px-3.5 py-1.5 rounded-full bg-secondary/80 dark:bg-white/[0.04] border border-border/70 dark:border-white/5 text-[10px] sm:text-xs font-bold text-foreground shadow-sm">
                       Audience: {result.targetAudience}
                     </span>
-                    <span className="px-3 py-1 rounded-full bg-secondary/85 border border-border/60 text-[10px] sm:text-xs font-semibold text-foreground shadow-sm">
+                    <span className="px-3.5 py-1.5 rounded-full bg-secondary/80 dark:bg-white/[0.04] border border-border/70 dark:border-white/5 text-[10px] sm:text-xs font-bold text-foreground shadow-sm">
                       Duration: {result.presentationDuration} min
                     </span>
-                    <span className="px-3 py-1 rounded-full bg-secondary/85 border border-border/60 text-[10px] sm:text-xs font-semibold text-foreground shadow-sm">
+                    <span className="px-3.5 py-1.5 rounded-full bg-secondary/80 dark:bg-white/[0.04] border border-border/70 dark:border-white/5 text-[10px] sm:text-xs font-bold text-foreground shadow-sm">
                       Chapters: {result.chapters.length}
                     </span>
                   </div>
@@ -483,8 +483,8 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 flex-1 min-h-0">
                     {/* Objectives Card */}
-                    <div className="flex flex-col bg-secondary/25 dark:bg-white/[0.02] border border-border/50 dark:border-white/5 rounded-2xl p-4 md:p-5 min-h-0">
-                      <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <div className="flex flex-col bg-secondary/50 dark:bg-white/[0.03] border border-border/85 dark:border-white/5 rounded-2xl p-4 md:p-5 min-h-0">
+                      <div className="text-xs font-bold text-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
                         <Target className="w-3.5 h-3.5 text-primary" />
                         Objectives
                       </div>
@@ -495,7 +495,7 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
                               <span className="w-5 h-5 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-[10px] font-bold text-primary shrink-0 mt-0.5">
                                 {i + 1}
                               </span>
-                              <span>{obj}</span>
+                              <span className="font-medium">{obj}</span>
                             </li>
                           ))}
                         </ul>
@@ -503,8 +503,8 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
                     </div>
 
                     {/* Prerequisites Card */}
-                    <div className="flex flex-col bg-secondary/25 dark:bg-white/[0.02] border border-border/50 dark:border-white/5 rounded-2xl p-4 md:p-5 min-h-0">
-                      <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <div className="flex flex-col bg-secondary/50 dark:bg-white/[0.03] border border-border/85 dark:border-white/5 rounded-2xl p-4 md:p-5 min-h-0">
+                      <div className="text-xs font-bold text-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
                         <AlertCircle className="w-3.5 h-3.5 text-primary" />
                         Prerequisites
                       </div>
@@ -512,13 +512,13 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
                         {result.prerequisites.length > 0 ? (
                           <div className="flex flex-wrap gap-2">
                             {result.prerequisites.map((pre, i) => (
-                              <span key={i} className="px-3 py-1.5 rounded-xl bg-background border border-border/80 text-xs text-foreground/90 font-medium shadow-sm transition-colors hover:border-primary/30">
+                              <span key={i} className="px-3 py-1.5 rounded-xl bg-background border border-border text-xs text-foreground/90 font-semibold shadow-sm transition-all hover:border-primary/30 hover:shadow">
                                 {pre}
                               </span>
                             ))}
                           </div>
                         ) : (
-                          <p className="text-xs text-muted-foreground italic">No prior experience required. Perfect for beginners!</p>
+                          <p className="text-xs text-muted-foreground italic font-medium">No prior experience required. Perfect for beginners!</p>
                         )}
                       </div>
                     </div>
@@ -538,7 +538,7 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
                         <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-xs sm:text-sm font-extrabold text-primary shrink-0">
                           {chapter.chapterNumber}
                         </span>
-                        <span className="truncate">{chapter.title}</span>
+                        <span className="truncate font-extrabold">{chapter.title}</span>
                       </h2>
                       <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider bg-secondary/80 dark:bg-zinc-800/80 px-2 py-1 rounded-md border border-border/50">
                         Slide {currentSlide + 1}
@@ -547,22 +547,22 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 flex-1 min-h-0">
                       {/* Left Card: Overview & Takeaways */}
-                      <div className="flex flex-col bg-secondary/25 dark:bg-white/[0.02] border border-border/50 dark:border-white/5 rounded-2xl p-4 md:p-5 min-h-0">
-                        <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3">
+                      <div className="flex flex-col bg-secondary/50 dark:bg-white/[0.03] border border-border/85 dark:border-white/5 rounded-2xl p-4 md:p-5 min-h-0">
+                        <div className="text-xs font-bold text-foreground uppercase tracking-wider mb-3">
                           Chapter Overview
                         </div>
                         <div className="flex-1 overflow-y-auto pr-1 space-y-4 scrollbar-thin">
-                          <div className="text-xs sm:text-sm text-foreground/90 leading-relaxed">
-                            <MarkdownContent content={chapter.chapterSummary || chapter.description} />
+                          <div className="text-xs sm:text-sm text-foreground/90 leading-relaxed font-medium">
+                            <MarkdownContent content={chapter.chapterSummary || chapter.description} compact />
                           </div>
 
                           <div className="space-y-2.5 pt-3 border-t border-border/40">
-                            <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Key Takeaways</div>
+                            <div className="text-[10px] font-bold text-foreground uppercase tracking-wider">Key Takeaways</div>
                             <ul className="space-y-2">
                               {chapter.keyTakeaways.map((kt, ki) => (
                                 <li key={ki} className="flex items-start gap-2 text-xs text-foreground/90 leading-relaxed">
                                   <Check className="w-3.5 h-3.5 text-green-500 dark:text-green-400 shrink-0 mt-0.5" />
-                                  <span>{kt}</span>
+                                  <span className="font-medium">{kt}</span>
                                 </li>
                               ))}
                             </ul>
@@ -571,19 +571,19 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
                       </div>
 
                       {/* Right Card: Topics */}
-                      <div className="flex flex-col bg-secondary/25 dark:bg-white/[0.02] border border-border/50 dark:border-white/5 rounded-2xl p-4 md:p-5 min-h-0">
-                        <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3">
+                      <div className="flex flex-col bg-secondary/50 dark:bg-white/[0.03] border border-border/85 dark:border-white/5 rounded-2xl p-4 md:p-5 min-h-0">
+                        <div className="text-xs font-bold text-foreground uppercase tracking-wider mb-3">
                           Topics & Explanations
                         </div>
                         <div className="flex-1 overflow-y-auto pr-1 space-y-3 scrollbar-thin">
                           {chapter.topics.map((topic, ti) => (
-                            <div key={ti} className="p-3.5 bg-background border border-border/60 dark:border-white/[0.03] rounded-xl space-y-1.5 shadow-[0_2px_8px_rgba(0,0,0,0.01)] transition-colors hover:border-primary/20">
-                              <div className="font-semibold text-xs sm:text-sm text-foreground flex items-center gap-2">
+                            <div key={ti} className="p-3.5 bg-background border border-border/60 dark:border-white/[0.03] rounded-xl space-y-1.5 shadow-[0_2px_8px_rgba(0,0,0,0.01)] transition-all hover:border-primary/20 hover:shadow-sm">
+                              <div className="font-bold text-xs sm:text-sm text-foreground flex items-center gap-2">
                                 <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0 animate-pulse" />
                                 {topic.title}
                               </div>
-                              <div className="pl-3.5 text-xs text-muted-foreground leading-relaxed">
-                                <MarkdownContent content={topic.explanation} />
+                              <div className="pl-3.5 text-xs text-muted-foreground dark:text-zinc-300 leading-relaxed font-medium">
+                                <MarkdownContent content={topic.explanation} compact />
                               </div>
                             </div>
                           ))}
@@ -598,7 +598,7 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
                 <div key={totalSlides - 1} className={`text-center space-y-4 md:space-y-6 animate-in fade-in duration-300 ${
                   direction === "forward" ? "slide-in-from-right-[30px]" : "slide-in-from-left-[30px]"
                 }`}>
-                  <div className="inline-flex p-3 bg-gradient-to-tr from-primary/20 via-violet-500/10 to-amber-500/20 rounded-full shadow-sm mx-auto">
+                  <div className="inline-flex p-3 bg-gradient-to-tr from-primary/20 via-violet-500/10 to-amber-500/20 rounded-full shadow-sm mx-auto animate-pulse">
                     <BookOpen className="w-6 h-6 text-primary" />
                   </div>
                   <div className="space-y-3">
@@ -606,7 +606,7 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
                       Presentation Summary
                     </h2>
                     <div className="text-xs sm:text-sm md:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed bg-secondary/15 dark:bg-zinc-900/20 border border-border/60 rounded-2xl p-4 md:p-6 shadow-inner overflow-y-auto max-h-[180px] md:max-h-[220px] scrollbar-thin">
-                      <MarkdownContent content={result.summary} />
+                      <MarkdownContent content={result.summary} compact />
                     </div>
                   </div>
                   <h3 className="text-sm font-bold text-primary tracking-wider uppercase pt-2 animate-pulse">
@@ -892,21 +892,21 @@ function CodeBlock({ language, codeString, ...props }: any) {
   );
 }
 
-function MarkdownContent({ content }: { content: string }) {
+function MarkdownContent({ content, compact = false }: { content: string; compact?: boolean }) {
   return (
-    <div className="w-full text-sm md:text-base text-foreground/90 leading-relaxed space-y-4">
+    <div className={`w-full text-foreground/95 leading-relaxed ${compact ? "text-xs sm:text-sm space-y-1.5" : "text-sm md:text-base space-y-4"}`}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
-          p: ({ children }) => <p className="leading-relaxed mb-3">{children}</p>,
-          ul: ({ children }) => <ul className="list-disc pl-5 mb-4 space-y-1.5">{children}</ul>,
-          ol: ({ children }) => <ol className="list-decimal pl-5 mb-4 space-y-1.5">{children}</ol>,
+          p: ({ children }) => <p className={`leading-relaxed ${compact ? "mb-1" : "mb-3"}`}>{children}</p>,
+          ul: ({ children }) => <ul className={`list-disc pl-4 space-y-0.5 ${compact ? "mb-1.5" : "mb-4 space-y-1.5"}`}>{children}</ul>,
+          ol: ({ children }) => <ol className={`list-decimal pl-4 space-y-0.5 ${compact ? "mb-1.5" : "mb-4 space-y-1.5"}`}>{children}</ol>,
           li: ({ children }) => <li className="text-foreground/90">{children}</li>,
           strong: ({ children }) => <strong className="font-semibold text-foreground">{children}</strong>,
-          h1: ({ children }) => <h1 className="text-2xl font-bold mb-4 mt-6 text-foreground">{children}</h1>,
-          h2: ({ children }) => <h2 className="text-xl font-bold mb-3 mt-5 text-foreground">{children}</h2>,
-          h3: ({ children }) => <h3 className="text-lg font-bold mb-2 mt-4 text-foreground">{children}</h3>,
-          blockquote: ({ children }) => <blockquote className="border-l-4 border-primary/50 pl-4 italic text-muted-foreground my-4">{children}</blockquote>,
+          h1: ({ children }) => <h1 className={`${compact ? "text-lg font-bold mb-1.5 mt-2" : "text-2xl font-bold mb-4 mt-6"} text-foreground`}>{children}</h1>,
+          h2: ({ children }) => <h2 className={`${compact ? "text-base font-bold mb-1 mt-1.5" : "text-xl font-bold mb-3 mt-5"} text-foreground`}>{children}</h2>,
+          h3: ({ children }) => <h3 className={`${compact ? "text-sm font-bold mb-1 mt-1" : "text-lg font-bold mb-2 mt-4"} text-foreground`}>{children}</h3>,
+          blockquote: ({ children }) => <blockquote className="border-l-4 border-primary/50 pl-3 italic text-muted-foreground my-2">{children}</blockquote>,
           code({ className, children, ...props }: any) {
             const match = /language-(\w+)/.exec(className || "");
             const isBlock = match || String(children).includes("\n");
@@ -922,7 +922,7 @@ function MarkdownContent({ content }: { content: string }) {
             }
 
             return (
-              <code {...props} className={`${className || ""} bg-secondary/80 px-1.5 py-0.5 rounded-md text-foreground font-mono text-[13px] font-medium border border-border/50`}>
+              <code {...props} className={`${className || ""} bg-secondary/80 px-1 py-0.5 rounded text-foreground font-mono text-[11px] sm:text-xs font-medium border border-border/50`}>
                 {children}
               </code>
             );
