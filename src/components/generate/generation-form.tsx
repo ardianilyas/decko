@@ -36,6 +36,7 @@ interface GenerationFormProps {
 }
 
 export function GenerationForm({ onResult, onPendingChange }: GenerationFormProps) {
+  const utils = trpc.useUtils();
   const [topic, setTopic] = useState("");
   const [selectedModel, setSelectedModel] = useState<"deepseek/deepseek-chat" | "openai/gpt-4o-mini" | "openrouter/owl-alpha">("openrouter/owl-alpha");
   const [language, setLanguage] = useState<"English" | "Bahasa Indonesia">("English");
