@@ -443,7 +443,7 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
             <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-gradient-to-tr from-blue-500/8 via-teal-500/4 to-amber-500/8 blur-[120px] pointer-events-none z-0 animate-pulse" style={{ animationDuration: "12s" }} />
 
             {/* Slide active content wrapper */}
-            <div className="flex-1 flex flex-col justify-center z-10 select-text overflow-y-auto md:overflow-hidden pr-1.5 scrollbar-thin">
+            <div className="flex-1 flex flex-col justify-center z-10 select-text overflow-y-auto md:overflow-hidden pr-1.5 pb-6 md:pb-8 scrollbar-thin">
               {currentSlide === 0 && (
                 <div key={0} className={`text-center space-y-3 md:space-y-5 animate-in fade-in duration-300 ${
                   direction === "forward" ? "slide-in-from-right-[30px]" : "slide-in-from-left-[30px]"
@@ -460,13 +460,13 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
                     </p>
                   </div>
                   <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
-                    <span className="px-3.5 py-1.5 rounded-full bg-secondary/80 dark:bg-white/[0.04] border border-border/70 dark:border-white/5 text-[10px] sm:text-xs font-bold text-foreground shadow-sm">
+                    <span className="inline-flex items-center justify-center px-3.5 py-1.5 rounded-full bg-secondary/80 dark:bg-white/[0.04] border border-border/70 dark:border-white/5 text-[10px] sm:text-xs font-bold text-foreground shadow-sm">
                       Audience: {result.targetAudience}
                     </span>
-                    <span className="px-3.5 py-1.5 rounded-full bg-secondary/80 dark:bg-white/[0.04] border border-border/70 dark:border-white/5 text-[10px] sm:text-xs font-bold text-foreground shadow-sm">
+                    <span className="inline-flex items-center justify-center px-3.5 py-1.5 rounded-full bg-secondary/80 dark:bg-white/[0.04] border border-border/70 dark:border-white/5 text-[10px] sm:text-xs font-bold text-foreground shadow-sm">
                       Duration: {result.presentationDuration} min
                     </span>
-                    <span className="px-3.5 py-1.5 rounded-full bg-secondary/80 dark:bg-white/[0.04] border border-border/70 dark:border-white/5 text-[10px] sm:text-xs font-bold text-foreground shadow-sm">
+                    <span className="inline-flex items-center justify-center px-3.5 py-1.5 rounded-full bg-secondary/80 dark:bg-white/[0.04] border border-border/70 dark:border-white/5 text-[10px] sm:text-xs font-bold text-foreground shadow-sm">
                       Chapters: {result.chapters.length}
                     </span>
                   </div>
@@ -652,10 +652,10 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
                       setCurrentSlide(idx);
                     }
                   }}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                  className={`w-2 h-2 rounded-full transition-all duration-300 cursor-pointer shrink-0 ${
                     idx === currentSlide
                       ? "bg-primary w-5"
-                      : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
+                      : "bg-zinc-300 dark:bg-zinc-700 hover:bg-zinc-400 dark:hover:bg-zinc-600"
                   }`}
                   title={`Go to slide ${idx + 1}`}
                 />
