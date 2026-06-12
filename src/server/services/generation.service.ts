@@ -84,15 +84,16 @@ CRITICAL RULES:
   - chapterNumber (integer, starting at 1)
   - title (concise, engaging)
   - description (1-2 sentences explaining what this chapter covers)
-  - chapterSummary (A detailed descriptive paragraph of 30-50 words discussing the chapter content comprehensively)
-  - topics (array of 3-5 objects, each with a 'title' string and an 'explanation' string which is a highly descriptive 40-60 word paragraph or detailed code example explaining the topic)
+  - chapterSummary (A highly descriptive 40-60 word paragraph outlining the chapter content comprehensively. Use rich markdown bolding on critical terms, lists, or tables where appropriate.)
+  - topics (array of 3-5 objects, each with a 'title' string and an 'explanation' string. The explanation must be a detailed, pedagogically sound 60-100 word description or a syntax-highlighted code block detailing the topic. Each explanation should follow a structured flow: (1) Core concept definition in bold, (2) A concrete analogy or real-world use case, and (3) Actionable steps or code examples using rich markdown syntax.)
   - keyTakeaways (array of 2-4 actionable insights the learner will gain)
 - learningObjectives must have 4-6 measurable, verb-driven objectives (use Bloom's taxonomy verbs).
 - prerequisites must list 1-4 realistic prior knowledge requirements.
 - presentationDuration must be an integer between 60 and 120 (minutes).
 - targetAudience must be a short string describing the audience level and role (e.g., "Beginner Level Web Developer"). Do not write long descriptions.
 - summary must be 2-3 sentences encapsulating the full arc of the presentation.
-- All text must be professional, clear, and pedagogically sound.
+- Tone and Vocabulary: Dynamically adapt the tone, technical vocabulary, and complexity of all explanation texts strictly to the inferred targetAudience level.
+- Formatting: All text must be professional, clear, and use standard Markdown syntax (such as bolding, lists, inline code snippets, and syntax-highlighted code blocks) to deliver visually rich content.
 
 OUTPUT SCHEMA (follow exactly):
 {
@@ -167,7 +168,7 @@ REVISION INSTRUCTION: ${instruction}
 OUTPUT LANGUAGE: ${language}
 
 RULES:
-- Return ONLY valid JSON. No markdown, no explanations.
+- Return ONLY valid JSON. No markdown fences, no explanations, no preamble, no postamble.
 - Apply the revision instruction ONLY to the chapters provided in the user message.
 - Each revised chapter MUST follow this exact schema:
   {
@@ -178,6 +179,7 @@ RULES:
     "topics": [{ "title": string, "explanation": string }],
     "keyTakeaways": [string]
   }
+- Formatting: Follow the visual standard of using rich Markdown syntax (bolding, lists, inline code snippets, syntax-highlighted code blocks) in chapterSummary and topic explanation fields where appropriate.
 - Preserve chapterNumber values exactly.
 - Return the result as: { "revisedChapters": [ ...chapters ] }`;
 }
