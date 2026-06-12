@@ -52,7 +52,7 @@ export function SearchCommand({ open, onOpenChange, onSelect }: SearchCommandPro
                     key={item.id}
                     value={title}
                     onSelect={() => handleSelect(item.id)}
-                    className="cursor-pointer px-4 py-3 rounded-lg bg-transparent data-selected:bg-transparent hover:bg-secondary/45 data-selected:hover:bg-secondary/45 text-sm transition-colors"
+                    className="cursor-pointer px-4 py-3 rounded-lg bg-transparent data-selected:bg-secondary/65 hover:bg-secondary/45 text-sm transition-colors"
                   >
                     <span className="truncate">{title}</span>
                   </CommandItem>

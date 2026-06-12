@@ -3,6 +3,8 @@ import { Albert_Sans, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 
+import { cookies } from "next/headers";
+
 const albertSans = Albert_Sans({
   variable: "--font-sans",
   subsets: ["latin"],
@@ -21,15 +23,19 @@ export const metadata: Metadata = {
 import { TRPCProvider } from "@/trpc/Provider";
 import { ThemeProvider } from "@/components/theme-provider";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const theme = cookieStore.get("decko-theme")?.value || "system";
+  const themeClass = theme === "dark" ? "dark" : theme === "light" ? "light" : "";
+
   return (
     <html
       lang="en"
-      className={`${albertSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${albertSans.variable} ${geistMono.variable} h-full antialiased ${themeClass}`}
       suppressHydrationWarning
     >
       <head>

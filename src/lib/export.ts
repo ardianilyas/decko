@@ -51,22 +51,31 @@ export async function exportToPDF(presentation: Presentation) {
     y += lines.length * lineH;
   }
 
-  function drawCodeBlock(lines: string[], size = 9) {
+  function drawCodeBlock(rawLines: string[], size = 9) {
+    doc.setFontSize(size);
+    doc.setFont("courier", "normal");
+    
     const codeLineH = 4.5;
     const padding = 3;
-    const rectH = lines.length * codeLineH + padding * 2;
+    const maxCodeW = contentW - padding * 2;
+    
+    const wrappedLines: string[] = [];
+    rawLines.forEach((line) => {
+      const split = doc.splitTextToSize(line, maxCodeW);
+      wrappedLines.push(...split);
+    });
+
+    const rectH = wrappedLines.length * codeLineH + padding * 2;
     
     ensurePage(rectH + 2);
     
     doc.setFillColor(245, 245, 247);
     doc.rect(margin, y, contentW, rectH, "F");
     
-    doc.setFontSize(size);
-    doc.setFont("courier", "normal");
     doc.setTextColor(50, 50, 50);
     
     let codeY = y + padding + 3;
-    lines.forEach((line) => {
+    wrappedLines.forEach((line) => {
       doc.text(line, margin + padding, codeY);
       codeY += codeLineH;
     });
@@ -232,41 +241,72 @@ export async function exportToPDF(presentation: Presentation) {
 // ---------------------------------------------------------------------------
 
 export async function exportToDocx(presentation: Presentation) {
-  const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, BorderStyle } =
+  const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, BorderStyle, Table, TableRow, TableCell, WidthType } =
     await import("docx");
   const { saveAs } = await import("file-saver");
 
-  const children: Paragraph[] = [];
+  const children: any[] = [];
 
   function addBodyWithMarkdown(text: string) {
     const lines = text.split("\n");
     let inCodeBlock = false;
+    let codeBlockLines: string[] = [];
 
     lines.forEach((line) => {
       const trimmed = line.trim();
       if (trimmed.startsWith("```")) {
-        inCodeBlock = !inCodeBlock;
+        if (inCodeBlock) {
+          if (codeBlockLines.length > 0) {
+            const codeParagraphs = codeBlockLines.map(
+              (codeLine) =>
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      text: codeLine,
+                      font: "Courier New",
+                      size: 18,
+                      color: "333333",
+                    }),
+                  ],
+                  spacing: { before: 20, after: 20 },
+                })
+            );
+
+            children.push(
+              new Table({
+                width: { size: 100, type: WidthType.PERCENTAGE },
+                borders: {
+                  top: { style: BorderStyle.NONE },
+                  bottom: { style: BorderStyle.NONE },
+                  left: { style: BorderStyle.NONE },
+                  right: { style: BorderStyle.NONE },
+                  insideHorizontal: { style: BorderStyle.NONE },
+                  insideVertical: { style: BorderStyle.NONE },
+                },
+                rows: [
+                  new TableRow({
+                    children: [
+                      new TableCell({
+                        children: codeParagraphs,
+                        shading: { fill: "F5F5F7" },
+                        margins: { top: 140, bottom: 140, left: 240, right: 240 },
+                      }),
+                    ],
+                  }),
+                ],
+              })
+            );
+          }
+          codeBlockLines = [];
+          inCodeBlock = false;
+        } else {
+          inCodeBlock = true;
+        }
         return;
       }
 
       if (inCodeBlock) {
-        children.push(
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: line,
-                font: "Courier New",
-                size: 18,
-                color: "333333",
-              }),
-            ],
-            shading: {
-              fill: "F5F5F7",
-            },
-            indent: { left: 360 },
-            spacing: { before: 20, after: 20 },
-          })
-        );
+        codeBlockLines.push(line);
       } else {
         if (trimmed === "") {
           children.push(new Paragraph({ spacing: { after: 60 } }));
@@ -285,6 +325,48 @@ export async function exportToDocx(presentation: Presentation) {
         );
       }
     });
+
+    if (inCodeBlock && codeBlockLines.length > 0) {
+      const codeParagraphs = codeBlockLines.map(
+        (codeLine) =>
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: codeLine,
+                font: "Courier New",
+                size: 18,
+                color: "333333",
+              }),
+            ],
+            spacing: { before: 20, after: 20 },
+          })
+      );
+
+      children.push(
+        new Table({
+          width: { size: 100, type: WidthType.PERCENTAGE },
+          borders: {
+            top: { style: BorderStyle.NONE },
+            bottom: { style: BorderStyle.NONE },
+            left: { style: BorderStyle.NONE },
+            right: { style: BorderStyle.NONE },
+            insideHorizontal: { style: BorderStyle.NONE },
+            insideVertical: { style: BorderStyle.NONE },
+          },
+          rows: [
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: codeParagraphs,
+                  shading: { fill: "F5F5F7" },
+                  margins: { top: 140, bottom: 140, left: 240, right: 240 },
+                }),
+              ],
+            }),
+          ],
+        })
+      );
+    }
   }
 
   function heading1(text: string) {
