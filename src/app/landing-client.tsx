@@ -155,7 +155,7 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
       <div className="absolute top-[10%] right-[-10%] w-[45%] h-[45%] rounded-full bg-purple-500/10 blur-[130px] pointer-events-none z-0" />
 
       {/* Floating Navbar Container */}
-      <div className="sticky top-4 z-50 w-full px-4 sm:px-6 lg:px-8 pointer-events-none">
+      <div className="sticky top-0 z-50 w-full px-4 sm:px-6 lg:px-8 pointer-events-none pt-4">
         <header className="max-w-5xl mx-auto h-14 rounded-full border border-white/10 bg-[#0c0c0f]/75 backdrop-blur-md shadow-lg shadow-black/40 flex items-center justify-between px-6 pointer-events-auto">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
