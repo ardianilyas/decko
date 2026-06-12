@@ -18,7 +18,7 @@ import {
   Target,
   BookOpen,
   AlertCircle,
-  Send,
+  ArrowUp,
   Sparkles,
   Wand2,
 } from "lucide-react";
@@ -363,7 +363,7 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
                 {reviseMutation.isPending ? (
                   <Loader2 className="w-4 h-4 animate-spin" style={{ animation: "spin 1s linear infinite" }} />
                 ) : (
-                  <Send className="w-4 h-4" />
+                  <ArrowUp className="w-4 h-4" />
                 )}
               </button>
             </div>
