@@ -1,7 +1,6 @@
 "use client";
 
 import { trpc } from "@/trpc/client";
-import { MessageSquare } from "lucide-react";
 import {
   Command,
   CommandDialog,
@@ -35,6 +34,7 @@ export function SearchCommand({ open, onOpenChange, onSelect }: SearchCommandPro
       onOpenChange={onOpenChange}
       title="Search presentations"
       description="Search your presentation history"
+      className="sm:max-w-[550px] w-full"
     >
       <Command>
         <CommandInput placeholder="Search presentations..." autoFocus />
@@ -52,9 +52,8 @@ export function SearchCommand({ open, onOpenChange, onSelect }: SearchCommandPro
                     key={item.id}
                     value={title}
                     onSelect={() => handleSelect(item.id)}
-                    className="cursor-pointer"
+                    className="cursor-pointer px-4 py-3 rounded-lg bg-transparent hover:bg-secondary/20 data-selected:bg-secondary/35 text-sm transition-colors"
                   >
-                    <MessageSquare className="w-4 h-4 opacity-50 shrink-0" />
                     <span className="truncate">{title}</span>
                   </CommandItem>
                 );
@@ -66,3 +65,4 @@ export function SearchCommand({ open, onOpenChange, onSelect }: SearchCommandPro
     </CommandDialog>
   );
 }
+
