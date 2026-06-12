@@ -384,13 +384,19 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
             </div>
             {/* Typing indicator */}
             <div className="flex items-start gap-2">
-              <div className="w-7 h-7 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0 mt-1">
-                <Sparkles className="w-3.5 h-3.5 text-primary animate-pulse" />
+              <div className="w-7 h-7 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0 mt-1 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-tr from-primary/25 via-violet-500/10 to-amber-500/25 animate-spin" style={{ animationDuration: "4s" }} />
+                <Sparkles className="w-3.5 h-3.5 text-primary relative z-10 animate-pulse" />
               </div>
-              <div className="bg-secondary/60 border border-border/60 rounded-2xl rounded-tl-sm px-5 py-3.5 flex items-center gap-1.5 h-[44px]">
-                <span className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: "0ms" }} />
-                <span className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: "150ms" }} />
-                <span className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: "300ms" }} />
+              <div className="bg-secondary/50 border border-border/40 rounded-2xl rounded-tl-sm px-4.5 py-3 flex items-center gap-3.5 shadow-sm">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: "0ms" }} />
+                  <span className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-bounce" style={{ animationDelay: "150ms" }} />
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-bounce" style={{ animationDelay: "300ms" }} />
+                </div>
+                <span className="text-xs text-muted-foreground font-medium tracking-wide animate-pulse duration-2000">
+                  Revising outline...
+                </span>
               </div>
             </div>
           </div>

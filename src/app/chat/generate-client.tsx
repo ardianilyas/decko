@@ -276,8 +276,12 @@ function GeneratePageContent({ user }: { user: { name: string; email: string } }
                     return (
                       <div
                         key={idx}
-                        className={`flex items-center gap-3 transition-all duration-500 ${
-                          isCompleted ? "opacity-45 scale-98" : isActive ? "opacity-100 scale-102" : "opacity-25"
+                        className={`flex items-center gap-3 transition-all duration-500 ease-out ${
+                          isCompleted
+                            ? "opacity-45 scale-98"
+                            : isActive
+                              ? "opacity-100 scale-102 bg-primary/10 border border-primary/20 -mx-2.5 px-2.5 py-1.5 rounded-xl shadow-[0_0_15px_rgba(var(--primary),0.05)]"
+                              : "opacity-25 scale-95"
                         }`}
                       >
                         <div className="flex items-center justify-center w-5 h-5 shrink-0">
