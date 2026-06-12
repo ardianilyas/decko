@@ -6,8 +6,6 @@ import { useRouter } from "next/navigation";
 import {
   Loader2,
   MessageSquare,
-  Clock,
-  ChevronRight,
   History,
   Trash2,
 } from "lucide-react";
@@ -23,24 +21,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-function formatRelativeTime(date: Date | string) {
-  const d = typeof date === "string" ? new Date(date) : date;
-  const now = Date.now();
-  const diff = now - d.getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 1) return "Just now";
-  if (mins < 60) return `${mins}m ago`;
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
-  return d.toLocaleDateString();
-}
-
-const STATUS_STYLES = {
-  completed: "bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20",
-  failed: "bg-destructive/10 text-destructive border-destructive/20",
-  pending: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
-};
-
 interface HistoryListProps {
   onSelect: (id: string) => void;
   activeId?: string | null;
@@ -52,10 +32,10 @@ export function HistoryList({ onSelect, activeId }: HistoryListProps) {
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const { data: history, isLoading } = trpc.generation.getHistory.useQuery(
-    { limit: 20 },
+    { limit: 50 },
     {
-      refetchInterval: (query) => 
-        query.state.data?.some(item => item.status === "pending") ? 3000 : false
+      refetchInterval: (query) =>
+        query.state.data?.some((item) => item.status === "pending") ? 3000 : false,
     }
   );
 
@@ -71,7 +51,7 @@ export function HistoryList({ onSelect, activeId }: HistoryListProps) {
     onError: () => {
       toast.error("Failed to delete chat");
       setDeleteId(null);
-    }
+    },
   });
 
   const handleDelete = () => {
@@ -83,7 +63,10 @@ export function HistoryList({ onSelect, activeId }: HistoryListProps) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center p-6">
-        <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" style={{ animation: "spin 1s linear infinite" }} />
+        <Loader2
+          className="w-4 h-4 text-muted-foreground"
+          style={{ animation: "spin 1s linear infinite" }}
+        />
       </div>
     );
   }
@@ -102,49 +85,40 @@ export function HistoryList({ onSelect, activeId }: HistoryListProps) {
 
   return (
     <>
-      <div className="space-y-1 px-2 py-1">
-        {history.map((item) => (
-          <div key={item.id} className="relative group">
-            <button
-              onClick={() => onSelect(item.id)}
-              className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-2.5 transition-colors ${
-                activeId === item.id
-                  ? "bg-secondary text-foreground"
-                  : "text-muted-foreground hover:bg-secondary hover:text-foreground"
-              }`}
-            >
-              <MessageSquare className="w-3.5 h-3.5 shrink-0" />
-              <div className="flex-1 min-w-0 pr-6">
-                <div className="text-xs font-medium truncate text-foreground">
-                  {item.generatedJson && (item.generatedJson as any).title ? (item.generatedJson as any).title : item.topic}
-                </div>
-                <div className="flex items-center gap-1.5 mt-0.5">
-                  <Clock className="w-2.5 h-2.5 text-muted-foreground" />
-                  <span className="text-[10px] text-muted-foreground">
-                    {formatRelativeTime(item.createdAt)}
-                  </span>
-                  <span
-                    className={`text-[9px] font-medium px-1.5 py-0.5 rounded-full border ${
-                      STATUS_STYLES[item.status as keyof typeof STATUS_STYLES] ?? STATUS_STYLES.pending
-                    }`}
-                  >
-                    {item.status}
-                  </span>
-                </div>
-              </div>
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setDeleteId(item.id);
-              }}
-              className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 opacity-0 group-hover:opacity-100 transition-all focus:opacity-100"
-              title="Delete chat"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        ))}
+      <div className="space-y-0.5 px-2 py-1">
+        {history.map((item) => {
+          const title =
+            item.generatedJson && (item.generatedJson as any).title
+              ? (item.generatedJson as any).title
+              : item.topic;
+          return (
+            <div key={item.id} className="relative group">
+              <button
+                onClick={() => onSelect(item.id)}
+                className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2.5 transition-colors ${
+                  activeId === item.id
+                    ? "bg-secondary text-foreground"
+                    : "text-muted-foreground hover:bg-secondary/60 hover:text-foreground"
+                }`}
+              >
+                <MessageSquare className="w-3.5 h-3.5 shrink-0 opacity-60" />
+                <span className="text-xs font-medium truncate pr-6 text-foreground">
+                  {title}
+                </span>
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setDeleteId(item.id);
+                }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 opacity-0 group-hover:opacity-100 transition-all focus:opacity-100"
+                title="Delete chat"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          );
+        })}
       </div>
 
       <AlertDialog open={!!deleteId} onOpenChange={(open) => !open && setDeleteId(null)}>
@@ -152,7 +126,8 @@ export function HistoryList({ onSelect, activeId }: HistoryListProps) {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Presentation?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete this presentation and all of its revisions. This action cannot be undone.
+              This will permanently delete this presentation and all of its revisions. This action
+              cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -165,7 +140,14 @@ export function HistoryList({ onSelect, activeId }: HistoryListProps) {
               disabled={deleteMutation.isPending}
               className="bg-destructive text-white hover:bg-destructive/90"
             >
-              {deleteMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" style={{ animation: "spin 1s linear infinite" }} /> : "Delete"}
+              {deleteMutation.isPending ? (
+                <Loader2
+                  className="w-4 h-4"
+                  style={{ animation: "spin 1s linear infinite" }}
+                />
+              ) : (
+                "Delete"
+              )}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

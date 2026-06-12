@@ -1,17 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { trpc } from "@/trpc/client";
 import { GenerationForm } from "@/components/generate/generation-form";
 import { GenerationResult } from "@/components/generate/generation-result";
 import { HistoryList } from "@/components/generate/history-list";
+import { SearchCommand } from "@/components/generate/search-command";
 import { ThemeToggle } from "@/components/theme-toggle";
 import {
   PanelLeftOpen,
   PanelLeft,
   Sparkles,
   Plus,
+  Search,
   Loader2,
 } from "lucide-react";
 import type { Presentation } from "@/server/services/generation.service";
@@ -33,6 +35,19 @@ function GeneratePageContent({ user }: { user: { name: string; email: string } }
   const searchParams = useSearchParams();
   const displayId = searchParams.get("id");
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  // Cmd+K / Ctrl+K to open search
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setSearchOpen((prev) => !prev);
+      }
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, []);
 
   const utils = trpc.useUtils();
 
@@ -81,14 +96,32 @@ function GeneratePageContent({ user }: { user: { name: string; email: string } }
               <Sparkles className="w-4 h-4 text-muted-foreground" />
               <span className="text-sm font-semibold text-foreground">Decko</span>
             </div>
-            <button
-              onClick={() => setSidebarOpen(false)}
-              className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
-              title="Close sidebar"
-            >
-              <PanelLeft className="w-4 h-4" />
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setSearchOpen(true)}
+                className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                title="Search presentations (⌘K)"
+              >
+                <Search className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setSidebarOpen(false)}
+                className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                title="Close sidebar"
+              >
+                <PanelLeft className="w-4 h-4" />
+              </button>
+            </div>
           </div>
+
+          <SearchCommand
+            open={searchOpen}
+            onOpenChange={setSearchOpen}
+            onSelect={(id) => {
+              handleHistorySelect(id);
+              setSearchOpen(false);
+            }}
+          />
 
           <div className="p-2">
             <button

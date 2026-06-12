@@ -21,9 +21,12 @@ import {
   ArrowUp,
   Sparkles,
   Wand2,
+  FileDown,
+  FileText,
 } from "lucide-react";
 import { toast } from "sonner";
 import type { Presentation } from "@/server/services/generation.service";
+import { exportToPDF, exportToDocx } from "@/lib/export";
 
 interface GenerationResultProps {
   generationId: string;
@@ -38,6 +41,8 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
   const [expandedChapters, setExpandedChapters] = useState<Set<number>>(new Set([0]));
   const [copied, setCopied] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
+  const [exportingPdf, setExportingPdf] = useState(false);
+  const [exportingDocx, setExportingDocx] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const revisionEndRef = useRef<HTMLDivElement>(null);
 
@@ -125,6 +130,30 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleExportPDF = async () => {
+    setExportingPdf(true);
+    try {
+      await exportToPDF(result);
+      toast.success("PDF downloaded!");
+    } catch {
+      toast.error("Failed to export PDF.");
+    } finally {
+      setExportingPdf(false);
+    }
+  };
+
+  const handleExportDocx = async () => {
+    setExportingDocx(true);
+    try {
+      await exportToDocx(result);
+      toast.success("DOCX downloaded!");
+    } catch {
+      toast.error("Failed to export DOCX.");
+    } finally {
+      setExportingDocx(false);
+    }
+  };
+
   const toggleChapter = (idx: number) => {
     setExpandedChapters((prev) => {
       const next = new Set(prev);
@@ -143,13 +172,39 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
             <h2 className="text-xl md:text-2xl font-bold text-foreground">{result.title}</h2>
             <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{result.description}</p>
           </div>
-          <button
-            onClick={handleCopyText}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors shrink-0"
-          >
-            {copied ? <Check className="w-3.5 h-3.5 text-green-500" /> : <Copy className="w-3.5 h-3.5" />}
-            {copied ? "Copied!" : "Copy Text"}
-          </button>
+          {/* Export toolbar */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            <button
+              onClick={handleCopyText}
+              title="Copy as plain text"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-border text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+            >
+              {copied ? <Check className="w-3.5 h-3.5 text-green-500" /> : <Copy className="w-3.5 h-3.5" />}
+              <span>{copied ? "Copied!" : "Copy"}</span>
+            </button>
+            <button
+              onClick={handleExportPDF}
+              disabled={exportingPdf}
+              title="Export as PDF"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-border text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors disabled:opacity-50"
+            >
+              {exportingPdf
+                ? <Loader2 className="w-3.5 h-3.5" style={{ animation: "spin 1s linear infinite" }} />
+                : <FileDown className="w-3.5 h-3.5" />}
+              <span>PDF</span>
+            </button>
+            <button
+              onClick={handleExportDocx}
+              disabled={exportingDocx}
+              title="Export as DOCX"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-border text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors disabled:opacity-50"
+            >
+              {exportingDocx
+                ? <Loader2 className="w-3.5 h-3.5" style={{ animation: "spin 1s linear infinite" }} />
+                : <FileText className="w-3.5 h-3.5" />}
+              <span>DOCX</span>
+            </button>
+          </div>
         </div>
 
         {/* Stats row */}
