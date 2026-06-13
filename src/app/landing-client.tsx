@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Sparkles } from "lucide-react";
+
 
 import { Navbar } from "./landing-client/navbar";
 import { Hero } from "./landing-client/hero";
@@ -93,9 +93,6 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
       <footer className="relative z-10 border-t border-black/5 dark:border-white/5 py-12 bg-zinc-50/50 dark:bg-[#020202]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded bg-gradient-to-tr from-amber-400 to-amber-200 flex items-center justify-center">
-              <Sparkles className="w-3.5 h-3.5 text-black" />
-            </div>
             <span className="text-base font-bold tracking-tight text-zinc-950 dark:text-white">Decko</span>
           </div>
           <p className="text-zinc-400 dark:text-zinc-500 text-xs text-center md:text-left">

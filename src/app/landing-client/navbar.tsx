@@ -29,7 +29,7 @@ export function Navbar({
 }: NavbarProps) {
   return (
     <div className="sticky top-0 z-50 w-full px-4 sm:px-6 lg:px-8 pt-4">
-      <header className="max-w-5xl mx-auto h-14 rounded-full border border-black/[0.06] dark:border-white/[0.06] shadow-[0_8px_32px_rgba(0,0,0,0.03)] dark:shadow-black/20 flex items-center justify-between px-6 pointer-events-auto bg-white/60 dark:bg-[#050507]/60 backdrop-blur-md">
+      <header className="max-w-5xl mx-auto h-14 rounded-full border border-black/[0.06] dark:border-white/[0.06] shadow-[0_8px_32px_rgba(0,0,0,0.03)] dark:shadow-black/20 flex items-center justify-between px-6 pointer-events-auto glass-navbar">
         {/* Logo */}
         <Link href="/" className="flex items-center group">
           <span className="text-lg font-extrabold tracking-tight text-zinc-950 dark:text-white group-hover:opacity-80 transition-opacity">
@@ -110,7 +110,7 @@ export function Navbar({
 
       {/* Mobile Menu Panel */}
       {mobileMenuOpen && (
-        <div className="fixed inset-x-4 top-20 z-40 bg-white/95 dark:bg-[#0c0c0f]/95 border border-black/10 dark:border-white/10 rounded-2xl px-5 py-6 flex flex-col gap-5 md:hidden animate-in fade-in slide-in-from-top-5 duration-200 shadow-xl shadow-black/10 dark:shadow-black/50 pointer-events-auto">
+        <div className="fixed inset-x-4 top-20 z-40 bg-white/75 dark:bg-[#0c0c0f]/75 backdrop-blur-xl border border-black/10 dark:border-white/10 rounded-2xl px-5 py-6 flex flex-col gap-5 md:hidden animate-in fade-in slide-in-from-top-5 duration-200 shadow-xl shadow-black/10 dark:shadow-black/50 pointer-events-auto">
           <nav className="flex flex-col gap-4">
             <button
               onClick={() => scrollToSection("hero")}
