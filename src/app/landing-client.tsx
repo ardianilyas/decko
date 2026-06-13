@@ -163,7 +163,7 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
 
       {/* Floating Navbar Container */}
       <div className="sticky top-0 z-50 w-full px-4 sm:px-6 lg:px-8 pointer-events-none pt-4">
-        <header className="max-w-5xl mx-auto h-14 rounded-full border border-black/[0.06] dark:border-white/[0.06] bg-white/30 dark:bg-black/30 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.03)] dark:shadow-black/20 flex items-center justify-between px-6 pointer-events-auto">
+        <header className="max-w-5xl mx-auto h-14 rounded-full border border-black/[0.06] dark:border-white/[0.06] glass-navbar shadow-[0_8px_32px_rgba(0,0,0,0.03)] dark:shadow-black/20 flex items-center justify-between px-6 pointer-events-auto">
           {/* Logo */}
           <Link href="/" className="flex items-center group">
             <span className="text-lg font-extrabold tracking-tight text-zinc-950 dark:text-white group-hover:opacity-80 transition-opacity bg-gradient-to-r from-zinc-950 to-zinc-600 dark:from-white dark:to-zinc-300 bg-clip-text text-transparent">
@@ -572,8 +572,12 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="relative z-10 py-24 border-t border-black/5 dark:border-white/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="pricing" className="relative z-10 py-24 border-t border-black/5 dark:border-white/5 overflow-hidden">
+        {/* Background glow blobs to showcase glassmorphism */}
+        <div className="absolute top-[20%] left-[10%] w-[40%] h-[40%] rounded-full bg-amber-500/[0.03] dark:bg-amber-500/[0.05] blur-[110px] pointer-events-none z-0" />
+        <div className="absolute bottom-[20%] right-[10%] w-[45%] h-[45%] rounded-full bg-blue-500/[0.03] dark:bg-blue-500/[0.05] blur-[130px] pointer-events-none z-0" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-zinc-950 dark:text-white mb-4">
               Simple, transparent pricing
@@ -592,7 +596,7 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
               Drag the slider to calculate your estimated outline runs and see which plan fits you best!
             </p>
             
-            <div className="flex justify-between items-center mb-2 px-1 text-xs font-semibold text-zinc-700 dark:text-zinc-305">
+            <div className="flex justify-between items-center mb-2 px-1 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
               <span>2 Credits (Trial)</span>
               <span className="text-amber-500 dark:text-amber-400 text-sm font-bold bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/20">
                 {sliderCredits} Credits
@@ -616,20 +620,20 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
               </div>
               <div className="border-x border-black/[0.06] dark:border-white/5">
                 <span className="block text-zinc-500 dark:text-zinc-400">DeepSeek (3 cr.)</span>
-                <span className="font-bold text-zinc-855 dark:text-zinc-200">{Math.floor(sliderCredits / 3)} runs</span>
+                <span className="font-bold text-zinc-800 dark:text-zinc-200">{Math.floor(sliderCredits / 3)} runs</span>
               </div>
               <div>
                 <span className="block text-zinc-500 dark:text-zinc-400">GPT-4o Mini (7 cr.)</span>
-                <span className="font-bold text-zinc-855 dark:text-zinc-200">{Math.floor(sliderCredits / 7)} runs</span>
+                <span className="font-bold text-zinc-800 dark:text-zinc-200">{Math.floor(sliderCredits / 7)} runs</span>
               </div>
             </div>
 
-            <div className="mt-5 text-xs font-medium text-zinc-800 dark:text-zinc-305">
+            <div className="mt-5 text-xs font-medium text-zinc-800 dark:text-zinc-300">
               Recommended:{" "}
               {sliderCredits <= 2 ? (
                 <span className="text-zinc-500 font-bold dark:text-zinc-400">Free Trial ($0)</span>
               ) : sliderCredits <= 10 ? (
-                <span className="text-zinc-950 dark:text-white font-bold bg-zinc-150 dark:bg-zinc-850 px-2 py-1 rounded">
+                <span className="text-zinc-950 dark:text-white font-bold bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded">
                   Starter Pack ($5)
                 </span>
               ) : (
@@ -651,9 +655,7 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
                 <div
                   key={index}
                   className={`glass-card-premium rounded-3xl p-8 flex flex-col justify-between text-left relative transition-all duration-300 ${
-                    isRecommended
-                      ? "ring-2 ring-amber-500 dark:ring-amber-400 scale-[1.03] z-20 shadow-xl shadow-amber-500/[0.04] dark:shadow-none"
-                      : "opacity-75 hover:opacity-100 scale-[0.98] z-10"
+                    isRecommended ? "pricing-card-active" : "pricing-card-inactive"
                   } ${
                     plan.popular ? "border-amber-500/20 dark:border-amber-400/30 bg-white/40 dark:bg-[#0c0c0e]/85" : ""
                   }`}
@@ -749,9 +751,9 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
                       </span>
                       <div className="w-7 h-7 rounded-full border border-zinc-200/80 dark:border-zinc-800/80 flex items-center justify-center shrink-0 transition-colors duration-300 bg-white/50 dark:bg-black/20">
                         {isOpen ? (
-                          <Minus className="w-3.5 h-3.5 text-zinc-850 dark:text-zinc-200" />
+                          <Minus className="w-3.5 h-3.5 text-zinc-800 dark:text-zinc-200" />
                         ) : (
-                          <Plus className="w-3.5 h-3.5 text-zinc-550 dark:text-zinc-400" />
+                          <Plus className="w-3.5 h-3.5 text-zinc-500 dark:text-zinc-400" />
                         )}
                       </div>
                     </button>

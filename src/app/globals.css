@@ -244,3 +244,36 @@
   border-color: rgba(255, 255, 255, 0.14);
   box-shadow: 0 12px 40px 0 rgba(99, 102, 241, 0.12);
 }
+
+/* Custom glass navbar */
+.glass-navbar {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+.dark .glass-navbar {
+  background-color: rgba(13, 13, 16, 0.3) !important;
+}
+
+/* Pricing Card Active/Inactive Styles */
+.pricing-card-active {
+  border-width: 2px !important;
+  border-color: #f59e0b !important; /* amber-500 */
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02), 0 0 30px rgba(245, 158, 11, 0.05) !important;
+  transform: scale(1.03) !important;
+  z-index: 20 !important;
+  opacity: 1 !important;
+}
+.dark .pricing-card-active {
+  border-color: #fbbf24 !important; /* amber-400 */
+  box-shadow: 0 0 30px rgba(251, 191, 36, 0.05) !important;
+}
+
+.pricing-card-inactive {
+  opacity: 0.75 !important;
+  transform: scale(0.98) !important;
+  z-index: 10 !important;
+}
+.pricing-card-inactive:hover {
+  opacity: 1 !important;
+}
