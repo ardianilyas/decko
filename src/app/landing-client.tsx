@@ -728,65 +728,54 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="relative z-10 py-24 border-t border-black/[0.05] dark:border-white/[0.05] bg-zinc-50/10 dark:bg-[#050507]/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
-            {/* Left Column */}
-            <div className="lg:col-span-5 flex flex-col items-start text-left">
-              <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-zinc-950 dark:text-white mb-6 leading-[1.15]">
-                General Questions <br />
-                asked by customers.
-              </h2>
-              <p className="text-zinc-650 dark:text-zinc-400 text-base mb-8 max-w-sm leading-relaxed">
-                Our friendly team is always here to help you with quick, clear, and reliable answers whenever needed.
-              </p>
-              <a
-                href="mailto:support@decko.com"
-                className="px-6 py-3 rounded-full bg-zinc-950 dark:bg-white text-white dark:text-black text-xs font-semibold hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors shadow-md shadow-zinc-950/10 dark:shadow-white/5"
-              >
-                Contact Support
-              </a>
-            </div>
+      <section id="faq" className="relative z-10 py-32 bg-transparent">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col items-center text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-950 dark:text-white mb-4">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-zinc-500 dark:text-zinc-400 text-sm sm:text-base max-w-lg">
+              Everything you need to know about the product and billing. Can't find the answer you're looking for?{" "}
+              <a href="mailto:support@decko.com" className="text-zinc-900 dark:text-zinc-100 font-medium underline underline-offset-4 hover:opacity-80">
+                Contact support
+              </a>.
+            </p>
+          </div>
 
-            {/* Right Column */}
-            <div className="lg:col-span-7 space-y-4">
-              {FAQS.map((faq, index) => {
-                const isOpen = activeFaq === index;
-                return (
-                  <div
-                    key={index}
-                    className="bg-white/70 dark:bg-[#0c0c0e]/70 backdrop-blur-sm rounded-2xl border border-zinc-200/60 dark:border-zinc-800/80 shadow-[0_2px_8px_rgba(0,0,0,0.01)] dark:shadow-none overflow-hidden transition-all duration-300"
+          <div className="space-y-0 border-t border-black/[0.08] dark:border-white/[0.08]">
+            {FAQS.map((faq, index) => {
+              const isOpen = activeFaq === index;
+              return (
+                <div
+                  key={index}
+                  className="border-b border-black/[0.08] dark:border-white/[0.08] overflow-hidden"
+                >
+                  <button
+                    onClick={() => setActiveFaq(isOpen ? null : index)}
+                    className="w-full flex items-center justify-between py-6 text-left focus:outline-none cursor-pointer group"
                   >
-                    <button
-                      onClick={() => setActiveFaq(isOpen ? null : index)}
-                      className="w-full flex items-center justify-between p-6 text-left focus:outline-none cursor-pointer"
-                    >
-                      <span className="font-bold text-zinc-900 dark:text-white text-sm sm:text-base pr-6 leading-snug">
-                        {faq.question}
-                      </span>
-                      <div className="w-7 h-7 rounded-full border border-zinc-200/80 dark:border-zinc-800/80 flex items-center justify-center shrink-0 transition-colors duration-300 bg-white/50 dark:bg-black/20">
-                        {isOpen ? (
-                          <Minus className="w-3.5 h-3.5 text-zinc-800 dark:text-zinc-200" />
-                        ) : (
-                          <Plus className="w-3.5 h-3.5 text-zinc-500 dark:text-zinc-400" />
-                        )}
-                      </div>
-                    </button>
-                    <div
-                      className={`transition-all duration-300 ease-in-out ${
-                        isOpen
-                          ? "max-h-[300px] border-t border-zinc-100 dark:border-zinc-900"
-                          : "max-h-0 pointer-events-none"
-                      }`}
-                    >
-                      <p className="p-6 text-zinc-650 dark:text-zinc-400 text-sm leading-relaxed">
-                        {faq.answer}
-                      </p>
+                    <span className="font-semibold text-zinc-900 dark:text-white text-base pr-6 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors">
+                      {faq.question}
+                    </span>
+                    <div className="shrink-0 transition-transform duration-300 relative w-5 h-5 flex items-center justify-center">
+                      <Plus className={`absolute w-5 h-5 text-zinc-400 transition-all duration-300 ${isOpen ? "rotate-90 opacity-0 scale-50" : "rotate-0 opacity-100 scale-100"}`} />
+                      <Minus className={`absolute w-5 h-5 text-zinc-400 transition-all duration-300 ${isOpen ? "rotate-0 opacity-100 scale-100" : "-rotate-90 opacity-0 scale-50"}`} />
                     </div>
+                  </button>
+                  <div
+                    className={`transition-all duration-300 ease-in-out ${
+                      isOpen
+                        ? "max-h-[300px] opacity-100 pb-6"
+                        : "max-h-0 opacity-0 pb-0 pointer-events-none"
+                    }`}
+                  >
+                    <p className="text-zinc-500 dark:text-zinc-400 text-sm leading-relaxed pr-8">
+                      {faq.answer}
+                    </p>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
