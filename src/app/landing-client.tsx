@@ -588,15 +588,7 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
             </p>
           </div>
 
-          {/* Credit Estimator Slider widget */}
-          <div className="max-w-xl mx-auto mb-16 p-6 rounded-2xl bg-white/40 dark:bg-[#0c0c0e]/45 border border-zinc-200/50 dark:border-zinc-800/80 backdrop-blur-md text-center shadow-lg shadow-zinc-100/10 dark:shadow-none">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-2">
-              Credit Needs Estimator
-            </h3>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-6">
-              Drag the slider to calculate your estimated outline runs and see which plan fits you best!
-            </p>
-          </div>
+
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch px-2 mt-12">
             {PRICING_PLANS.map((plan, index) => {
@@ -662,21 +654,26 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="relative z-10 py-32 bg-transparent">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-950 dark:text-white mb-4">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-zinc-500 dark:text-zinc-400 text-sm sm:text-base max-w-lg">
-              Everything you need to know about the product and billing. Can't find the answer you're looking for?{" "}
-              <a href="mailto:support@decko.com" className="text-zinc-900 dark:text-zinc-100 font-medium underline underline-offset-4 hover:opacity-80">
-                Contact support
-              </a>.
-            </p>
-          </div>
+      <section id="faq" className="relative z-10 py-24 border-t border-black/5 dark:border-white/5">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+            {/* Left Column */}
+            <div className="lg:col-span-4 flex flex-col items-start text-left">
+              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-950 dark:text-white mb-4 leading-tight">
+                Frequently Asked Questions
+              </h2>
+              <p className="text-zinc-500 dark:text-zinc-400 text-sm sm:text-base leading-relaxed">
+                Everything you need to know about the product and billing. Can't find the answer you're looking for?{" "}
+                <a href="mailto:support@decko.com" className="text-zinc-900 dark:text-zinc-100 font-medium underline underline-offset-4 hover:opacity-80">
+                  Contact support
+                </a>.
+              </p>
+            </div>
 
-          <div className="space-y-0 border-t border-black/[0.08] dark:border-white/[0.08]">
+            {/* Right Column */}
+            <div className="lg:col-span-8">
+
+              <div className="space-y-0 border-t border-black/[0.08] dark:border-white/[0.08]">
             {FAQS.map((faq, index) => {
               const isOpen = activeFaq === index;
               return (
@@ -712,7 +709,9 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
             })}
           </div>
         </div>
-      </section>
+      </div>
+    </div>
+  </section>
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-black/5 dark:border-white/5 py-12 bg-zinc-50/50 dark:bg-[#020202]">
