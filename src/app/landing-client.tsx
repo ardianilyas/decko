@@ -163,10 +163,13 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
 
       {/* Floating Navbar Container */}
       <div className="sticky top-0 z-50 w-full px-4 sm:px-6 lg:px-8 pointer-events-none pt-4">
-        <header className="max-w-5xl mx-auto h-14 rounded-full border border-black/[0.06] dark:border-white/[0.06] glass-navbar shadow-[0_8px_32px_rgba(0,0,0,0.03)] dark:shadow-black/20 flex items-center justify-between px-6 pointer-events-auto">
+        <header
+          className="max-w-5xl mx-auto h-14 rounded-full border border-black/[0.06] dark:border-white/[0.06] shadow-[0_8px_32px_rgba(0,0,0,0.03)] dark:shadow-black/20 flex items-center justify-between px-6 pointer-events-auto"
+          style={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)", backgroundColor: "rgba(255,255,255,0.28)" }}
+        >
           {/* Logo */}
           <Link href="/" className="flex items-center group">
-            <span className="text-lg font-extrabold tracking-tight text-zinc-950 dark:text-white group-hover:opacity-80 transition-opacity bg-gradient-to-r from-zinc-950 to-zinc-600 dark:from-white dark:to-zinc-300 bg-clip-text text-transparent">
+            <span className="text-lg font-extrabold tracking-tight text-zinc-950 dark:text-white group-hover:opacity-80 transition-opacity">
               Decko
             </span>
           </Link>
@@ -654,11 +657,23 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
               return (
                 <div
                   key={index}
-                  className={`glass-card-premium rounded-3xl p-8 flex flex-col justify-between text-left relative transition-all duration-300 ${
-                    isRecommended ? "pricing-card-active" : "pricing-card-inactive"
-                  } ${
-                    plan.popular ? "border-amber-500/20 dark:border-amber-400/30 bg-white/40 dark:bg-[#0c0c0e]/85" : ""
-                  }`}
+                  className="rounded-3xl p-8 flex flex-col justify-between text-left relative transition-all duration-300"
+                  style={{
+                    backdropFilter: "blur(12px)",
+                    WebkitBackdropFilter: "blur(12px)",
+                    background: plan.popular
+                      ? "rgba(255,255,255,0.55)"
+                      : "rgba(255,255,255,0.45)",
+                    border: isRecommended
+                      ? "2px solid #f59e0b"
+                      : "1px solid rgba(0,0,0,0.08)",
+                    boxShadow: isRecommended
+                      ? "0 0 30px rgba(245,158,11,0.08), 0 20px 40px rgba(0,0,0,0.06)"
+                      : "0 8px 32px rgba(0,0,0,0.06)",
+                    transform: isRecommended ? "scale(1.03)" : "scale(0.98)",
+                    zIndex: isRecommended ? 20 : 10,
+                    opacity: isRecommended ? 1 : 0.8,
+                  }}
                 >
                   {plan.popular && (
                     <div className="absolute top-0 right-8 -translate-y-1/2 px-3 py-1 rounded-full bg-amber-400 text-black text-[10px] font-bold uppercase tracking-wider">

@@ -104,9 +104,9 @@ export function GenerationSlides({ result }: GenerationSlidesProps) {
         <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-gradient-to-tr from-blue-500/8 via-teal-500/4 to-amber-500/8 blur-[120px] pointer-events-none z-0 animate-pulse" style={{ animationDuration: "12s" }} />
 
         {/* Slide active content wrapper */}
-        <div className="flex-1 flex flex-col justify-center z-10 select-text overflow-y-auto pr-1.5 pb-6 md:pb-8 scrollbar-thin">
+        <div className="flex-1 flex flex-col z-10 select-text overflow-y-auto pr-1.5 pb-4 md:pb-6 scrollbar-thin">
           {currentSlide === 0 && (
-            <div key={0} className={`text-center space-y-3 md:space-y-5 animate-in fade-in duration-300 ${
+            <div key={0} className={`flex flex-col justify-center flex-1 text-center space-y-3 md:space-y-5 animate-in fade-in duration-300 ${
               direction === "forward" ? "slide-in-from-right-[30px]" : "slide-in-from-left-[30px]"
             }`}>
               <div className="inline-flex p-2 bg-gradient-to-tr from-amber-400 to-amber-200 rounded-full shadow-md shadow-amber-400/10 mx-auto animate-pulse">
@@ -145,7 +145,7 @@ export function GenerationSlides({ result }: GenerationSlidesProps) {
           )}
 
           {currentSlide === 1 && (
-            <div key={1} className={`w-full h-full flex flex-col justify-center animate-in fade-in duration-300 ${
+            <div key={1} className={`w-full flex flex-col animate-in fade-in duration-300 ${
               direction === "forward" ? "slide-in-from-right-[30px]" : "slide-in-from-left-[30px]"
             }`}>
               <h2 className="text-base sm:text-lg md:text-xl font-bold text-foreground mb-4 md:mb-6 flex items-center gap-2 border-b border-border/50 pb-2 shrink-0">
@@ -201,7 +201,7 @@ export function GenerationSlides({ result }: GenerationSlidesProps) {
             const chapterIndex = currentSlide - 2;
             const chapter = result.chapters[chapterIndex];
             return (
-              <div key={currentSlide} className={`w-full h-full flex flex-col justify-center animate-in fade-in duration-300 ${
+              <div key={currentSlide} className={`w-full flex flex-col animate-in fade-in duration-300 ${
                 direction === "forward" ? "slide-in-from-right-[30px]" : "slide-in-from-left-[30px]"
               }`}>
                 <div className="flex items-center justify-between border-b border-border/50 pb-2 mb-4 md:mb-6 flex-wrap gap-2 shrink-0">
