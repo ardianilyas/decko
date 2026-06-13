@@ -29,7 +29,7 @@ export function Navbar({
 }: NavbarProps) {
   return (
     <div className="sticky top-0 z-50 w-full px-4 sm:px-6 lg:px-8 pt-4">
-      <header className="max-w-5xl mx-auto h-14 rounded-full border border-black/[0.06] dark:border-white/[0.06] shadow-[0_8px_32px_rgba(0,0,0,0.03)] dark:shadow-black/20 flex items-center justify-between px-6 pointer-events-auto glass-navbar">
+      <header className="max-w-5xl mx-auto h-14 rounded-full border border-black/[0.06] dark:border-white/[0.06] shadow-[0_8px_32px_rgba(0,0,0,0.03)] dark:shadow-black/20 flex items-center justify-between px-6 pointer-events-auto bg-white/30 dark:bg-[#0c0c0e]/30 backdrop-blur-md">
         {/* Logo */}
         <Link href="/" className="flex items-center group">
           <span className="text-lg font-extrabold tracking-tight text-zinc-950 dark:text-white group-hover:opacity-80 transition-opacity">

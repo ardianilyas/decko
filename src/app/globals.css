@@ -223,7 +223,6 @@
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.06);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dark .glass-card-premium {
@@ -232,28 +231,7 @@
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
 }
 
-.glass-card-premium:hover {
-  background: rgba(255, 255, 255, 0.68);
-  border-color: rgba(0, 0, 0, 0.14);
-  box-shadow: 0 12px 40px 0 rgba(99, 102, 241, 0.06);
-  transform: translateY(-2px);
-}
 
-.dark .glass-card-premium:hover {
-  background: rgba(18, 18, 23, 0.65);
-  border-color: rgba(255, 255, 255, 0.14);
-  box-shadow: 0 12px 40px 0 rgba(99, 102, 241, 0.12);
-}
-
-/* Custom glass navbar */
-.glass-navbar {
-  background-color: rgba(255, 255, 255, 0.3) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-}
-.dark .glass-navbar {
-  background-color: rgba(13, 13, 16, 0.3) !important;
-}
 
 /* Pricing Card Active/Inactive Styles */
 .pricing-card-active {

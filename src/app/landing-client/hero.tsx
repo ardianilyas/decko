@@ -80,7 +80,7 @@ export function Hero({ isLoggedIn, scrollToSection }: HeroProps) {
           </div>
 
           {/* Overlapping Glassmorphic Card 1 (Left) */}
-          <div className="absolute left-[-20px] top-[45%] sm:left-[5%] md:left-[-40px] z-20 glass-card-premium rounded-2xl p-5 w-[160px] sm:w-[220px] text-left hover:scale-105 transition-transform cursor-pointer">
+          <div className="absolute left-[-20px] top-[45%] sm:left-[5%] md:left-[-40px] z-20 glass-card-premium rounded-2xl p-5 w-[160px] sm:w-[220px] text-left hover:scale-105 hover:bg-white/75 dark:hover:bg-[#121217]/75 hover:border-indigo-500/30 dark:hover:border-indigo-500/30 hover:shadow-xl transition-all duration-300 cursor-pointer">
             <div className="flex justify-between items-start mb-3">
               <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                 Model Choice
@@ -98,7 +98,7 @@ export function Hero({ isLoggedIn, scrollToSection }: HeroProps) {
           </div>
 
           {/* Overlapping Glassmorphic Card 2 (Right) */}
-          <div className="absolute right-[-20px] top-[60%] sm:right-[5%] md:right-[-40px] z-20 glass-card-premium rounded-2xl p-5 w-[160px] sm:w-[220px] text-left hover:scale-105 transition-transform cursor-pointer">
+          <div className="absolute right-[-20px] top-[60%] sm:right-[5%] md:right-[-40px] z-20 glass-card-premium rounded-2xl p-5 w-[160px] sm:w-[220px] text-left hover:scale-105 hover:bg-white/75 dark:hover:bg-[#121217]/75 hover:border-indigo-500/30 dark:hover:border-indigo-500/30 hover:shadow-xl transition-all duration-300 cursor-pointer">
             <div className="flex justify-between items-start mb-3">
               <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                 Revision Cost
