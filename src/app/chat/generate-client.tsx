@@ -1,30 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { trpc } from "@/trpc/client";
 import { GenerationForm } from "@/components/generate/generation-form";
 import { GenerationResult } from "@/components/generate/generation-result";
-import { HistoryList } from "@/components/generate/history-list";
-import {
-  PanelLeftOpen,
-  PanelLeft,
-  Sparkles,
-  Plus,
-  Search,
-  Loader2,
-  CheckCircle2,
-  Circle,
-} from "lucide-react";
+import { PanelLeftOpen, Sparkles, Loader2 } from "lucide-react";
 import type { Presentation } from "@/server/services/generation.service";
 import { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
-
-const SearchCommand = dynamic(
-  () => import("@/components/generate/search-command").then((mod) => mod.SearchCommand),
-  { ssr: false }
-);
+import { GenerateSidebar } from "./generate-sidebar";
+import { GeneratingOverlay } from "./generating-overlay";
 
 const ThemeToggle = dynamic(
   () => import("@/components/theme-toggle").then((mod) => mod.ThemeToggle),
@@ -33,22 +19,6 @@ const ThemeToggle = dynamic(
     loading: () => (
       <div className="p-2 rounded-lg w-8 h-8 flex items-center justify-center bg-secondary/35 border border-border/10 animate-pulse">
         <span className="w-4 h-4 rounded-full bg-muted-foreground/25" />
-      </div>
-    ),
-  }
-);
-
-const UserMenu = dynamic(
-  () => import("./user-menu").then((mod) => mod.UserMenu),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="w-full flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg text-left bg-secondary/35 border border-border/10 animate-pulse">
-        <div className="min-w-0 flex-1 space-y-1">
-          <div className="h-3.5 bg-muted-foreground/25 rounded w-20" />
-          <div className="h-3 bg-muted-foreground/15 rounded w-32" />
-        </div>
-        <div className="w-4 h-4 bg-muted-foreground/20 rounded shrink-0" />
       </div>
     ),
   }
@@ -133,6 +103,7 @@ function GeneratePageContent({ user }: { user: { name: string; email: string } }
 
   const displayResult = (historyItem?.generatedJson as Presentation | undefined) ?? null;
   const showResult = !!displayId && !!displayResult;
+  const isGeneratingOverlayVisible = isGenerating || (displayId && historyItem?.status === "pending" && !historyItem?.generatedJson);
 
   return (
     <div className="flex h-screen overflow-hidden bg-background text-foreground font-sans">
@@ -145,64 +116,16 @@ function GeneratePageContent({ user }: { user: { name: string; email: string } }
       )}
 
       {/* Sidebar */}
-      {sidebarOpen && (
-        <div className="absolute md:relative z-50 h-full w-[260px] shrink-0 border-r border-border bg-card flex flex-col">
-          <div className="p-3 flex items-center justify-between border-b border-border">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm font-semibold text-foreground">Decko</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => setSearchOpen(true)}
-                className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
-                title="Search presentations (⌘K)"
-              >
-                <Search className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => setSidebarOpen(false)}
-                className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
-                title="Close sidebar"
-              >
-                <PanelLeft className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-
-          <SearchCommand
-            open={searchOpen}
-            onOpenChange={setSearchOpen}
-            onSelect={(id) => {
-              handleHistorySelect(id);
-              setSearchOpen(false);
-            }}
-          />
-
-          <div className="p-2">
-            <button
-              onClick={handleNewGeneration}
-              className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
-            >
-              <Plus className="w-4 h-4" />
-              New Presentation
-            </button>
-          </div>
-
-          <div className="flex-1 overflow-y-auto">
-            <div className="px-4 py-2">
-              <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                History
-              </span>
-            </div>
-            <HistoryList onSelect={handleHistorySelect} activeId={displayId} />
-          </div>
-
-          <div className="p-3 border-t border-border bg-card">
-            <UserMenu user={user} />
-          </div>
-        </div>
-      )}
+      <GenerateSidebar
+        user={user}
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+        searchOpen={searchOpen}
+        setSearchOpen={setSearchOpen}
+        displayId={displayId}
+        handleNewGeneration={handleNewGeneration}
+        handleHistorySelect={handleHistorySelect}
+      />
 
       {/* Main area */}
       <div className="flex-1 flex flex-col overflow-hidden relative bg-background">
@@ -225,91 +148,17 @@ function GeneratePageContent({ user }: { user: { name: string; email: string } }
           <div className="flex items-center gap-2">
             <ThemeToggle />
           </div>
-        </div>        {/* Scrollable content area */}
+        </div>
+
+        {/* Scrollable content area */}
         <div className="flex-1 overflow-y-auto w-full relative">
-          {isGenerating || (displayId && historyItem?.status === "pending" && !historyItem?.generatedJson) ? (
-            <div className="absolute inset-0 bg-background/80 backdrop-blur-xl z-20 flex flex-col items-center justify-center p-6 animate-in fade-in duration-500">
-              {/* Ambient Glows */}
-              <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
-              <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-violet-500/5 blur-[120px] pointer-events-none" />
+          <GeneratingOverlay
+            isVisible={!!isGeneratingOverlayVisible}
+            loadingStep={loadingStep}
+            loadingSteps={LOADING_STEPS}
+          />
 
-              {/* Glowing Center Orb Animation */}
-              <div className="relative w-48 h-48 mb-8 flex items-center justify-center">
-                {/* Pulsing Aura */}
-                <div className="absolute inset-4 rounded-full bg-gradient-to-tr from-primary/20 via-violet-500/10 to-amber-500/20 blur-xl animate-pulse duration-3000" />
-                
-                {/* Outer Concentric Dash Ring (Spinning Counter-clockwise) */}
-                <div 
-                  className="absolute w-36 h-36 border border-dashed border-primary/20 rounded-full" 
-                  style={{ animation: "spin 16s linear infinite reverse" }}
-                />
-                
-                {/* Inner Concentric Dash Ring (Spinning Clockwise) */}
-                <div 
-                  className="absolute w-28 h-28 border border-dashed border-violet-500/30 rounded-full" 
-                  style={{ animation: "spin 10s linear infinite" }}
-                />
-
-                {/* Glowing morphing gradient core */}
-                <div className="relative w-16 h-16 rounded-full bg-gradient-to-tr from-primary via-violet-500 to-amber-400 p-0.5 shadow-[0_0_40px_rgba(var(--primary),0.3)] animate-pulse duration-2000">
-                  <div className="w-full h-full rounded-full bg-background/90 flex items-center justify-center backdrop-blur-2xl">
-                    <Sparkles className="w-6 h-6 text-foreground animate-pulse" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Stepper Checklist */}
-              <div className="text-center max-w-sm w-full space-y-6">
-                <div className="space-y-1.5">
-                  <h2 className="text-xl font-bold bg-gradient-to-r from-primary via-foreground to-primary bg-clip-text text-transparent animate-pulse">
-                    Crafting Outline
-                  </h2>
-                  <p className="text-xs text-muted-foreground">
-                    Analyzing topic and generating custom slides
-                  </p>
-                </div>
-
-                <div className="bg-card/50 border border-border/50 rounded-2xl p-5 shadow-sm space-y-3.5 text-left backdrop-blur-md">
-                  {LOADING_STEPS.map((step, idx) => {
-                    const isCompleted = idx < loadingStep;
-                    const isActive = idx === loadingStep;
-                    return (
-                      <div
-                        key={idx}
-                        className={`flex items-center gap-3 transition-all duration-500 ease-out ${
-                          isCompleted
-                            ? "opacity-45 scale-98"
-                            : isActive
-                              ? "opacity-100 scale-102 bg-primary/10 border border-primary/20 -mx-2.5 px-2.5 py-1.5 rounded-xl shadow-[0_0_15px_rgba(var(--primary),0.05)]"
-                              : "opacity-25 scale-95"
-                        }`}
-                      >
-                        <div className="flex items-center justify-center w-5 h-5 shrink-0">
-                          {isCompleted ? (
-                            <CheckCircle2 className="w-4 h-4 text-emerald-500 animate-in zoom-in duration-300" />
-                          ) : isActive ? (
-                            <div className="relative flex items-center justify-center">
-                              <span className="absolute w-4 h-4 bg-primary/20 rounded-full animate-ping duration-1000" />
-                              <span className="relative w-2 h-2 bg-primary rounded-full animate-pulse" />
-                            </div>
-                          ) : (
-                            <Circle className="w-3.5 h-3.5 text-muted-foreground/60" />
-                          )}
-                        </div>
-                        <span
-                          className={`text-xs transition-colors duration-500 ${
-                            isActive ? "text-foreground font-semibold" : "text-muted-foreground"
-                          }`}
-                        >
-                          {step}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          ) : (
+          {!isGeneratingOverlayVisible && (
             <div className={`max-w-3xl mx-auto px-4 py-8 md:py-12 ${displayId ? "pb-12" : "pb-56"}`}>
               {displayId ? (
                 historyLoading ? (
