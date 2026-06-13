@@ -16,8 +16,8 @@ export function BentoGrid() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-auto">
-          {/* Feature 1 (Double size - Col Span 2, Row Span 2) */}
-          <div className="glass-card-premium rounded-3xl p-8 md:col-span-2 md:row-span-2 flex flex-col justify-between relative overflow-hidden border-zinc-200/50 dark:border-white/5 hover:border-indigo-500/30 dark:hover:border-indigo-500/30 group text-left min-h-[380px] md:min-h-[460px]">
+          {/* Feature 1 */}
+          <div className="glass-card-premium rounded-3xl p-6 md:col-span-2 flex flex-col justify-between relative overflow-hidden border-zinc-200/50 dark:border-white/5 hover:border-indigo-500/30 dark:hover:border-indigo-500/30 group text-left">
             <div className="absolute inset-0 bg-indigo-500/[0.005] dark:bg-[radial-gradient(circle_at_center,_rgba(99,102,241,0.05)_0%,_transparent_60%)] pointer-events-none" />
             <div className="relative z-10">
               <div className="w-12 h-12 rounded-xl bg-indigo-500/5 dark:bg-indigo-500/10 border border-indigo-500/15 dark:border-indigo-500/20 flex items-center justify-center mb-6 text-indigo-650 dark:text-indigo-400">
@@ -51,8 +51,8 @@ export function BentoGrid() {
             </div>
           </div>
 
-          {/* Feature 2 (Single size - Amber) */}
-          <div className="glass-card-premium rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden border-zinc-200/50 dark:border-white/5 hover:border-amber-500/30 dark:hover:border-amber-500/30 group text-left min-h-[220px]">
+          {/* Feature 2 */}
+          <div className="glass-card-premium rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden border-zinc-200/50 dark:border-white/5 hover:border-amber-500/30 dark:hover:border-amber-500/30 group text-left">
             <div className="absolute inset-0 bg-amber-500/[0.005] dark:bg-[radial-gradient(circle_at_center,_rgba(245,158,11,0.05)_0%,_transparent_60%)] pointer-events-none" />
             <div className="relative z-10">
               <div className="w-12 h-12 rounded-xl bg-amber-500/5 dark:bg-amber-500/10 border border-amber-500/15 dark:border-amber-500/20 flex items-center justify-center mb-6 text-amber-600 dark:text-amber-400">
@@ -75,8 +75,8 @@ export function BentoGrid() {
             </div>
           </div>
 
-          {/* Feature 3 (Single size - Rose) */}
-          <div className="glass-card-premium rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden border-zinc-200/50 dark:border-white/5 hover:border-rose-500/30 dark:hover:border-rose-500/30 group text-left min-h-[220px]">
+          {/* Feature 3 */}
+          <div className="glass-card-premium rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden border-zinc-200/50 dark:border-white/5 hover:border-rose-500/30 dark:hover:border-rose-500/30 group text-left">
             <div className="absolute inset-0 bg-rose-500/[0.005] dark:bg-[radial-gradient(circle_at_center,_rgba(244,63,94,0.05)_0%,_transparent_60%)] pointer-events-none" />
             <div className="relative z-10">
               <div className="w-12 h-12 rounded-xl bg-rose-500/5 dark:bg-rose-500/10 border border-rose-500/15 dark:border-rose-500/20 flex items-center justify-center mb-6 text-rose-600 dark:text-rose-400">
@@ -98,8 +98,8 @@ export function BentoGrid() {
             </div>
           </div>
 
-          {/* Feature 4 (Single size - Emerald) */}
-          <div className="glass-card-premium rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden border-zinc-200/50 dark:border-white/5 hover:border-emerald-500/30 dark:hover:border-emerald-500/30 group text-left min-h-[220px]">
+          {/* Feature 4 */}
+          <div className="glass-card-premium rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden border-zinc-200/50 dark:border-white/5 hover:border-emerald-500/30 dark:hover:border-emerald-500/30 group text-left">
             <div className="absolute inset-0 bg-emerald-500/[0.005] dark:bg-[radial-gradient(circle_at_center,_rgba(16,185,129,0.05)_0%,_transparent_60%)] pointer-events-none" />
             <div className="relative z-10">
               <div className="w-12 h-12 rounded-xl bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/15 dark:border-emerald-500/20 flex items-center justify-center mb-6 text-emerald-600 dark:text-emerald-400">
@@ -122,8 +122,8 @@ export function BentoGrid() {
             </div>
           </div>
 
-          {/* Feature 5 (Double size - Col Span 2, Purple) */}
-          <div className="glass-card-premium rounded-3xl p-8 md:col-span-2 flex flex-col md:flex-row gap-6 items-center justify-between relative overflow-hidden border-zinc-200/50 dark:border-white/5 hover:border-purple-500/30 dark:hover:border-purple-500/30 group text-left min-h-[220px]">
+          {/* Feature 5 */}
+          <div className="glass-card-premium rounded-3xl p-6 md:col-span-2 flex flex-col md:flex-row gap-6 items-center justify-between relative overflow-hidden border-zinc-200/50 dark:border-white/5 hover:border-purple-500/30 dark:hover:border-purple-500/30 group text-left">
             <div className="absolute inset-0 bg-purple-500/[0.005] dark:bg-[radial-gradient(circle_at_center,_rgba(139,92,246,0.05)_0%,_transparent_60%)] pointer-events-none" />
             <div className="relative z-10 flex-1">
               <div className="w-12 h-12 rounded-xl bg-purple-500/5 dark:bg-purple-500/10 border border-purple-500/15 dark:border-purple-500/20 flex items-center justify-center mb-6 text-purple-650 dark:text-purple-400">
