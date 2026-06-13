@@ -231,6 +231,11 @@
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
 }
 
+.glass-effect {
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+
 
 
 /* Pricing Card Active/Inactive Styles */
