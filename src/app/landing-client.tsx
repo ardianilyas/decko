@@ -113,7 +113,6 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
-  const [sliderCredits, setSliderCredits] = useState(15);
   const [stars, setStars] = useState<{ id: number; top: string; left: string; size: number; delay: string; opacity: number }[]>([]);
 
   useEffect(() => {
@@ -162,10 +161,9 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
       <div className="absolute top-[10%] right-[-10%] w-[45%] h-[45%] rounded-full bg-purple-500/[0.04] dark:bg-purple-500/10 blur-[130px] pointer-events-none z-0" />
 
       {/* Floating Navbar Container */}
-      <div className="sticky top-0 z-50 w-full px-4 sm:px-6 lg:px-8 pointer-events-none pt-4">
+      <div className="sticky top-0 z-50 w-full px-4 sm:px-6 lg:px-8 pt-4">
         <header
-          className="max-w-5xl mx-auto h-14 rounded-full border border-black/[0.06] dark:border-white/[0.06] shadow-[0_8px_32px_rgba(0,0,0,0.03)] dark:shadow-black/20 flex items-center justify-between px-6 pointer-events-auto"
-          style={{ backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)", backgroundColor: "rgba(255,255,255,0.28)" }}
+          className="max-w-5xl mx-auto h-14 rounded-full border border-black/[0.06] dark:border-white/[0.06] shadow-[0_8px_32px_rgba(0,0,0,0.03)] dark:shadow-black/20 flex items-center justify-between px-6 pointer-events-auto bg-white/60 dark:bg-[#050507]/60 backdrop-blur-md"
         >
           {/* Logo */}
           <Link href="/" className="flex items-center group">
@@ -598,90 +596,26 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-6">
               Drag the slider to calculate your estimated outline runs and see which plan fits you best!
             </p>
-            
-            <div className="flex justify-between items-center mb-2 px-1 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-              <span>2 Credits (Trial)</span>
-              <span className="text-amber-500 dark:text-amber-400 text-sm font-bold bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/20">
-                {sliderCredits} Credits
-              </span>
-              <span>100 Credits</span>
-            </div>
-
-            <input
-              type="range"
-              min="2"
-              max="100"
-              value={sliderCredits}
-              onChange={(e) => setSliderCredits(parseInt(e.target.value))}
-              className="w-full h-2 bg-zinc-200 dark:bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-amber-500 mb-6"
-            />
-
-            <div className="grid grid-cols-3 gap-2 text-center text-[11px] border-t border-black/[0.06] dark:border-white/5 pt-4">
-              <div>
-                <span className="block text-zinc-500 dark:text-zinc-400">Owl Alpha (1 cr.)</span>
-                <span className="font-bold text-zinc-800 dark:text-zinc-200">{Math.floor(sliderCredits / 1)} runs</span>
-              </div>
-              <div className="border-x border-black/[0.06] dark:border-white/5">
-                <span className="block text-zinc-500 dark:text-zinc-400">DeepSeek (3 cr.)</span>
-                <span className="font-bold text-zinc-800 dark:text-zinc-200">{Math.floor(sliderCredits / 3)} runs</span>
-              </div>
-              <div>
-                <span className="block text-zinc-500 dark:text-zinc-400">GPT-4o Mini (7 cr.)</span>
-                <span className="font-bold text-zinc-800 dark:text-zinc-200">{Math.floor(sliderCredits / 7)} runs</span>
-              </div>
-            </div>
-
-            <div className="mt-5 text-xs font-medium text-zinc-800 dark:text-zinc-300">
-              Recommended:{" "}
-              {sliderCredits <= 2 ? (
-                <span className="text-zinc-500 font-bold dark:text-zinc-400">Free Trial ($0)</span>
-              ) : sliderCredits <= 10 ? (
-                <span className="text-zinc-950 dark:text-white font-bold bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded">
-                  Starter Pack ($5)
-                </span>
-              ) : (
-                <span className="text-amber-600 dark:text-amber-400 font-extrabold bg-amber-500/5 dark:bg-amber-400/5 border border-amber-500/20 dark:border-amber-400/20 px-2 py-1 rounded">
-                  Pro Pack ($15) — Save 40% per credit!
-                </span>
-              )}
-            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch px-2">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch px-2 mt-12">
             {PRICING_PLANS.map((plan, index) => {
-              const isRecommended =
-                (sliderCredits <= 2 && index === 0) ||
-                (sliderCredits > 2 && sliderCredits <= 10 && index === 1) ||
-                (sliderCredits > 10 && index === 2);
-
               return (
                 <div
                   key={index}
-                  className="rounded-3xl p-8 flex flex-col justify-between text-left relative transition-all duration-300"
-                  style={{
-                    backdropFilter: "blur(12px)",
-                    WebkitBackdropFilter: "blur(12px)",
-                    background: plan.popular
-                      ? "rgba(255,255,255,0.55)"
-                      : "rgba(255,255,255,0.45)",
-                    border: isRecommended
-                      ? "2px solid #f59e0b"
-                      : "1px solid rgba(0,0,0,0.08)",
-                    boxShadow: isRecommended
-                      ? "0 0 30px rgba(245,158,11,0.08), 0 20px 40px rgba(0,0,0,0.06)"
-                      : "0 8px 32px rgba(0,0,0,0.06)",
-                    transform: isRecommended ? "scale(1.03)" : "scale(0.98)",
-                    zIndex: isRecommended ? 20 : 10,
-                    opacity: isRecommended ? 1 : 0.8,
-                  }}
+                  className={`rounded-3xl p-8 flex flex-col justify-between text-left relative transition-all duration-300 ${
+                    plan.popular
+                      ? "bg-white dark:bg-[#0c0c0e] border-2 border-indigo-500 shadow-[0_0_40px_rgba(99,102,241,0.1),0_20px_40px_rgba(0,0,0,0.05)] scale-[1.02] z-20"
+                      : "bg-white/80 dark:bg-[#0c0c0e]/80 border border-zinc-200 dark:border-zinc-800 shadow-xl shadow-zinc-900/5 dark:shadow-none scale-100 z-10"
+                  }`}
                 >
                   {plan.popular && (
-                    <div className="absolute top-0 right-8 -translate-y-1/2 px-3 py-1 rounded-full bg-amber-400 text-black text-[10px] font-bold uppercase tracking-wider">
+                    <div className="absolute top-0 right-8 -translate-y-1/2 px-3 py-1 rounded-full bg-indigo-500 text-white text-[10px] font-bold uppercase tracking-wider shadow-sm">
                       Most Popular
                     </div>
                   )}
                   <div>
-                    <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-300 mb-2">{plan.name}</h3>
+                    <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-2">{plan.name}</h3>
                     <div className="flex items-baseline gap-1.5 mb-4">
                       <span className="text-4xl sm:text-5xl font-extrabold text-zinc-950 dark:text-white">{plan.price}</span>
                       {plan.priceSub && (
@@ -691,21 +625,21 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
                       )}
                     </div>
                     {index === 1 && (
-                      <span className="inline-block text-[10px] font-semibold text-zinc-500 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded mb-3">
+                      <span className="inline-block text-[10px] font-semibold text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded mb-3">
                         $0.50 per credit
                       </span>
                     )}
                     {index === 2 && (
-                      <span className="inline-block text-[10px] font-bold text-amber-600 dark:text-amber-400 bg-amber-500/5 dark:bg-amber-400/5 border border-amber-500/10 dark:border-amber-400/10 px-2 py-0.5 rounded mb-3">
+                      <span className="inline-block text-[10px] font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20 px-2 py-0.5 rounded mb-3">
                         $0.30 per credit (Save 40% vs Starter)
                       </span>
                     )}
-                    <p className="text-zinc-650 dark:text-zinc-400 text-sm mb-6">{plan.description}</p>
-                    <div className="border-t border-black/[0.06] dark:border-white/5 pt-6 mb-8 space-y-3.5">
+                    <p className="text-zinc-600 dark:text-zinc-400 text-sm mb-6 leading-relaxed">{plan.description}</p>
+                    <div className="border-t border-zinc-100 dark:border-zinc-800 pt-6 mb-8 space-y-3.5">
                       {plan.features.map((feature, idx) => (
                         <div key={idx} className="flex items-start gap-2.5">
-                          <Check className="w-4 h-4 text-amber-500 dark:text-amber-400 shrink-0 mt-0.5" />
-                          <span className="text-zinc-700 dark:text-zinc-300 text-xs sm:text-sm">{feature}</span>
+                          <Check className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
+                          <span className="text-zinc-700 dark:text-zinc-300 text-xs sm:text-sm font-medium">{feature}</span>
                         </div>
                       ))}
                     </div>
@@ -713,9 +647,9 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
                   <Link
                     href={plan.actionLink}
                     className={`w-full text-center py-3.5 rounded-xl font-semibold text-sm transition-all ${
-                      plan.popular || isRecommended
-                        ? "bg-amber-400 hover:bg-amber-300 text-black shadow-lg shadow-amber-400/10 hover:scale-[1.01]"
-                        : "bg-zinc-100 dark:bg-white/5 hover:bg-zinc-200 dark:hover:bg-white/10 text-zinc-900 dark:text-white border border-black/[0.05] dark:border-white/10 hover:border-black/10 dark:hover:border-white/20"
+                      plan.popular
+                        ? "bg-indigo-500 hover:bg-indigo-600 text-white shadow-md shadow-indigo-500/20 hover:scale-[1.01]"
+                        : "bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-900 dark:text-white transition-colors"
                     }`}
                   >
                     {plan.buttonText}
@@ -754,12 +688,12 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
                     onClick={() => setActiveFaq(isOpen ? null : index)}
                     className="w-full flex items-center justify-between py-6 text-left focus:outline-none cursor-pointer group"
                   >
-                    <span className="font-semibold text-zinc-900 dark:text-white text-base pr-6 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors">
+                    <span className="font-bold text-zinc-950 dark:text-white text-lg pr-6 group-hover:text-zinc-700 dark:group-hover:text-zinc-300 transition-colors">
                       {faq.question}
                     </span>
-                    <div className="shrink-0 transition-transform duration-300 relative w-5 h-5 flex items-center justify-center">
-                      <Plus className={`absolute w-5 h-5 text-zinc-400 transition-all duration-300 ${isOpen ? "rotate-90 opacity-0 scale-50" : "rotate-0 opacity-100 scale-100"}`} />
-                      <Minus className={`absolute w-5 h-5 text-zinc-400 transition-all duration-300 ${isOpen ? "rotate-0 opacity-100 scale-100" : "-rotate-90 opacity-0 scale-50"}`} />
+                    <div className="shrink-0 transition-transform duration-300 relative w-6 h-6 flex items-center justify-center">
+                      <Plus className={`absolute w-6 h-6 text-zinc-500 transition-all duration-300 ${isOpen ? "rotate-90 opacity-0 scale-50" : "rotate-0 opacity-100 scale-100"}`} />
+                      <Minus className={`absolute w-6 h-6 text-zinc-500 transition-all duration-300 ${isOpen ? "rotate-0 opacity-100 scale-100" : "-rotate-90 opacity-0 scale-50"}`} />
                     </div>
                   </button>
                   <div
@@ -769,7 +703,7 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
                         : "max-h-0 opacity-0 pb-0 pointer-events-none"
                     }`}
                   >
-                    <p className="text-zinc-500 dark:text-zinc-400 text-sm leading-relaxed pr-8">
+                    <p className="text-zinc-700 dark:text-zinc-300 text-base font-medium leading-relaxed pr-8">
                       {faq.answer}
                     </p>
                   </div>
