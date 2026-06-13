@@ -17,7 +17,7 @@ export function BentoGrid() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-auto">
           {/* Feature 1 */}
-          <div className="glass-card-premium rounded-3xl p-6 md:col-span-2 flex flex-col justify-between relative overflow-hidden border-zinc-200/50 dark:border-white/5 hover:border-indigo-500/30 dark:hover:border-indigo-500/30 hover:bg-white/75 dark:hover:bg-[#121217]/75 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 group text-left">
+          <div className="glass-card-premium rounded-3xl p-6 md:col-span-2 md:row-span-2 flex flex-col justify-between relative overflow-hidden border-zinc-200/50 dark:border-white/5 hover:border-indigo-500/30 dark:hover:border-indigo-500/30 hover:bg-white/75 dark:hover:bg-[#121217]/75 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 group text-left">
             <div className="absolute inset-0 bg-indigo-500/[0.005] dark:bg-[radial-gradient(circle_at_center,_rgba(99,102,241,0.05)_0%,_transparent_60%)] pointer-events-none" />
             <div className="relative z-10">
               <div className="w-12 h-12 rounded-xl bg-indigo-500/5 dark:bg-indigo-500/10 border border-indigo-500/15 dark:border-indigo-500/20 flex items-center justify-center mb-6 text-indigo-650 dark:text-indigo-400">
