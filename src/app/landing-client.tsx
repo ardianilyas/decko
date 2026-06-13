@@ -163,10 +163,10 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
 
       {/* Floating Navbar Container */}
       <div className="sticky top-0 z-50 w-full px-4 sm:px-6 lg:px-8 pointer-events-none pt-4">
-        <header className="max-w-5xl mx-auto h-14 rounded-full border border-black/[0.06] dark:border-white/[0.06] bg-white/35 dark:bg-black/35 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.03)] dark:shadow-black/20 flex items-center justify-between px-6 pointer-events-auto">
+        <header className="max-w-5xl mx-auto h-14 rounded-full border border-black/[0.06] dark:border-white/[0.06] bg-white/30 dark:bg-black/30 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.03)] dark:shadow-black/20 flex items-center justify-between px-6 pointer-events-auto">
           {/* Logo */}
           <Link href="/" className="flex items-center group">
-            <span className="text-lg font-extrabold tracking-tight text-zinc-950 dark:text-white group-hover:opacity-80 transition-opacity bg-gradient-to-r from-zinc-950 to-zinc-650 dark:from-white dark:to-zinc-300 bg-clip-text text-transparent">
+            <span className="text-lg font-extrabold tracking-tight text-zinc-950 dark:text-white group-hover:opacity-80 transition-opacity bg-gradient-to-r from-zinc-950 to-zinc-600 dark:from-white dark:to-zinc-300 bg-clip-text text-transparent">
               Decko
             </span>
           </Link>
@@ -655,7 +655,7 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
                       ? "ring-2 ring-amber-500 dark:ring-amber-400 scale-[1.03] z-20 shadow-xl shadow-amber-500/[0.04] dark:shadow-none"
                       : "opacity-75 hover:opacity-100 scale-[0.98] z-10"
                   } ${
-                    plan.popular ? "border-amber-500/20 dark:border-amber-400/30 bg-white dark:bg-[#0c0c0e]/85" : ""
+                    plan.popular ? "border-amber-500/20 dark:border-amber-400/30 bg-white/40 dark:bg-[#0c0c0e]/85" : ""
                   }`}
                 >
                   {plan.popular && (
