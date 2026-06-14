@@ -1,43 +1,14 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { trpc } from "@/trpc/client";
 import { GenerationForm } from "@/components/generate/generation-form";
 import { GenerationResult } from "@/components/generate/generation-result";
 import { PanelLeftOpen, Loader2, Zap } from "lucide-react";
-import type { Presentation } from "@/server/services/generation.service";
 import { Suspense } from "react";
 import dynamic from "next/dynamic";
 import { GenerateSidebar } from "./generate-sidebar";
 import { GeneratingOverlay } from "./generating-overlay";
-
-const SUGGESTIONS = [
-  {
-    category: "Technology",
-    badgeColor: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20",
-    label: "Docker & Containerization",
-    topic: "Explain Docker and containerization to a non-technical audience, including the benefits over traditional VMs",
-  },
-  {
-    category: "Business",
-    badgeColor: "bg-amber-500/10 text-amber-600 dark:text-amber-500 border border-amber-500/20",
-    label: "Pitching a SaaS Startup",
-    topic: "The essential slides and storyline for pitching a B2B SaaS startup to early-stage venture capital investors",
-  },
-  {
-    category: "Science",
-    badgeColor: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20",
-    label: "Quantum Computing 101",
-    topic: "An introduction to Quantum Computing: Qubits, superposition, entanglement, and real-world future applications",
-  },
-  {
-    category: "Design",
-    badgeColor: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20",
-    label: "UX Design Fundamentals",
-    topic: "Core UX/UI Design principles for creating intuitive, accessible, and user-centered web applications",
-  },
-];
+import { SUGGESTIONS, LOADING_STEPS } from "./constants";
+import { useGeneratePage } from "@/hooks/use-generate-page";
 
 const ThemeToggle = dynamic(
   () => import("@/components/theme-toggle").then((mod) => mod.ThemeToggle),
@@ -60,102 +31,25 @@ export function GeneratePageClient({ user }: { user: { name: string; email: stri
 }
 
 function GeneratePageContent({ user }: { user: { name: string; email: string } }) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const displayId = searchParams.get("id");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [searchOpen, setSearchOpen] = useState(false);
-
-  const [topic, setTopic] = useState("");
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [greeting, setGreeting] = useState("Hello");
-
-  useEffect(() => {
-    const hour = new Date().getHours();
-    if (hour < 12) setGreeting("Good morning");
-    else if (hour < 17) setGreeting("Good afternoon");
-    else setGreeting("Good evening");
-  }, []);
-
-  const LOADING_STEPS = [
-    "Tuning prompt template...",
-    "Generating presentation content...",
-    "Structuring outline & chapters...",
-    "Polishing key takeaways & details...",
-    "Finalizing document structures...",
-  ];
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [loadingStep, setLoadingStep] = useState(0);
-  const [pendingGenerationId, setPendingGenerationId] = useState<string | null>(null);
-
-  // Cmd+K / Ctrl+K to open search
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        setSearchOpen((prev) => !prev);
-      }
-    };
-    document.addEventListener("keydown", handler);
-    return () => document.removeEventListener("keydown", handler);
-  }, []);
-
-  const utils = trpc.useUtils();
-
-  const { data: historyItem, isLoading: historyLoading } = trpc.generation.getGeneration.useQuery(
-    { id: displayId! },
-    { 
-      enabled: !!displayId,
-      refetchInterval: (query) => query.state.data?.status === "pending" ? 3000 : false
-    }
-  );
-
-  // Reset pendingGenerationId when the loaded generation is completed
-  useEffect(() => {
-    if (historyItem && historyItem.status !== "pending") {
-      setPendingGenerationId(null);
-    }
-  }, [historyItem?.status]);
-
-  // Cycle loadingStep for new generations
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    const isPending = isGenerating || (historyItem?.status === "pending" && !historyItem?.generatedJson);
-    if (isPending) {
-      interval = setInterval(() => {
-        setLoadingStep((prev) => (prev + 1 < LOADING_STEPS.length ? prev + 1 : prev));
-      }, 3000);
-    } else {
-      setLoadingStep(0);
-    }
-    return () => clearInterval(interval);
-  }, [isGenerating, historyItem?.status, !!historyItem?.generatedJson]);
-
-  const handleNewGeneration = () => {
-    setPendingGenerationId(null);
-    router.push("/chat");
-    if (window.innerWidth < 768) setSidebarOpen(false);
-  };
-
-  const handleResult = (id: string, result?: Presentation) => {
-    setPendingGenerationId(id);
-    router.push(`/chat?id=${id}`);
-    utils.generation.getHistory.invalidate();
-    utils.generation.getCredits.invalidate();
-  };
-
-  const handleHistorySelect = (id: string) => {
-    setPendingGenerationId(null);
-    router.push(`/chat?id=${id}`);
-    if (window.innerWidth < 768) setSidebarOpen(false);
-  };
-
-  const displayResult = (historyItem?.generatedJson as Presentation | undefined) ?? null;
-  const showResult = !!displayId && !!displayResult;
-  const isGeneratingOverlayVisible = 
-    isGenerating || 
-    (displayId === pendingGenerationId && historyLoading) ||
-    (displayId && historyItem?.status === "pending" && !historyItem?.generatedJson);
+  const {
+    displayId,
+    sidebarOpen,
+    setSidebarOpen,
+    searchOpen,
+    setSearchOpen,
+    topic,
+    setTopic,
+    textareaRef,
+    greeting,
+    setIsGenerating,
+    loadingStep,
+    historyLoading,
+    displayResult,
+    isGeneratingOverlayVisible,
+    handleNewGeneration,
+    handleResult,
+    handleHistorySelect,
+  } = useGeneratePage();
 
   return (
     <div className="flex h-screen overflow-hidden bg-background text-foreground font-sans">
