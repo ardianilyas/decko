@@ -38,8 +38,17 @@ export function Pricing() {
                   </div>
                 )}
                 <div>
-                  <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-2">{plan.name}</h3>
-                  <div className="flex items-baseline gap-1.5 mb-4">
+                  <div className="flex items-center justify-between gap-2 mb-1">
+                    <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">{plan.name}</h3>
+                    {plan.credits && (
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 shrink-0">
+                        {plan.credits}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-4 font-medium italic">{plan.tagline}</p>
+                  
+                  <div className="flex items-baseline gap-1.5 mb-2">
                     <span className="text-4xl sm:text-5xl font-extrabold text-zinc-950 dark:text-white">{plan.price}</span>
                     {plan.priceSub && (
                       <span className="text-xs text-zinc-500 font-semibold uppercase tracking-wider">
@@ -47,18 +56,37 @@ export function Pricing() {
                       </span>
                     )}
                   </div>
-                  {index === 1 && (
-                    <span className="inline-block text-[10px] font-semibold text-zinc-650 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800/50 px-2 py-0.5 rounded mb-3">
-                      $0.50 per credit
-                    </span>
-                  )}
-                  {index === 2 && (
-                    <span className="inline-block text-[10px] font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20 px-2 py-0.5 rounded mb-3">
-                      $0.30 per credit (Save 40% vs Starter)
-                    </span>
-                  )}
-                  <p className="text-zinc-600 dark:text-zinc-400 text-sm mb-6 leading-relaxed">{plan.description}</p>
-                  <div className="border-t border-zinc-100 dark:border-zinc-800 pt-6 mb-8 space-y-3.5">
+
+                  <div className="flex flex-wrap gap-1.5 mb-4">
+                    {plan.creditRate && (
+                      <span className="text-[10px] font-semibold text-zinc-650 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800/70 px-2 py-0.5 rounded border border-zinc-200/50 dark:border-zinc-700/50">
+                        {plan.creditRate}
+                      </span>
+                    )}
+                    {plan.saving && (
+                      <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-500/20">
+                        {plan.saving}
+                      </span>
+                    )}
+                  </div>
+
+                  <p className="text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm mb-5 leading-relaxed">{plan.description}</p>
+                  
+                  {/* Informative Capacity Specs */}
+                  <div className="mb-6 p-4 rounded-2xl bg-zinc-50/50 dark:bg-zinc-900/30 border border-zinc-100 dark:border-zinc-800/50 space-y-2 text-xs">
+                    <div className="flex items-center justify-between text-zinc-600 dark:text-zinc-400">
+                      <span>Outline Capacity:</span>
+                      <span className="font-semibold text-zinc-900 dark:text-zinc-100">{plan.chapterLimit}</span>
+                    </div>
+                    <div className="flex items-center justify-between gap-4 text-zinc-600 dark:text-zinc-400">
+                      <span className="shrink-0">Model Access:</span>
+                      <span className="font-semibold text-zinc-900 dark:text-zinc-100 text-right">
+                        {plan.modelAccess}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-zinc-100 dark:border-zinc-800 pt-5 mb-8 space-y-3">
                     {plan.features.map((feature, idx) => (
                       <div key={idx} className="flex items-start gap-2.5">
                         <Check className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />

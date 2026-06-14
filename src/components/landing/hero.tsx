@@ -34,14 +34,14 @@ export function Hero({ isLoggedIn, scrollToSection }: HeroProps) {
       <div className="flex flex-col sm:flex-row gap-4 mb-20 z-20">
         <Link
           href={isLoggedIn ? "/chat" : "/auth/signup"}
-          className="group px-8 py-4 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-base flex items-center justify-center gap-2 transition-all shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0"
+          className="group px-8 py-4 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-base flex items-center justify-center gap-2 transition-[transform,box-shadow,background-color] duration-200 will-change-transform shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0"
         >
           <span>{isLoggedIn ? "Go to Workspace" : "Get Started for Free"}</span>
           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
         </Link>
         <button
           onClick={() => scrollToSection("pricing")}
-          className="px-8 py-4 rounded-full border border-zinc-200 dark:border-white/10 hover:border-zinc-300 dark:hover:border-white/20 bg-zinc-50 dark:bg-white/5 hover:bg-zinc-100 dark:hover:bg-white/10 text-zinc-800 dark:text-white font-medium text-base transition-all cursor-pointer hover:-translate-y-0.5 active:translate-y-0"
+          className="px-8 py-4 rounded-full border border-zinc-200 dark:border-white/10 hover:border-zinc-300 dark:hover:border-white/20 bg-zinc-50 dark:bg-white/5 hover:bg-zinc-100 dark:hover:bg-white/10 text-zinc-800 dark:text-white font-medium text-base transition-[transform,background-color,border-color] duration-200 cursor-pointer will-change-transform hover:-translate-y-0.5 active:translate-y-0"
         >
           View Pricing
         </button>
@@ -80,7 +80,7 @@ export function Hero({ isLoggedIn, scrollToSection }: HeroProps) {
           </div>
 
           {/* Overlapping Glassmorphic Card 1 (Left) */}
-          <div className="absolute left-[-20px] top-[45%] sm:left-[5%] md:left-[-40px] z-20 glass-card-premium rounded-2xl p-5 w-[160px] sm:w-[220px] text-left hover:scale-105 hover:bg-white/75 dark:hover:bg-[#121217]/75 hover:border-indigo-500/30 dark:hover:border-indigo-500/30 hover:shadow-xl transition-all duration-300 cursor-pointer">
+          <div className="absolute left-[-20px] top-[45%] sm:left-[5%] md:left-[-40px] z-20 glass-card-premium rounded-2xl p-5 w-[160px] sm:w-[220px] text-left hover:scale-105 hover:bg-white/75 dark:hover:bg-[#121217]/75 hover:border-indigo-500/30 dark:hover:border-indigo-500/30 hover:shadow-xl cursor-pointer">
             <div className="flex justify-between items-start mb-3">
               <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                 Model Choice
@@ -90,7 +90,7 @@ export function Hero({ isLoggedIn, scrollToSection }: HeroProps) {
               </div>
             </div>
             <h4 className="text-sm sm:text-lg font-bold text-zinc-950 dark:text-white mb-1">
-              DeepSeek & GPT-4o
+              DeepSeek & GPT-5.5
             </h4>
             <p className="text-[10px] sm:text-xs text-zinc-500 dark:text-zinc-400">
               Optimized configurations starting from 1 credit
@@ -98,7 +98,7 @@ export function Hero({ isLoggedIn, scrollToSection }: HeroProps) {
           </div>
 
           {/* Overlapping Glassmorphic Card 2 (Right) */}
-          <div className="absolute right-[-20px] top-[60%] sm:right-[5%] md:right-[-40px] z-20 glass-card-premium rounded-2xl p-5 w-[160px] sm:w-[220px] text-left hover:scale-105 hover:bg-white/75 dark:hover:bg-[#121217]/75 hover:border-indigo-500/30 dark:hover:border-indigo-500/30 hover:shadow-xl transition-all duration-300 cursor-pointer">
+          <div className="absolute right-[-20px] top-[60%] sm:right-[5%] md:right-[-40px] z-20 glass-card-premium rounded-2xl p-5 w-[160px] sm:w-[220px] text-left hover:scale-105 hover:bg-white/75 dark:hover:bg-[#121217]/75 hover:border-indigo-500/30 dark:hover:border-indigo-500/30 hover:shadow-xl cursor-pointer">
             <div className="flex justify-between items-start mb-3">
               <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                 Revision Cost

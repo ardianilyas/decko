@@ -25,7 +25,7 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
 
   useEffect(() => {
     // Generate star coordinates on the client to avoid SSR hydration mismatches
-    const generatedStars = Array.from({ length: 45 }).map((_, i) => ({
+    const generatedStars = Array.from({ length: 25 }).map((_, i) => ({
       id: i,
       top: `${Math.random() * 95 + 2}%`,
       left: `${Math.random() * 96 + 2}%`,
@@ -59,6 +59,7 @@ export default function LandingPageClient({ isLoggedIn, user }: LandingPageClien
               height: `${star.size}px`,
               animationDelay: star.delay,
               opacity: star.opacity,
+              willChange: "opacity",
             }}
           />
         ))}
