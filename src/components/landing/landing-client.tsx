@@ -4,11 +4,11 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 
-import { Navbar } from "./landing-client/navbar";
-import { Hero } from "./landing-client/hero";
-import { BentoGrid } from "./landing-client/bento-grid";
-import { Pricing } from "./landing-client/pricing";
-import { FAQ } from "./landing-client/faq";
+import { Navbar } from "./navbar";
+import { Hero } from "./hero";
+import { BentoGrid } from "./bento-grid";
+import { Pricing } from "./pricing";
+import { FAQ } from "./faq";
 
 interface LandingPageClientProps {
   isLoggedIn: boolean;

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { trpc } from "@/trpc/client";
 import type { Presentation } from "@/server/services/generation.service";
-import { LOADING_STEPS } from "@/app/chat/constants";
+import { LOADING_STEPS } from "@/components/chat/constants";
 
 export function useGeneratePage() {
   const router = useRouter();
