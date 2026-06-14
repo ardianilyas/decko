@@ -5,7 +5,7 @@ export const FAQS = [
   },
   {
     question: "How does the credit system work?",
-    answer: "Every registered user starts with 2 free credits. You can generate outlines using different AI models which deduct credits based on their capability: Owl Alpha (1 credit/run), DeepSeek Chat (3 credits/run), or GPT-4o Mini (7 credits/run). Refills and extra credit packs can be purchased at any time.",
+    answer: "Every registered user starts with 2 free credits. You can generate outlines using different AI models which deduct credits based on their capability: Owl Alpha (1 credit/run), DeepSeek V4 (3 credits/run), or GPT-5.5 (7 credits/run). Refills and extra credit packs can be purchased at any time.",
   },
   {
     question: "Are presentation revisions free?",
@@ -44,7 +44,7 @@ export const PRICING_PLANS = [
     description: "Perfect for casual students & writers",
     features: [
       "10 credits pack refilled instantly",
-      "Access to DeepSeek Chat (3 credits)",
+      "Access to DeepSeek V4 (3 credits)",
       "3 free revisions per presentation",
       "Standard PDF & DOCX export",
       "Priority outline generation speed",
@@ -61,8 +61,8 @@ export const PRICING_PLANS = [
     description: "Best value for professionals & creators",
     features: [
       "50 credits pack refilled instantly",
-      "Access to GPT-4o Mini (7 credits)",
-      "Access to DeepSeek & Owl Alpha",
+      "Access to GPT-5.5 (7 credits)",
+      "Access to DeepSeek V4 & Owl Alpha",
       "3 free revisions per presentation",
       "Premium formatting PDF/DOCX exports",
       "Ultra-fast priority processing",

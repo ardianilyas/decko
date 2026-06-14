@@ -49,7 +49,7 @@ export async function generatePresentation(
     try {
       const { text } = await generateText({
         model: openrouter(modelId),
-        system: buildGenerationSystemPrompt(language),
+        system: buildGenerationSystemPrompt(modelId, language),
         prompt: `Generate a presentation structure for this topic: ${topic}`,
         temperature: 0.7,
         maxOutputTokens: 4096,

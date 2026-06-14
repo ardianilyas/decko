@@ -6,8 +6,8 @@ import * as schema from "@/db/schema";
 
 export const MODEL_COSTS: Record<string, number> = {
   "openrouter/owl-alpha": 1,
-  "deepseek/deepseek-chat": 3,
-  "openai/gpt-4o-mini": 7,
+  "deepseek/deepseek-v4-flash": 3,
+  "openai/gpt-5.5": 7,
 };
 
 /**

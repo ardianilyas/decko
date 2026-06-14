@@ -4,9 +4,9 @@ import { ChevronDown, Coins } from "lucide-react";
 import { MODELS } from "./constants";
 
 interface ModelDropdownProps {
-  selectedModel: "deepseek/deepseek-chat" | "openai/gpt-4o-mini" | "openrouter/owl-alpha";
+  selectedModel: "deepseek/deepseek-v4-flash" | "openai/gpt-5.5" | "openrouter/owl-alpha";
   setSelectedModel: (
-    model: "deepseek/deepseek-chat" | "openai/gpt-4o-mini" | "openrouter/owl-alpha"
+    model: "deepseek/deepseek-v4-flash" | "openai/gpt-5.5" | "openrouter/owl-alpha"
   ) => void;
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;

@@ -2,7 +2,16 @@
  * Build the system prompt for generating a presentation structure.
  * PRD-specified prompt tuned for consistent JSON output.
  */
-export function buildGenerationSystemPrompt(language: string): string {
+export function buildGenerationSystemPrompt(modelId: string, language: string): string {
+  let chapterRangeInstruction = "Generate between 3 and 8 chapters.";
+  if (modelId === "openrouter/owl-alpha") {
+    chapterRangeInstruction = "Generate between 3 and 5 chapters. If the user's topic implies or explicitly requests a specific number of items/chapters (e.g., \"4 cyber attacks\"), generate EXACTLY that many chapters (up to a maximum of 5).";
+  } else if (modelId === "deepseek/deepseek-v4-flash") {
+    chapterRangeInstruction = "Generate between 5 and 10 chapters. If the user's topic implies or explicitly requests a specific number of items/chapters (e.g., \"8 cyber attacks\"), generate EXACTLY that many chapters (up to a maximum of 10).";
+  } else if (modelId === "openai/gpt-5.5") {
+    chapterRangeInstruction = "Generate between 7 and 14 chapters. If the user's topic implies or explicitly requests a specific number of items/chapters (e.g., \"12 cyber attacks\"), generate EXACTLY that many chapters (up to a maximum of 14).";
+  }
+
   return `You are an expert instructional designer and curriculum architect with 15+ years of experience creating high-quality educational presentations.
 
 Your task is to generate a comprehensive, well-structured presentation outline in strict JSON format.
@@ -10,7 +19,7 @@ Generate the ENTIRE output (including all text, summaries, and descriptions) str
 
 CRITICAL RULES:
 - Return ONLY valid JSON. No markdown fences, no explanations, no preamble, no postamble.
-- Generate between 3 and 8 chapters. If the user's topic implies or explicitly requests a specific number of items/chapters (e.g., "5 cyber attacks"), generate EXACTLY that many chapters.
+- ${chapterRangeInstruction}
 - Each chapter MUST include:
   - chapterNumber (integer, starting at 1)
   - title (concise, engaging)

@@ -88,7 +88,7 @@ export const generationRouter = router({
       z.object({
         topic: z.string().min(3, "Topic must be at least 3 characters").max(500, "Topic too long"),
         language: z.enum(["English", "Bahasa Indonesia"]).default("English"),
-        model: z.enum(["deepseek/deepseek-chat", "openai/gpt-4o-mini", "openrouter/owl-alpha"]).default("openrouter/owl-alpha"),
+        model: z.enum(["deepseek/deepseek-v4-flash", "openai/gpt-5.5", "openrouter/owl-alpha"]).default("openrouter/owl-alpha"),
       })
     )
     .mutation(async ({ ctx, input }) => {

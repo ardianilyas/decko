@@ -58,9 +58,9 @@ export function BentoGrid() {
               <div className="w-12 h-12 rounded-xl bg-indigo-500/5 dark:bg-indigo-500/10 border border-indigo-500/15 dark:border-indigo-500/20 flex items-center justify-center mb-6 text-indigo-600 dark:text-indigo-400">
                 <Sparkles className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-semibold text-zinc-950 dark:text-white mb-2">DeepSeek & GPT-4o</h3>
+              <h3 className="text-xl font-semibold text-zinc-950 dark:text-white mb-2">DeepSeek & GPT-5.5</h3>
               <p className="text-zinc-655 dark:text-zinc-400 text-xs sm:text-sm leading-relaxed">
-                Choose between Owl Alpha (1 credit), DeepSeek (3 credits), or GPT-4o Mini (7 credits) to match your draft detail and cost requirements.
+                Choose between Owl Alpha (1 credit), DeepSeek V4 (3 credits), or GPT-5.5 (7 credits) to match your draft detail and cost requirements.
               </p>
             </div>
             <div className="relative z-10 bg-zinc-100/40 dark:bg-black/20 border border-black/[0.06] dark:border-white/5 rounded-xl p-2.5 mt-4 flex flex-col gap-1.5 text-xs text-zinc-600 dark:text-zinc-400 backdrop-blur-sm">
@@ -69,7 +69,7 @@ export function BentoGrid() {
                 <span className="text-[10px] bg-indigo-500 text-white px-1.5 py-0.5 rounded-full font-bold">1 credit</span>
               </div>
               <div className="flex justify-between items-center p-1.5 border border-black/[0.04] dark:border-white/5 rounded-lg opacity-85">
-                <span className="font-semibold text-zinc-700 dark:text-zinc-350">DeepSeek Chat</span>
+                <span className="font-semibold text-zinc-700 dark:text-zinc-350">DeepSeek V4</span>
                 <span className="text-[10px] bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-350 px-1.5 py-0.5 rounded-full">3 credits</span>
               </div>
             </div>

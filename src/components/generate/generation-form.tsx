@@ -25,7 +25,7 @@ export function GenerationForm({
   textareaRef,
 }: GenerationFormProps) {
   const utils = trpc.useUtils();
-  const [selectedModel, setSelectedModel] = useState<"deepseek/deepseek-chat" | "openai/gpt-4o-mini" | "openrouter/owl-alpha">("openrouter/owl-alpha");
+  const [selectedModel, setSelectedModel] = useState<"deepseek/deepseek-v4-flash" | "openai/gpt-5.5" | "openrouter/owl-alpha">("openrouter/owl-alpha");
   const [language, setLanguage] = useState<"English" | "Bahasa Indonesia">("English");
 
   // Custom dropdown states
