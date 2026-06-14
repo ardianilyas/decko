@@ -114,38 +114,44 @@ export const generationRouter = router({
         `Generate presentation: "${input.topic}"`
       );
 
-      let result: Presentation;
-      try {
-        result = await generatePresentation(input.topic, input.model, input.language);
-      } catch {
-        // Refund and delete the placeholder generation record
-        await refundCredits(
-          ctx.db,
-          ctx.session.user.id,
-          cost,
-          `Refund for failed generation: "${input.topic}"`
-        );
-        await ctx.db
-          .delete(schema.generation)
-          .where(eq(schema.generation.id, genId));
-
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Generation failed. Your credits have been refunded.",
-        });
-      }
-
-      // Store result
-      await ctx.db
-        .update(schema.generation)
-        .set({
-          generatedJson: result as any,
-          status: "completed",
-          updatedAt: new Date(),
+      // Trigger generation in background without awaiting it to allow client to redirect immediately
+      generatePresentation(input.topic, input.model, input.language)
+        .then(async (result) => {
+          await ctx.db
+            .update(schema.generation)
+            .set({
+              generatedJson: result as any,
+              status: "completed",
+              updatedAt: new Date(),
+            })
+            .where(eq(schema.generation.id, genId));
         })
-        .where(eq(schema.generation.id, genId));
+        .catch(async (error) => {
+          console.error(`Background generation failed for ${genId}:`, error);
+          try {
+            await refundCredits(
+              ctx.db,
+              ctx.session.user.id,
+              cost,
+              `Refund for failed generation: "${input.topic}"`
+            );
+          } catch (refundErr) {
+            console.error("Failed to refund credits:", refundErr);
+          }
+          try {
+            await ctx.db
+              .update(schema.generation)
+              .set({
+                status: "failed",
+                updatedAt: new Date(),
+              })
+              .where(eq(schema.generation.id, genId));
+          } catch (dbErr) {
+            console.error("Failed to update status to failed in DB:", dbErr);
+          }
+        });
 
-      return { id: genId, result };
+      return { id: genId };
     }),
 
   /**

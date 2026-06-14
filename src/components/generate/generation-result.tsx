@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { trpc } from "@/trpc/client";
 import type { Presentation } from "@/server/services/generation.service";
 
@@ -20,6 +20,12 @@ export function GenerationResult({ generationId, initialResult }: GenerationResu
   const [isUpdated, setIsUpdated] = useState(false);
 
   const { data: gen, refetch } = trpc.generation.getGeneration.useQuery({ id: generationId });
+
+  useEffect(() => {
+    if (gen?.generatedJson && gen.status === "completed") {
+      setResult(gen.generatedJson as Presentation);
+    }
+  }, [gen?.generatedJson, gen?.status]);
 
   const revisionsUsed = gen?.revisionCount ?? 0;
   const revisionHistory = gen?.revisions ?? [];

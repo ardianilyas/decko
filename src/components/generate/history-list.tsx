@@ -107,8 +107,18 @@ export function HistoryList({ onSelect, activeId }: HistoryListProps) {
                     : "text-muted-foreground hover:bg-secondary/60 hover:text-foreground"
                 }`}
               >
-                <MessageSquare className="w-3.5 h-3.5 shrink-0 opacity-60" />
-                <span className="text-xs font-medium truncate pr-6 text-foreground">
+                {item.status === "pending" ? (
+                  <Loader2 className="w-3.5 h-3.5 shrink-0 text-primary animate-spin" />
+                ) : (
+                  <MessageSquare className="w-3.5 h-3.5 shrink-0 opacity-60" />
+                )}
+                <span className={`text-xs font-medium truncate pr-6 ${
+                  item.status === "pending"
+                    ? "text-primary/80 animate-pulse"
+                    : activeId === item.id
+                      ? "text-foreground"
+                      : "text-muted-foreground group-hover:text-foreground"
+                }`}>
                   {title}
                 </span>
               </button>

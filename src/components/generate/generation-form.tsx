@@ -10,16 +10,23 @@ import { LanguageDropdown } from "./language-dropdown";
 import { ModelDropdown } from "./model-dropdown";
 
 interface GenerationFormProps {
-  onResult: (id: string, result: Presentation) => void;
+  onResult: (id: string, result?: Presentation) => void;
   onPendingChange?: (isPending: boolean) => void;
+  topic: string;
+  setTopic: (topic: string) => void;
+  textareaRef: React.RefObject<HTMLTextAreaElement | null>;
 }
 
-export function GenerationForm({ onResult, onPendingChange }: GenerationFormProps) {
+export function GenerationForm({
+  onResult,
+  onPendingChange,
+  topic,
+  setTopic,
+  textareaRef,
+}: GenerationFormProps) {
   const utils = trpc.useUtils();
-  const [topic, setTopic] = useState("");
   const [selectedModel, setSelectedModel] = useState<"deepseek/deepseek-chat" | "openai/gpt-4o-mini" | "openrouter/owl-alpha">("openrouter/owl-alpha");
   const [language, setLanguage] = useState<"English" | "Bahasa Indonesia">("English");
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Custom dropdown states
   const [isModelOpen, setIsModelOpen] = useState(false);
@@ -29,13 +36,13 @@ export function GenerationForm({ onResult, onPendingChange }: GenerationFormProp
 
   const { data: creditsData } = trpc.generation.getCredits.useQuery();
   const generateMutation = trpc.generation.generate.useMutation({
-    onSuccess: ({ id, result }) => {
-      toast.success("Presentation generated successfully!");
+    onSuccess: ({ id }) => {
+      toast.info("Starting outline generation...");
       setTopic("");
       if (textareaRef.current) {
         textareaRef.current.style.height = "auto";
       }
-      onResult(id, result);
+      onResult(id);
     },
     onError: (err) => {
       toast.error(err.message || "Generation failed.");
@@ -69,7 +76,7 @@ export function GenerationForm({ onResult, onPendingChange }: GenerationFormProp
       textarea.style.height = "auto";
       textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`;
     }
-  }, [topic]);
+  }, [topic, textareaRef]);
 
   // Close dropdowns when clicking outside
   useEffect(() => {

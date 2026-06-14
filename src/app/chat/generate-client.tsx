@@ -1,16 +1,43 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { trpc } from "@/trpc/client";
 import { GenerationForm } from "@/components/generate/generation-form";
 import { GenerationResult } from "@/components/generate/generation-result";
-import { PanelLeftOpen, Sparkles, Loader2 } from "lucide-react";
+import { PanelLeftOpen, Loader2, Zap } from "lucide-react";
 import type { Presentation } from "@/server/services/generation.service";
 import { Suspense } from "react";
 import dynamic from "next/dynamic";
 import { GenerateSidebar } from "./generate-sidebar";
 import { GeneratingOverlay } from "./generating-overlay";
+
+const SUGGESTIONS = [
+  {
+    category: "Technology",
+    badgeColor: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20",
+    label: "Docker & Containerization",
+    topic: "Explain Docker and containerization to a non-technical audience, including the benefits over traditional VMs",
+  },
+  {
+    category: "Business",
+    badgeColor: "bg-amber-500/10 text-amber-600 dark:text-amber-500 border border-amber-500/20",
+    label: "Pitching a SaaS Startup",
+    topic: "The essential slides and storyline for pitching a B2B SaaS startup to early-stage venture capital investors",
+  },
+  {
+    category: "Science",
+    badgeColor: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20",
+    label: "Quantum Computing 101",
+    topic: "An introduction to Quantum Computing: Qubits, superposition, entanglement, and real-world future applications",
+  },
+  {
+    category: "Design",
+    badgeColor: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20",
+    label: "UX Design Fundamentals",
+    topic: "Core UX/UI Design principles for creating intuitive, accessible, and user-centered web applications",
+  },
+];
 
 const ThemeToggle = dynamic(
   () => import("@/components/theme-toggle").then((mod) => mod.ThemeToggle),
@@ -39,6 +66,17 @@ function GeneratePageContent({ user }: { user: { name: string; email: string } }
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [searchOpen, setSearchOpen] = useState(false);
 
+  const [topic, setTopic] = useState("");
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [greeting, setGreeting] = useState("Hello");
+
+  useEffect(() => {
+    const hour = new Date().getHours();
+    if (hour < 12) setGreeting("Good morning");
+    else if (hour < 17) setGreeting("Good afternoon");
+    else setGreeting("Good evening");
+  }, []);
+
   const LOADING_STEPS = [
     "Tuning prompt template...",
     "Generating presentation content...",
@@ -48,6 +86,7 @@ function GeneratePageContent({ user }: { user: { name: string; email: string } }
   ];
   const [isGenerating, setIsGenerating] = useState(false);
   const [loadingStep, setLoadingStep] = useState(0);
+  const [pendingGenerationId, setPendingGenerationId] = useState<string | null>(null);
 
   // Cmd+K / Ctrl+K to open search
   useEffect(() => {
@@ -71,6 +110,13 @@ function GeneratePageContent({ user }: { user: { name: string; email: string } }
     }
   );
 
+  // Reset pendingGenerationId when the loaded generation is completed
+  useEffect(() => {
+    if (historyItem && historyItem.status !== "pending") {
+      setPendingGenerationId(null);
+    }
+  }, [historyItem?.status]);
+
   // Cycle loadingStep for new generations
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -86,24 +132,30 @@ function GeneratePageContent({ user }: { user: { name: string; email: string } }
   }, [isGenerating, historyItem?.status, !!historyItem?.generatedJson]);
 
   const handleNewGeneration = () => {
+    setPendingGenerationId(null);
     router.push("/chat");
     if (window.innerWidth < 768) setSidebarOpen(false);
   };
 
-  const handleResult = (id: string, result: Presentation) => {
+  const handleResult = (id: string, result?: Presentation) => {
+    setPendingGenerationId(id);
     router.push(`/chat?id=${id}`);
     utils.generation.getHistory.invalidate();
     utils.generation.getCredits.invalidate();
   };
 
   const handleHistorySelect = (id: string) => {
+    setPendingGenerationId(null);
     router.push(`/chat?id=${id}`);
     if (window.innerWidth < 768) setSidebarOpen(false);
   };
 
   const displayResult = (historyItem?.generatedJson as Presentation | undefined) ?? null;
   const showResult = !!displayId && !!displayResult;
-  const isGeneratingOverlayVisible = isGenerating || (displayId && historyItem?.status === "pending" && !historyItem?.generatedJson);
+  const isGeneratingOverlayVisible = 
+    isGenerating || 
+    (displayId === pendingGenerationId && historyLoading) ||
+    (displayId && historyItem?.status === "pending" && !historyItem?.generatedJson);
 
   return (
     <div className="flex h-screen overflow-hidden bg-background text-foreground font-sans">
@@ -217,21 +269,64 @@ function GeneratePageContent({ user }: { user: { name: string; email: string } }
                 ) : displayResult ? (
                   <GenerationResult key={displayId} generationId={displayId} initialResult={displayResult} />
                 ) : (
-                  <div className="flex flex-col items-center justify-center mt-24 space-y-4">
-                    <p className="text-sm text-muted-foreground">Presentation not found or failed to generate.</p>
+                  <div className="flex flex-col items-center justify-center text-center space-y-5 mt-20 animate-in fade-in duration-300">
+                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-destructive/10 text-destructive border border-destructive/20 shadow-sm">
+                      <Zap className="w-5 h-5" />
+                    </div>
+                    <div className="space-y-2">
+                      <h2 className="text-xl font-bold text-foreground">Generation Failed</h2>
+                      <p className="text-sm text-muted-foreground max-w-md">
+                        Something went wrong while generating this presentation outline. If credits were deducted, they have been automatically refunded to your account.
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleNewGeneration}
+                      className="px-4 py-2 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-sm font-semibold cursor-pointer shadow-sm animate-in zoom-in duration-300"
+                    >
+                      Try Another Topic
+                    </button>
                   </div>
                 )
               ) : (
-                <div className="flex flex-col items-center justify-center text-center space-y-4 mt-12 md:mt-24">
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-secondary border border-border shadow-sm">
-                    <Sparkles className="w-8 h-8 text-foreground" />
+                <div className="flex flex-col items-center justify-center text-center space-y-8 mt-8 md:mt-16 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                  <div className="space-y-3">
+                    <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-foreground">
+                      {greeting}, {user.name.split(" ")[0]}
+                    </h1>
+                    <p className="text-lg md:text-xl font-medium text-foreground/85">
+                      What would you like to present today?
+                    </p>
+                    <p className="text-sm md:text-base text-muted-foreground max-w-lg mx-auto">
+                      Select a structured template suggestion below or draft your own topic in the input box to generate a complete presentation outline.
+                    </p>
                   </div>
-                  <h1 className="text-3xl font-bold text-foreground">
-                    What are we presenting today?
-                  </h1>
-                  <p className="text-base text-muted-foreground max-w-md">
-                    Enter a topic below to generate a complete, structured presentation outline with chapters and learning objectives.
-                  </p>
+
+                  {/* Suggestion Cards Grid */}
+                  <div className="w-full max-w-2xl grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 px-2">
+                    {SUGGESTIONS.map((s, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => {
+                          setTopic(s.topic);
+                          textareaRef.current?.focus();
+                        }}
+                        className="group flex flex-col items-start text-left p-5 rounded-2xl border border-border bg-card/50 hover:bg-secondary/40 hover:border-foreground/20 active:scale-[0.98] transition-all duration-200 cursor-pointer shadow-sm relative overflow-hidden"
+                      >
+                        {/* Hover accent line */}
+                        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                        
+                        <span className={`inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full mb-3 ${s.badgeColor}`}>
+                          {s.category}
+                        </span>
+                        <span className="font-semibold text-foreground text-sm group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                          {s.label}
+                        </span>
+                        <span className="text-xs text-muted-foreground mt-1.5 leading-relaxed line-clamp-2">
+                          {s.topic}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
@@ -245,6 +340,9 @@ function GeneratePageContent({ user }: { user: { name: string; email: string } }
             onPendingChange={(pending) => {
               setIsGenerating(pending);
             }}
+            topic={topic}
+            setTopic={setTopic}
+            textareaRef={textareaRef}
           />
         </div>
       </div>
