@@ -97,10 +97,10 @@ export function Pricing() {
                 </div>
                 <Link
                   href={plan.actionLink}
-                  className={`w-full text-center py-3.5 rounded-xl font-semibold text-sm transition-all ${
+                  className={`w-full text-center py-3.5 rounded-xl font-semibold text-sm transition-[transform,background-color,box-shadow,color] duration-150 ease-out will-change-transform ${
                     plan.popular
-                      ? "bg-indigo-500 hover:bg-indigo-600 text-white shadow-md shadow-indigo-500/20 hover:scale-[1.01]"
-                      : "bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-900 dark:text-white transition-colors"
+                      ? "bg-indigo-500 hover:bg-indigo-600 text-white shadow-md shadow-indigo-500/20 hover:shadow-lg hover:shadow-indigo-500/30 hover:scale-[1.01]"
+                      : "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white hover:bg-indigo-600 dark:hover:bg-indigo-600 hover:text-white dark:hover:text-white hover:scale-[1.01]"
                   }`}
                 >
                   {plan.buttonText}
